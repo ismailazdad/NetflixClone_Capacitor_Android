@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from 'react-router-dom'
 import styled from "styled-components"
 import LogoImg from "../../assets/Logo.svg"
+import {Axios as axios} from "axios";
 
 
 const HomeWrapper = styled.div`
@@ -27,6 +28,7 @@ bottom: 40%;
 `
 
 function Home() {
+
     return (
         <HomeWrapper>
             <HomerContainer id="homecontainer">

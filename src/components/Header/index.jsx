@@ -1,11 +1,9 @@
 import React from "react";
-import { Link } from 'react-router-dom'
 import styled from "styled-components"
 import Battery from "../../assets/Battery.png"
 import Cell from "../../assets/Cellular.png"
 import Wifi from "../../assets/Wifi.png"
 import Time from "../../assets/Time.png"
-
 
 
 const HomeHeader = styled.div`
@@ -45,16 +43,16 @@ const LeftCol = styled.div`
 
 function Header() {
     return (
-            <HomeHeader>
-                <LeftCol>
-                    <HomeHeaderLeft>
-                        <Illustration src={Time}/>
-                    </HomeHeaderLeft>
-                </LeftCol>
-                <HomeHeaderRight>
-                    <Illustration src={Cell}/><Illustration src={Wifi}/><Illustration src={Battery}/>
-                </HomeHeaderRight>
-            </HomeHeader>
+        <HomeHeader id="header">
+            <LeftCol>
+                <HomeHeaderLeft>
+                    <Illustration src={Time}/>
+                </HomeHeaderLeft>
+            </LeftCol>
+            <HomeHeaderRight>
+                <Illustration src={Cell}/><Illustration src={Wifi}/><Illustration src={Battery}/>
+            </HomeHeaderRight>
+        </HomeHeader>
     );
 }
 
