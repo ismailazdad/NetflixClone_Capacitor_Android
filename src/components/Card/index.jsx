@@ -4,27 +4,28 @@ import styled from "styled-components"
 
 const CardLabel = styled.span`
   color: white;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: normal;
   padding-left: 15px;
+  // visibility :hidden;
+  width : 100%;
+  position:relative;
+  top: 19pc;
 `
 const CardTitle = styled.span`
   color: white;
   font-size: 22px;
   font-weight: normal;
   align-self: center;
+  // visibility :hidden;
+  float :right;
+  // top: 23pc;
 `
 
-const CardImage = styled.img`
-    // height: 100vh;
-    width: 100%;
-    align-self: center;
-    object-fit: cover;
-`
-const CardImage2 = styled.div`
+
+const CardImage = styled.div`
     width: 75%;
     height: 100vh;
-    // background: url('cat.jpeg') no-repeat;
     background: ${({ image }) => 'url('+image+') no-repeat;' };
     background-size: cover; 
     background-position: center; 
@@ -45,6 +46,9 @@ const CardWrapper = styled.div`
         // box-shadow: 2px 2px 10px #e2e3e9;
         width:340px;
         height: 340px;  
+        .hideprop{
+            visibility: visible;
+        }
     }
 `
 
@@ -52,11 +56,14 @@ function Card({title, type, picture,year,}) {
     return (
         <div>
         <CardWrapper id="CardWrapper" >
-            {/*<CardLabel >{title}</CardLabel>*/}
+
             {/*<CardLabel >{type}</CardLabel>*/}
             {/*<CardImage src={picture} alt="freelance"/>*/}
-            <CardImage2 image={picture} alt="freelance"/>
-            {/*<CardTitle >{year}</CardTitle>*/}
+            <CardImage image={picture} alt="freelance">
+                <CardLabel className="hideprop">{title}</CardLabel>
+                <CardTitle className="hideprop">{year}</CardTitle>
+            </CardImage>
+
         </CardWrapper>
 
         </div>

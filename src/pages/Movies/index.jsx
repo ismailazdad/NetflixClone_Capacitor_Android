@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components"
 import {Loader} from "../../utils/style/Atoms";
 import Card from "../../components/Card";
+import Info from "../../components/Info";
 
 export const LoaderWrapper = styled.div`
     display: flex;
@@ -27,15 +28,29 @@ const HomeWrapper = styled.div`
 `
 
 
-const HomerContainer = styled.div`
+const HomeContainer = styled.div`
     display: flex;
     width : 100%;
     // height : 100vh;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-top:16%;
+    // margin-top:20%;
     // border:solid 1px red;
+    background-color: #000000;
+    // position:absolute;
+`
+
+const HeaderContainer = styled.div`
+    // border:solid 1px green;
+    width : 100%;
+    height: 70vh;
+    background-color:red;
+    background: ${({ image }) => 'url('+image+') no-repeat;' };
+    background-size : cover;
+    // background-position: center;
+    background-position: bottom;
+    // background-position: top;
 `
 
 
@@ -43,6 +58,7 @@ function Movies() {
     const [moviesList, setMoviesList] = useState([]);
     const [moviesList2, setMoviesList2] = useState([]);
     const [moviesList3, setMoviesList3] = useState([]);
+    const [mainMovie, setMainMovie] = useState({})
     const [isLoading, setLoading] = useState(false)
 
 
@@ -68,18 +84,18 @@ function Movies() {
         "spider man"
     ];
     const trendsTitles3 = [
-        "garfield",
-        "ring",
-        "bad taste",
-        "Apocalypto",
-        "dogville",
-        "underground",
-        "marathon man",
-        "spider man"
+        "squid game",
+        "lord of ",
+        "braindead",
+        "ip man",
+        "recall",
+        "blonde",
+        "burton",
+        "ant-man"
     ];
 
-    async function getData(title, setMoviesList) {
-        await axios.get("http://www.omdbapi.com/?apikey=2e1e970c&t=" + title)
+    async function getData(url, setMoviesList) {
+        await axios.get(url)
             .then(res => {
                 setMoviesList(prevTrends => [...prevTrends, res.data])
             })
@@ -87,23 +103,45 @@ function Movies() {
                 console.log(error);
             })
             .finally(e => {
-                console.log(moviesList)
+                // console.log(moviesList)
                 setLoading(false)
             })
     }
 
+    async function getMainData(url) {
+        await axios.get(url)
+            .then(res => {
+                setMainMovie(res ? res : undefined)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally(e => {
+                // console.log(moviesList)
+                setLoading(false)
+            })
+    }
 
     /**************************************************************************/
     useEffect(() => {
+        const fetchData = async () => {
+            await getMainData("http://www.omdbapi.com/?apikey=2e1e970c&y=2022&plot=full&t=godfather")
+            // await getMainData("http://www.omdbapi.com/?apikey=2e1e970c&y=2022&plot=full&t=rocky")
+        };
+
+        fetchData()
         const asyncRes = Promise.all(trendsTitles.map((title) => {
-            getData(title, setMoviesList)
+            getData("http://www.omdbapi.com/?apikey=2e1e970c&t=" + title, setMoviesList)
         }))
         const asyncRes2 = Promise.all(trendsTitles2.map((title) => {
-            getData(title, setMoviesList2)
+            getData("http://www.omdbapi.com/?apikey=2e1e970c&t=" + title, setMoviesList2)
         }))
         const asyncRes3 = Promise.all(trendsTitles3.map((title) => {
-            getData(title, setMoviesList3)
+            getData("http://www.omdbapi.com/?apikey=2e1e970c&t=" + title, setMoviesList3)
         }))
+
+
+
         setLoading(false)
     }, []);
     /**************************************************************************/
@@ -116,47 +154,55 @@ function Movies() {
                 <Loader/>
             </LoaderWrapper>
         ) : (
-            <HomeWrapper id="homewraper">
-                <HomerContainer id="homecontainer">
-                    <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Film primee</label>
-                    <CardsContainer id="one">
-                        {moviesList.map((movie, index) => (
-                            <Card
-                                key={`${movie['imdbID']}-${index}`}
-                                // type={movie['type']}
-                                // title={movie['Title']}
-                                // year={movie['Year']}
-                                picture={movie['Poster']}
-                            />
-                        ))}
-                    </CardsContainer>
-                    <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Film Culte</label>
-                    <CardsContainer id="two">
-                        {moviesList2.map((movie, index) => (
-                            <Card
-                                key={`${movie['imdbID']}-${index}`}
-                                // type={movie['type']}
-                                // title={movie['Title']}
-                                // year={movie['Year']}
-                                picture={movie['Poster']}
-                            />
-                        ))}
-                    </CardsContainer>
+            <div>
+                {/*<div id={"test"}>{JSON.stringify(mainMovie)}</div>*/}
+                <HeaderContainer image={mainMovie.data.Poster}>
+                <Info />
+                </HeaderContainer>
+                <HomeWrapper id="homewraper">
 
-                    <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Vous pourriez aimez</label>
-                    <CardsContainer id="two">
-                        {moviesList3.map((movie, index) => (
-                            <Card
-                                key={`${movie['imdbID']}-${index}`}
-                                // type={movie['type']}
-                                // title={movie['Title']}
-                                // year={movie['Year']}
-                                picture={movie['Poster']}
-                            />
-                        ))}
-                    </CardsContainer>
-                </HomerContainer>
-            </HomeWrapper>
+                    <HomeContainer id="homecontainer">
+                        <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Film primee</label>
+                        <CardsContainer id="one">
+                            {moviesList.map((movie, index) => (
+                                <Card
+                                    key={`${movie['imdbID']}-${index}`}
+                                    type={movie['type']}
+                                    title={movie['Title']}
+                                    year={movie['Year']}
+                                    picture={movie['Poster']}
+                                />
+                            ))}
+                        </CardsContainer>
+                        <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Film Culte</label>
+                        <CardsContainer id="two">
+                            {moviesList2.map((movie, index) => (
+                                <Card
+                                    key={`${movie['imdbID']}-${index}`}
+                                    type={movie['type']}
+                                    title={movie['Title']}
+                                    year={movie['Year']}
+                                    picture={movie['Poster']}
+                                />
+                            ))}
+                        </CardsContainer>
+
+                        <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Vous pourriez
+                            aimez</label>
+                        <CardsContainer id="three">
+                            {moviesList3.map((movie, index) => (
+                                <Card
+                                    key={`${movie['imdbID']}-${index}`}
+                                    type={movie['type']}
+                                    title={movie['Title']}
+                                    year={movie['Year']}
+                                    picture={movie['Poster']}
+                                />
+                            ))}
+                        </CardsContainer>
+                    </HomeContainer>
+                </HomeWrapper>
+            </div>
 
         )
     )
