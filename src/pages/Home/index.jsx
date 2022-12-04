@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Link} from 'react-router-dom'
 import styled from "styled-components"
 import LogoImg from "../../assets/Logo.svg"
-import {Axios as axios} from "axios";
 
 
 const HomeWrapper = styled.div`
@@ -20,17 +19,17 @@ const HomerContainer = styled.div`
 `
 
 const LogoContainer = styled.img`
-position: fixed;
-left: 40%;
-right: 40%;
-top: 40%;
-bottom: 40%;
+    position: fixed;
+    left: 40%;
+    right: 40%;
+    top: 40%;
+    bottom: 40%;
 `
 
 function Home() {
 
     return (
-        <HomeWrapper>
+        <HomeWrapper id="homewraper">
             <HomerContainer id="homecontainer">
                 <Link to="/movies">
                     <LogoContainer id="imgd" src={LogoImg}/>

@@ -16,36 +16,50 @@ const CardTitle = styled.span`
 `
 
 const CardImage = styled.img`
-  height: 150px;
-  width: 150px;
-  align-self: center;
-  border-radius: 50%;
+    // height: 100vh;
+    width: 100%;
+    align-self: center;
+    object-fit: cover;
+`
+const CardImage2 = styled.div`
+    width: 75%;
+    height: 100vh;
+    // background: url('cat.jpeg') no-repeat;
+    background: ${({ image }) => 'url('+image+') no-repeat;' };
+    background-size: cover; 
+    background-position: center; 
+    // border: 1px solid red;
 `
 
 const CardWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 15px;
-  background-color: black;
-  border-radius: 30px;
-  width: 300px;
-  height: 300px;
-  transition: 200ms;
-  &:hover {
-    cursor: pointer;
-    box-shadow: 2px 2px 10px #e2e3e9;
-  }
+    margin-top : 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 300px;
+    height: 300px;
+    transition: 300ms;
+    margin-right : -80px;
+    &:hover {
+        cursor: pointer;
+        // box-shadow: 2px 2px 10px #e2e3e9;
+        width:340px;
+        height: 340px;  
+    }
 `
 
 function Card({title, type, picture,year,}) {
     return (
-        <CardWrapper >
-            <CardLabel >{title}</CardLabel>
-            <CardLabel >{type}</CardLabel>
-            <CardImage src={picture} alt="freelance"/>
-            <CardTitle >{year}</CardTitle>
+        <div>
+        <CardWrapper id="CardWrapper" >
+            {/*<CardLabel >{title}</CardLabel>*/}
+            {/*<CardLabel >{type}</CardLabel>*/}
+            {/*<CardImage src={picture} alt="freelance"/>*/}
+            <CardImage2 image={picture} alt="freelance"/>
+            {/*<CardTitle >{year}</CardTitle>*/}
         </CardWrapper>
+
+        </div>
     )
 }
 
