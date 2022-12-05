@@ -7,7 +7,7 @@ const CardLabel = styled.span`
   font-size: 18px;
   font-weight: normal;
   padding-left: 15px;
-  // visibility :hidden;
+  visibility :hidden;
   width : 100%;
   position:relative;
   top: 19pc;
@@ -17,7 +17,7 @@ const CardTitle = styled.span`
   font-size: 22px;
   font-weight: normal;
   align-self: center;
-  // visibility :hidden;
+  visibility :hidden;
   float :right;
   // top: 23pc;
 `
@@ -33,7 +33,6 @@ const CardImage = styled.div`
 `
 
 const CardWrapper = styled.div`
-    margin-top : 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

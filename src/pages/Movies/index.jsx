@@ -162,7 +162,7 @@ function Movies() {
                 <HomeWrapper id="homewraper">
 
                     <HomeContainer id="homecontainer">
-                        <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Film primee</label>
+                        <label style={{color: 'white', position: 'relative'}}>Film primee</label>
                         <CardsContainer id="one">
                             {moviesList.map((movie, index) => (
                                 <Card
@@ -174,7 +174,7 @@ function Movies() {
                                 />
                             ))}
                         </CardsContainer>
-                        <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Film Culte</label>
+                        <label style={{color: 'white', position: 'relative'}}>Film Culte</label>
                         <CardsContainer id="two">
                             {moviesList2.map((movie, index) => (
                                 <Card
@@ -187,7 +187,7 @@ function Movies() {
                             ))}
                         </CardsContainer>
 
-                        <label style={{color: 'white', position: 'relative', marginTop: '26px'}}>Vous pourriez
+                        <label style={{color: 'white', position: 'relative'}}>Vous pourriez
                             aimez</label>
                         <CardsContainer id="three">
                             {moviesList3.map((movie, index) => (
