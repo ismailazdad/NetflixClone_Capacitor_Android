@@ -63,12 +63,12 @@ const BannerFadeBottom = styled.div`
 `
 
 const ErrorLoader = styled.div`
-margin-top: 185px;
-top: 50px;
-left: 41%;
-position: absolute;
-color: black;
-height:440px;
+    margin-top: 185px;
+    top: 50px;
+    left: 41%;
+    position: absolute;
+    color: black;
+    height:440px;
 `
 export const LoaderWrapper = styled.div`
   display: flex;
@@ -86,7 +86,6 @@ function Banner() {
     }
 
     return (
-
         (isLoading ? (
             <LoaderWrapper data-testid='loader'>
                 <Loader/>
