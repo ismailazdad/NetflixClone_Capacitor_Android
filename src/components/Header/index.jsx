@@ -4,7 +4,6 @@ import Battery from "../../assets/Battery.png"
 import Cell from "../../assets/Cellular.png"
 import Wifi from "../../assets/Wifi.png"
 import Time from "../../assets/Time.png"
-import Test from "../../assets/test.svg"
 
 const HomeHeader = styled.div`
 box-sizing: border-box;
@@ -52,7 +51,6 @@ function Header() {
             <HomeHeaderRight>
                 <Illustration src={Cell}/><Illustration src={Wifi}/><Illustration src={Battery}/>
             </HomeHeaderRight>
-            <Illustration src={Test}/>
         </HomeHeader>
 
     );

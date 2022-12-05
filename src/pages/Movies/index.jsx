@@ -3,8 +3,7 @@ import axios from "axios";
 import styled from "styled-components"
 import {Loader} from "../../utils/style/Atoms";
 import Card from "../../components/Card";
-import Info from "../../components/Info";
-
+import Banner from "../../components/Banner";
 export const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;  
@@ -60,7 +59,7 @@ function Movies() {
     const [moviesList3, setMoviesList3] = useState([]);
     const [mainMovie, setMainMovie] = useState({})
     const [isLoading, setLoading] = useState(false)
-
+    const url = process.env.REACT_APP_API_URL;
 
     const trendsTitles = [
         "star wars",
@@ -156,9 +155,9 @@ function Movies() {
         ) : (
             <div>
                 {/*<div id={"test"}>{JSON.stringify(mainMovie)}</div>*/}
-                <HeaderContainer image={mainMovie.data.Poster}>
-                <Info />
-                </HeaderContainer>
+                {/*<HeaderContainer image={mainMovie.data.Poster}>*/}
+                {/*</HeaderContainer>*/}
+                <Banner />
                 <HomeWrapper id="homewraper">
 
                     <HomeContainer id="homecontainer">
