@@ -9,9 +9,8 @@ const BannerHeader = styled.div`
     object-fit: contain;
     height: 448px;
     background-size: cover;
-    // background: ${({image}) => 'url(' + image + ') no-repeat;'};
-    background: ${({image}) => 'url(' + image + ') ;'};
-    background-position: "center center",
+    background: ${({image}) => 'url(' + image + ') ;'}
+    background-position: center ;
 `
 const BannerContent = styled.div`
     margin-left: 30px;
@@ -76,7 +75,7 @@ export const LoaderWrapper = styled.div`
 `
 
 function Banner() {
-    const {isLoading, data, error} = useFetch(urls.findNetflixOriginals, true)
+    const {isLoading, data, error} = useFetch(urls.findNetflixOriginals)
     if (error) {
         return <BannerHeader><ErrorLoader><span>Oups something went wrong</span></ErrorLoader></BannerHeader>
     }

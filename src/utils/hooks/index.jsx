@@ -1,7 +1,6 @@
 import {useContext, useEffect, useState} from 'react'
 
-export function useFetch(url,random=false) {
-    console.log(url);
+export function useFetch(url) {
     const [data, setData] = useState({})
     const [isLoading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -10,17 +9,9 @@ export function useFetch(url,random=false) {
         fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
-                if(random){
-                    console.log(jsonResponse);
-                    setData(
-                        jsonResponse.results[
-                            Math.floor(Math.random() * jsonResponse.results.length)
-                            ],
-                    );
-                }else{
-                    setData(jsonResponse?jsonResponse:undefined)
-                }
-
+                setData(
+                    jsonResponse.results[Math.floor(Math.random() * jsonResponse.results.length)],
+                );
             })
             .catch(e => {
                 console.log(e)
@@ -32,7 +23,29 @@ export function useFetch(url,random=false) {
             )
     }, [url])
     return {isLoading, data,error}
+}
 
-
-
+export function useFetchList(url) {
+    const [data, setData] = useState([])
+    const [isLoading, setLoading] = useState(true)
+    const [error, setError] = useState(false)
+    useEffect(() => {
+        setLoading(true)
+        fetch(url)
+            .then((response) => response.json())
+            .then((jsonResponse) => {
+                setData(
+                    jsonResponse.results
+                );
+            })
+            .catch(e => {
+                console.log(e)
+                setError(true)
+            })
+            .finally( e =>{
+                    setLoading(false)
+                }
+            )
+    }, [url])
+    return {isLoading, data,error}
 }
