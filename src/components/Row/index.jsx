@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import YouTube from "react-youtube";
 import urls from "../../utils/urls";
 import movieTrailer from "movie-trailer";
@@ -7,6 +7,7 @@ import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
+import PlayerMenu from "../PlayerMenu";
 
 const RowContainer = styled.div`
     color: white;
@@ -72,10 +73,11 @@ function Row({title, url, isLargeRow}) {
     const [vidError, setVidError] = useState(true);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoShown, setIsVideoShown] = useState(false);
-    const movies = data.slice(0,5);
+    // const movies = data.slice(3, 5);
+    const movies = data;
 
     const scrollLeft = function () {
-        const leftsize = isLargeRow ? 200 : 250;
+        const leftsize = isLargeRow ? 1000 : 600;
         const ec = myRef.current.offsetWidth - myRef.current.scrollLeft;
         if (ec <= myRef.current.offsetWidth * 0.15) {
             setIsOpenR(false);
@@ -88,7 +90,7 @@ function Row({title, url, isLargeRow}) {
     };
 
     const scrollRight = function () {
-        const leftsize = isLargeRow ? 200 : 250;
+        const leftsize = isLargeRow ? 1000 : 600;
         const ec = myRef.current.offsetWidth - myRef.current.scrollLeft;
         if (myRef.current.scrollLeft <= leftsize) {
             setIsOpenR(true);
@@ -114,7 +116,7 @@ function Row({title, url, isLargeRow}) {
     };
 
 
-    const resetStateVideo =  async function(){
+    const resetStateVideo = async function () {
         setTrailerURL("");
         setVidError(true);
         setIsVideoLoading(false);
@@ -122,7 +124,7 @@ function Row({title, url, isLargeRow}) {
     }
 
     const HandleVideo = async (movie) => {
-        if(isVideoShown ===false){
+        if (!isVideoShown) {
             setTrailerURL("");
             setVidError(false);
             setIsVideoLoading(true);
@@ -144,6 +146,7 @@ function Row({title, url, isLargeRow}) {
         }
     };
 
+
     return (
         (isLoading ? (
                 <LoaderWrapper data-testid='loader'>
@@ -152,27 +155,44 @@ function Row({title, url, isLargeRow}) {
             ) : (
                 <RowContainer id="RowContainer">
                     <h2>{title}</h2>
-                    {isOpenR ? <Chevron style={{float:'right'}} icon={ChevronRight} onClick={scrollLeft} isLargeRow={isLargeRow}/> : ''}
-                    {isOpenL ? <Chevron style={{float:'left'}} icon={ChevronLeft} onClick={scrollRight} isLargeRow={isLargeRow}/> : ''}
+                    {isOpenR ? <Chevron style={{float: 'right'}} icon={ChevronRight} onClick={scrollLeft} isLargeRow={isLargeRow}/> : ''}
+                    {isOpenL ? <Chevron style={{float: 'left'}} icon={ChevronLeft} onClick={scrollRight} isLargeRow={isLargeRow}/> : ''}
                     <RowPoster id="RowPoster" ref={myRef}>
                         {movies && movies.map((movie, index) => (
-                            <Container onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} onClick={()=>alert(1)} id="test" key={`${movie.id}'---'`}>
-                                    {myVideoId === movie.id && vidError === false ?
-                                        (isVideoLoading ?
-                                                <LoaderWrapper data-testid='loader' >
-                                                    <Loader id='myloader' style={{marginTop: '0vh'}} />
-                                                </LoaderWrapper>
-                                                :
+                            <Container onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)}  key={`${movie.id}'---'`}>
+                                {myVideoId === movie.id && vidError === false ?
+                                    (isVideoLoading ?
+                                            <LoaderWrapper data-testid='loader'>
+                                                <Loader id='myloader' style={{marginTop: '0vh'}}/>
+                                            </LoaderWrapper>
+                                            :
+                                            <div>
                                                 <YouTube
-                                                   onReady={e=>setIsVideoLoading(false)} onError={e=>setIsVideoLoading(true)}  id="vidContainer" style={{width: isLargeRow ? '400px': '300px', height: isLargeRow ? '300px': '100px', marginTop:isLargeRow ? '-123px': '-150px' }}
+                                                    onReady={e => setIsVideoLoading(false)}
+                                                    onError={e => setIsVideoLoading(true)} id="vidContainer" style={{
+                                                    width: isLargeRow ? '400px' : '300px',
+                                                    height: isLargeRow ? '300px' : '100px',
+                                                    marginTop: isLargeRow ? '-123px' : '-150px'
+                                                }}
                                                     videoId={trailerURL} opts={opts}/>
-                                        ) : (<StyledImage
-                                                key={movie.id}
-                                                src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                                alt={movie.name}
-                                                isLargeRow={isLargeRow}
-                                            />)
-                                    }
+                                                <PlayerMenu
+                                                id={movie.id}
+                                                title={movie.title}
+                                                overview={movie.overview}
+                                                media_type={movie.media_type}
+                                                genre_ids={movie.genre_ids}
+                                                popularity={movie.popularity}
+                                                vote_average={movie.vote_average}
+                                                isLargeRow={isLargeRow}/>
+                                            </div>
+
+                                    ) : (<StyledImage
+                                        key={movie.id}
+                                        src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                        alt={movie.name}
+                                        isLargeRow={isLargeRow}
+                                    />)
+                                }
                             </Container>
                         ))}
                     </RowPoster>
