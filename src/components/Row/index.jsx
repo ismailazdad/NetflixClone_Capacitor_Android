@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState} from "react";
 import YouTube from "react-youtube";
 import urls from "../../utils/urls";
 import movieTrailer from "movie-trailer";
@@ -23,29 +23,28 @@ const RowPoster = styled.div`
 }
 `
 const LoaderWrapper = styled.div`
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 `
 
 
 const StyledImage = styled.img`
-  object-fit: contain;
-  margin-right:  ${({isLargeRow}) => (isLargeRow ? '10px' : '0px')};
-  transition: transform 450ms;
-  max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '100px')};
-   &:hover{
+    object-fit: contain;
+    margin-right:  ${({isLargeRow}) => (isLargeRow ? '10px' : '0px')};
+    transition: transform 450ms;
+    max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '100px')};
+    &:hover{
       transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.08)')}; 
-  }
+    }
 `
 
 const Container = styled.div`
-  cursor:pointer;
-  object-fit: contain;
-  width: 100%;
-  max-height: 100px;
-  margin-right: 10px;
-  transition: transform 450ms;
-  max-height: 250px;
+    cursor:pointer;
+    object-fit: contain;
+    max-height: 100px;
+    margin-right: 10px;
+    transition: transform 450ms;
+    max-height: 250px;
 `
 
 const Chevron = styled.div`
@@ -72,7 +71,8 @@ function Row({title, url, isLargeRow}) {
     const [myVideoId, setMyVideoId] = useState(null);
     const [vidError, setVidError] = useState(true);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
-    const movies = data;
+    const [isVideoShown, setIsVideoShown] = useState(false);
+    const movies = data.slice(0,5);
 
     const scrollLeft = function () {
         const leftsize = isLargeRow ? 200 : 250;
@@ -113,37 +113,35 @@ function Row({title, url, isLargeRow}) {
         },
     };
 
-    function delay(milliseconds){
-        return new Promise(resolve => {
-            setTimeout(resolve, milliseconds);
-        });
-    }
 
-    const resetStateMovie =  async function(){
-        // alert('leavbe');
-        // await delay(2000);
+    const resetStateVideo =  async function(){
         setTrailerURL("");
         setVidError(true);
         setIsVideoLoading(false);
+        setIsVideoShown(false);
     }
-    const handleClick = async (movie) => {
-        setTrailerURL("");
-        setVidError(false);
-        setIsVideoLoading(true);
-        movieTrailer(movie?.name || movie?.title || movie?.original_title || "")
-            .then((url) => {
-                const urlParams = new URLSearchParams(new URL(url).search);
-                setTrailerURL(urlParams.get("v"));
-                setMyVideoId(movie.id)
-            })
-            .catch((error) => {
-                setMyVideoId(null);
-                setTrailerURL("");
-                setVidError(true);
-            })
-            .finally((elem) => {
-                setIsVideoLoading(false);
-            })
+
+    const HandleVideo = async (movie) => {
+        if(isVideoShown ===false){
+            setTrailerURL("");
+            setVidError(false);
+            setIsVideoLoading(true);
+            movieTrailer(movie?.name || movie?.title || movie?.original_title || "")
+                .then((url) => {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    setTrailerURL(urlParams.get("v"));
+                    setMyVideoId(movie.id)
+                })
+                .catch((e) => {
+                    setMyVideoId(null);
+                    setTrailerURL("");
+                    setVidError(true);
+                })
+                .finally((e) => {
+                    setIsVideoLoading(false);
+                    setIsVideoShown(true)
+                })
+        }
     };
 
     return (
@@ -158,11 +156,16 @@ function Row({title, url, isLargeRow}) {
                     {isOpenL ? <Chevron style={{float:'left'}} icon={ChevronLeft} onClick={scrollRight} isLargeRow={isLargeRow}/> : ''}
                     <RowPoster id="RowPoster" ref={myRef}>
                         {movies && movies.map((movie, index) => (
-                            <Container onMouseLeave={() => resetStateMovie(movie)} onClick={() => handleClick(movie)} id="test" key={`${movie.id}'---'`}>
+                            <Container onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} onClick={()=>alert(1)} id="test" key={`${movie.id}'---'`}>
                                     {myVideoId === movie.id && vidError === false ?
-                                        (<YouTube
-                                                id="vidContainer" style={{width: isLargeRow ? '400px': '300px', height: isLargeRow ? '300px': '100px', marginTop:isLargeRow ? '-123px': '-150px' }}
-                                                videoId={trailerURL} opts={opts}/>
+                                        (isVideoLoading ?
+                                                <LoaderWrapper data-testid='loader' >
+                                                    <Loader id='myloader' style={{marginTop: '0vh'}} />
+                                                </LoaderWrapper>
+                                                :
+                                                <YouTube
+                                                   onReady={e=>setIsVideoLoading(false)} onError={e=>setIsVideoLoading(true)}  id="vidContainer" style={{width: isLargeRow ? '400px': '300px', height: isLargeRow ? '300px': '100px', marginTop:isLargeRow ? '-123px': '-150px' }}
+                                                    videoId={trailerURL} opts={opts}/>
                                         ) : (<StyledImage
                                                 key={movie.id}
                                                 src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
