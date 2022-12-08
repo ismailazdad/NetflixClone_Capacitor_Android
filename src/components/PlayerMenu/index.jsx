@@ -16,7 +16,6 @@ const PlayerContainer = styled.div`
   top: ${({isLargeRow}) => isLargeRow ? '9px' : '137px'};
   max-width : ${({isLargeRow}) => isLargeRow ? 'inherit' : '300px'};
   padding-top: 5px;
-  
   font-size : 1em;
 `
 const PlaySubMenuButton = styled.button`       
@@ -62,25 +61,27 @@ const PlayerDescription = styled.h1`
     line-height: 0.9rem;
 `
 const GenresTypes = styled.div`
-display:initial;
-color:green;
-float:right;
-padding-right:1%;
-font-size: 1rem;
+    display:initial;
+    color:lightgreen;
+    float:right;
+    padding-right:1%;
+    font-size: 1rem;
 `
 function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
 }
 
-function PlayerMenu({id,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow}) {
+function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow}) {
     let genresMovies =  genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
     let genresTv =  genre_ids.map((item) => tvGenres.find(x => x.id === item)?.name)
     let genres = genresMovies.concat(genresTv).filter((item,index)=>genresMovies.indexOf(item)===index);
 
     return (
-        <PlayerContainer onClick={() => alert(1)} isLargeRow={isLargeRow} key={`${id}--sub`}>
+        <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>
             <PlayerTitle> {title}</PlayerTitle>
-            <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
+            <Link  to={`/movie/${title ? title : name}`}>
+                <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
+            </Link>
             { genres.join(' . ')}
             {isLargeRow ?   <GenresTypes >{Math.ceil(vote_average*10)}%</GenresTypes>:''}
             <PlayerDescription>

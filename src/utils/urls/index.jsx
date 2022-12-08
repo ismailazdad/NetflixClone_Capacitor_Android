@@ -10,7 +10,10 @@ const urls = {
     findHorrorMovies: API_URL+`/discover/movie?api_key=`+API_KEY+`&with_genres=27`,
     findRomanceMovies: API_URL+`/discover/movie?api_key=`+API_KEY+`&with_genres=10749`,
     findDocumentaries: API_URL+`/discover/movie?api_key=`+API_KEY+`&with_genres=99`,
-    findImagesUrl : 'https://image.tmdb.org/t/p/original/'
+    findImagesUrl : 'https://image.tmdb.org/t/p/original/',
+    findMovie : API_URL+'/search/movie?api_key='+API_KEY+`&query=`,
+    findTv : API_URL+'/search/tv?api_key='+API_KEY+`&query=`,
+    // https://api.themoviedb.org/3/movie/505642?api_key=b065018389f6469be049239a4671c12e
 };
 
 export default urls;

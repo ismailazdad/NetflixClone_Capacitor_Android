@@ -8,6 +8,7 @@ import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
 import PlayerMenu from "../PlayerMenu";
+import {Link} from "react-router-dom";
 
 const RowContainer = styled.div`
     color: white;
@@ -82,7 +83,7 @@ function Row({title, url, isLargeRow}) {
         if (ec <= myRef.current.offsetWidth * 0.15) {
             setIsOpenR(false);
             setIsOpenL(true);
-        } else if (ec <= myRef.current.offsetWidth * 0.40) {
+        } else if (ec <= myRef.current.offsetWidth * 0.60) {
             setIsOpenR(true);
             setIsOpenL(true);
         }
@@ -95,7 +96,7 @@ function Row({title, url, isLargeRow}) {
         if (myRef.current.scrollLeft <= leftsize) {
             setIsOpenR(true);
             setIsOpenL(false);
-        } else if (ec <= myRef.current.offsetWidth * 0.40) {
+        } else if (ec <= myRef.current.offsetWidth * 0.60) {
             setIsOpenR(true);
             setIsOpenL(true);
         }
@@ -176,22 +177,30 @@ function Row({title, url, isLargeRow}) {
                                                 }}
                                                     videoId={trailerURL} opts={opts}/>
                                                 <PlayerMenu
-                                                id={movie.id}
-                                                title={movie.title}
-                                                overview={movie.overview}
-                                                media_type={movie.media_type}
-                                                genre_ids={movie.genre_ids}
-                                                popularity={movie.popularity}
-                                                vote_average={movie.vote_average}
-                                                isLargeRow={isLargeRow}/>
+                                                    id={movie.id}
+                                                    name={movie.name}
+                                                    title={movie.title}
+                                                    overview={movie.overview}
+                                                    media_type={movie.media_type}
+                                                    genre_ids={movie.genre_ids}
+                                                    popularity={movie.popularity}
+                                                    vote_average={movie.vote_average}
+                                                    isLargeRow={isLargeRow}/>
                                             </div>
 
-                                    ) : (<StyledImage
-                                        key={movie.id}
-                                        src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                        alt={movie.name}
-                                        isLargeRow={isLargeRow}
-                                    />)
+                                    ) :
+                                    (
+
+                                        <Link key={`rows--${index}`} to={`/movie/${movie.original_name ? movie.original_name : movie.title}`}>
+                                            {/*{JSON.stringify(movie)}*/}
+                                            <StyledImage
+                                                key={movie.id}
+                                                src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                                alt={movie.name}
+                                                isLargeRow={isLargeRow}
+                                            />
+                                        </Link>
+                                    )
                                 }
                             </Container>
                         ))}
