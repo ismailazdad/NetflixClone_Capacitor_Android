@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import YouTube from "react-youtube";
 import urls from "../../utils/urls";
 import movieTrailer from "movie-trailer";
@@ -81,8 +81,8 @@ function Row({title, url, isLargeRow}) {
     const [vidError, setVidError] = useState(true);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoShown, setIsVideoShown] = useState(false);
-    const [isEffect, setIsEffect] = useState(false);
-    // const movies = data.slice(9, 12);
+    const type = url.toString().includes('tv') ? 'tv' : 'movie'
+    // const movies = data.slice(9, 11);
     const movies = data;
 
     const scrollLeft = function () {
@@ -124,13 +124,11 @@ function Row({title, url, isLargeRow}) {
     };
 
     const resetStateVideo = async function (e) {
-        if (!isEffect) {
-            setTrailerURL("");
-            setVidError(false);
-            setIsVideoLoading(false);
-            setIsVideoShown(false);
-            setMyVideoId(null);
-        }
+        setTrailerURL("");
+        setVidError(false);
+        setIsVideoLoading(false);
+        setIsVideoShown(false);
+        setMyVideoId(null);
     }
 
     const HandleVideo = async (movie) => {
@@ -168,7 +166,8 @@ function Row({title, url, isLargeRow}) {
                     <RowPoster id="RowPoster" ref={myRef}>
                         {movies && movies.map((movie, index) => (
                             <Container onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} key={`${movie.id}'---'`}>
-                                {myVideoId === movie.id && vidError === false && !isEffect ?
+                                {/*{JSON.stringify(movie)}*/}
+                                {myVideoId === movie.id && vidError === false ?
                                     (
                                         <div style={{
                                             width: isLargeRow ? '400px' : '300px',
@@ -202,19 +201,21 @@ function Row({title, url, isLargeRow}) {
                                                 genre_ids={movie.genre_ids}
                                                 popularity={movie.popularity}
                                                 vote_average={movie.vote_average}
-                                                isLargeRow={isLargeRow}/>
+                                                isLargeRow={isLargeRow}
+                                                type={type}
+                                            />
                                         </div>
                                     ) :
-                                    (!isEffect ?
+                                    (
                                             <Link key={`rows--${index}`}
-                                                  to={`/movie/${movie.original_name ? movie.original_name : movie.title}`}>
+                                                  to={`/movieDetails/${movie.id}/${type}`}>
                                                 <StyledImage
                                                     key={movie.id}
                                                     src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
                                                     alt={movie.name}
                                                     isLargeRow={isLargeRow}
                                                 />
-                                            </Link> : ''
+                                            </Link>
                                     )
                                 }
                             </Container>

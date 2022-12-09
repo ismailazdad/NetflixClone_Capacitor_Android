@@ -71,7 +71,7 @@ function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
 }
 
-function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow}) {
+function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type}) {
     let genresMovies =  genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
     let genresTv =  genre_ids.map((item) => tvGenres.find(x => x.id === item)?.name)
     let genres = genresMovies.concat(genresTv).filter((item,index)=>genresMovies.indexOf(item)===index);
@@ -79,9 +79,8 @@ function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote
     return (
         <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>
             <PlayerTitle> {title}</PlayerTitle>
-            <Link  to={`/movie/${title ? title : name}`}>
+            <Link  to={`/movieDetails/${id}/${type}`}>
                 <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
-
             </Link>
             <span style={{maxWidth:'50%'}}>{ genres.join(' . ')}</span>
             {isLargeRow ?   <GenresTypes >{Math.ceil(vote_average*10)}%</GenresTypes>:''}

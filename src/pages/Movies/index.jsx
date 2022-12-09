@@ -10,7 +10,7 @@ function Movies() {
         <div style={{background:'black'}}>
         <Banner />
         <Row title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals} isLargeRow/>
-        {/*<Row title='Trending Now' url={urls.findTrending} />*/}
+        <Row title='Trending Now' url={urls.findTrending} />
         {/*<Row title='Top Rated' url={urls.findTopRated} isLargeRow/>*/}
         {/*<Row title='Action Movies' url={urls.findActionMovies} />*/}
         {/*<Row title='Comedy Movies' url={urls.findComedyMovies} isLargeRow/>*/}

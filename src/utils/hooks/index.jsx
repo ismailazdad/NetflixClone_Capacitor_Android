@@ -25,7 +25,7 @@ export function useFetch(url) {
     return {isLoading, data,error}
 }
 
-export function useFetch2(url) {
+export function useFetchById(url) {
     const [data, setData] = useState({})
     const [isLoading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -34,9 +34,7 @@ export function useFetch2(url) {
         fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
-                setData(
-                    jsonResponse.results,
-                );
+                setData(jsonResponse);
             })
             .catch(e => {
                 console.log(e)

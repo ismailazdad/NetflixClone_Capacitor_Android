@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useContext} from "react";
 import urls from "../../utils/urls"
 import styled from "styled-components";
-import {useFetch, useFetch2} from "../../utils/hooks";
+import { useFetchById} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import {useParams} from "react-router";
 
@@ -24,12 +24,12 @@ const MovieTitle = styled.h1`
     padding-bottom: 0.3rem;
 `
 const MovieDescription = styled.h1`
-    width: 45rem;
+    width: 100rem;
     line-height: 1.3;
-    padding-top: 1rem;
-    font-size: 0.8rem;
-    max-width: 360px;
-    height: 80px;
+    padding-top: 0.5rem;
+    font-size: 1.5rem;
+    max-width: 120rem;
+    height: 200px;
 `
 
 const MovieButton = styled.button`
@@ -76,13 +76,10 @@ export const LoaderWrapper = styled.div`
 `
 
 function Movie() {
-    // const {title:title} = useParams()
-    const {id: myTitle} = useParams()
-    const {isLoading, data, error} = useFetch(urls.findTv+myTitle)
-    const {isLoading2, data2, error2} = useFetch(urls.findMovie+myTitle)
-    console.log(data,data2)
-
-    const dataFinal = data ? Object.values(data).length === 0 ? data2: data : data2
+    const {id: myId,type:myType} = useParams()
+    let url = urls.findById.replace('{type}',myType).replace('{id}',myId);
+    const {isLoading, data, error} = useFetchById(url)
+    console.log(data)
     if (error) {
         return <MovieHeader><MovieErrorLoader><span>Oups something went wrong</span></MovieErrorLoader></MovieHeader>
     }
@@ -97,22 +94,24 @@ function Movie() {
                 <Loader/>
             </LoaderWrapper>
         ) : (
-            <MovieHeader image={dataFinal?.backdrop_path ? urls.findImagesUrl + dataFinal.backdrop_path : ''}>
+            <MovieHeader image={data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : ''}>
                 <MovieContent>
                     <MovieTitle>
-                        {dataFinal?.title || dataFinal?.name || dataFinal?.original_name}
+                        {data?.title || data?.name || data?.original_name}
                     </MovieTitle>
                     <div>
                         <MovieButton>Play</MovieButton>
                         <MovieButton>My List</MovieButton>
                     </div>
                     <MovieDescription>
-                        {truncate(dataFinal?.overview, 150)}
+                        {truncate(data?.overview, 250)}
                     </MovieDescription>
                 </MovieContent>
                 <MovieFadeBottom/>
             </MovieHeader>
-        ))
+        )
+        )
+
     );
 }
 

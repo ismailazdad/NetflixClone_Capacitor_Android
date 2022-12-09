@@ -6,12 +6,12 @@ import Movies from "./pages/Movies";
 import {BrowserRouter as Router} from 'react-router-dom'
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import {Routes,Route} from "react-router";
+import {Route, Routes} from "react-router";
 import Movie from "./pages/Movie";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    // <React.StrictMode>
+    <React.StrictMode>
     <Router>
         <Header/>
         <Routes>
@@ -19,11 +19,11 @@ root.render(
             </Route>
             <Route exact path="/movies" element={<Movies />}>
             </Route>
-            <Route path="/movie/:id" element={ <Movie />}>
+            <Route exact path="/movieDetails/:id/:type" element={ <Movie />}>
             </Route>
         </Routes>
         <Footer />
     </Router>
-    // </React.StrictMode>
+    </React.StrictMode>
 );
 
