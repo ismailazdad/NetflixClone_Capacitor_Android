@@ -3,6 +3,7 @@ import urls from "../../utils/urls"
 import styled from "styled-components";
 import {useFetch} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
+import {Link} from "react-router-dom";
 
 const BannerHeader = styled.div`
     color: white;
@@ -75,7 +76,8 @@ export const LoaderWrapper = styled.div`
 `
 
 function Banner() {
-    const {isLoading, data, error} = useFetch(urls.findNetflixOriginals)
+    const {isLoading, data, error} = useFetch(urls.findNetflixOriginals);
+    const type = urls.findNetflixOriginals.toString().includes('/tv') ? 'tv' : 'movie'
     if (error) {
         return <BannerHeader><ErrorLoader><span>Oups something went wrong</span></ErrorLoader></BannerHeader>
     }
@@ -96,7 +98,10 @@ function Banner() {
                         {data?.title || data?.name || data?.original_name}
                     </BannerTitle>
                     <div>
-                        <BannerButton>Play</BannerButton>
+                        <Link
+                              to={`/movieDetails/${data.id}/${type}`}>
+                         <BannerButton>Play</BannerButton>
+                        </Link>
                         <BannerButton>My List</BannerButton>
                     </div>
                     <BannerDescription>

@@ -81,7 +81,7 @@ function Row({title, url, isLargeRow}) {
     const [vidError, setVidError] = useState(true);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoShown, setIsVideoShown] = useState(false);
-    const type = url.toString().includes('/tv/') ? 'tv' : 'movie'
+    const type = url.toString().includes('/tv') ? 'tv' : 'movie'
     playerOptions.height = '390';
     playerOptions.playerVars.mute = 1;
     const movies = data;
@@ -165,7 +165,7 @@ function Row({title, url, isLargeRow}) {
                                             width: isLargeRow ? '400px' : '300px',
                                             height: isLargeRow ? '300px' : '100px',
                                             marginTop: isLargeRow ? '-7.5rem' : '-9rem',
-                                            position:'revert'
+                                            // position:'revert'
                                         }}
                                         >
                                             {isVideoLoading ?
