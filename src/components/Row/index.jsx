@@ -2,7 +2,7 @@ import React, {useContext, useRef, useState} from "react";
 import YouTube from "react-youtube";
 import urls from "../../utils/urls";
 import movieTrailer from "movie-trailer";
-import {useFetchList} from "../../utils/hooks";
+import {useFetchList,playerOptions} from "../../utils/hooks";
 import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
@@ -81,8 +81,9 @@ function Row({title, url, isLargeRow}) {
     const [vidError, setVidError] = useState(true);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoShown, setIsVideoShown] = useState(false);
-    const type = url.toString().includes('tv') ? 'tv' : 'movie'
-    // const movies = data.slice(9, 11);
+    const type = url.toString().includes('/tv/') ? 'tv' : 'movie'
+    playerOptions.height = '390';
+    playerOptions.playerVars.mute = 1;
     const movies = data;
 
     const scrollLeft = function () {
@@ -114,14 +115,6 @@ function Row({title, url, isLargeRow}) {
     if (error) {
         return <span>Oups something went wrong</span>
     }
-    const opts = {
-        height: "390",
-        width: "100%",
-        playerVars: {
-            autoplay: 1,
-            mute: 1
-        },
-    };
 
     const resetStateVideo = async function (e) {
         setTrailerURL("");
@@ -166,7 +159,6 @@ function Row({title, url, isLargeRow}) {
                     <RowPoster id="RowPoster" ref={myRef}>
                         {movies && movies.map((movie, index) => (
                             <Container onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} key={`${movie.id}'---'`}>
-                                {/*{JSON.stringify(movie)}*/}
                                 {myVideoId === movie.id && vidError === false ?
                                     (
                                         <div style={{
@@ -185,13 +177,11 @@ function Row({title, url, isLargeRow}) {
                                                 </LoaderContainer>
                                                 : ''}
                                             <YouTube
-                                                onPlay={e => {
-                                                    setIsVideoLoading(false);
-                                                }}
+                                                onPlay={e => {setIsVideoLoading(false);}}
                                                 onError={e => setVidError(true)}
                                                 id="vidContainer"
                                                 videoId={trailerURL}
-                                                opts={opts}/>
+                                                opts={playerOptions}/>
                                             <PlayerMenu
                                                 id={movie.id}
                                                 name={movie.name}

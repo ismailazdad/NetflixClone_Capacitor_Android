@@ -2,9 +2,7 @@ import {Link} from "react-router-dom";
 import styled from "styled-components";
 import React from "react";
 import PlayButton from "../../assets/play2.png"
-
-const MovieGenres = [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}]
-const tvGenres = [{"id":10759,"name":"Action & Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":10762,"name":"Kids"},{"id":9648,"name":"Mystery"},{"id":10763,"name":"News"},{"id":10764,"name":"Reality"},{"id":10765,"name":"Sci-Fi & Fantasy"},{"id":10766,"name":"Soap"},{"id":10767,"name":"Talk"},{"id":10768,"name":"War & Politics"},{"id":37,"name":"Western"}]
+import {MovieGenres,tvGenres} from "../../utils/hooks";
 
 const PlayerContainer = styled.div`
   position: sticky;
@@ -75,15 +73,15 @@ function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote
     let genresMovies =  genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
     let genresTv =  genre_ids.map((item) => tvGenres.find(x => x.id === item)?.name)
     let genres = genresMovies.concat(genresTv).filter((item,index)=>genresMovies.indexOf(item)===index);
-
+    let notes = Math.ceil(vote_average*10)
     return (
         <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>
-            <PlayerTitle> {title}</PlayerTitle>
+            <PlayerTitle> {title ? title : name}</PlayerTitle>
             <Link  to={`/movieDetails/${id}/${type}`}>
                 <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
             </Link>
             <span style={{maxWidth:'50%'}}>{ genres.join(' . ')}</span>
-            {isLargeRow ?   <GenresTypes >{Math.ceil(vote_average*10)}%</GenresTypes>:''}
+            {isLargeRow ?   <GenresTypes >{notes}%</GenresTypes>:''}
             <PlayerDescription>
                 {isLargeRow ?truncate(overview, 150):''}
             </PlayerDescription>
