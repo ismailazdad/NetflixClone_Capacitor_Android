@@ -140,10 +140,10 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
                     </div>
                 </div>
                 {!isMainMenu ?
-                <div style={{height: '200px', width: '30rem', lineHeight: '1.2rem', float: 'right'}}>
-                    <div>Genres : {genres}</div>
-                    <div>Productions : {productions}</div>
-                    <div>Languages : {languages}</div>
+                <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
+                    <div><span style={{color:'gray'}}>Genres</span> : {genres}</div>
+                    <div><span style={{color:'gray'}}>Productions</span> : {productions}</div>
+                    <div><span style={{color:'gray'}}>Languages</span> : {languages}</div>
                 </div>:''}
                 <MovieDescription style={{ display: 'flex'}}>
                     {isMainMenu ? truncate(overview,250):truncate(overview,500)}
