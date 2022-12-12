@@ -29,7 +29,8 @@ export function getInfo(data,url){
     languages = languages?.map((e) => Object.values(e)).flat().join(', ');
     return {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type}
 }
-export function useFetch(url) {
+
+export function useFetch(url,random=false) {
     const [data, setData] = useState({})
     const [isLoading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -38,9 +39,14 @@ export function useFetch(url) {
         fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
-                setData(
-                    jsonResponse.results[Math.floor(Math.random() * jsonResponse.results.length)],
-                );
+                if(random){
+                    setData(
+                        jsonResponse.results[Math.floor(Math.random() * jsonResponse.results.length)],
+                    );
+                }else {
+                    setData(jsonResponse);
+                }
+
             })
             .catch(e => {
                 console.log(e)
@@ -54,28 +60,6 @@ export function useFetch(url) {
     return {isLoading, data,error}
 }
 
-export function useFetchById(url) {
-    const [data, setData] = useState({})
-    const [isLoading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
-    useEffect(() => {
-        setLoading(true)
-        fetch(url)
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                setData(jsonResponse);
-            })
-            .catch(e => {
-                console.log(e)
-                setError(true)
-            })
-            .finally( e =>{
-                    setLoading(false)
-                }
-            )
-    }, [url])
-    return {isLoading, data,error}
-}
 
 export function useFetchList(url) {
     const [data, setData] = useState([])

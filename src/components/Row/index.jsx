@@ -25,6 +25,7 @@ const RowPoster = styled.div`
     float :right;
 }
 `
+
 const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -38,7 +39,7 @@ const StyledImage = styled.img`
       transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.5)')}; 
     }
 `
-const Container = styled.div`
+const Card = styled.div`
     cursor:pointer;
     object-fit: contain;
     max-height: 100px;
@@ -158,7 +159,7 @@ function Row({title, url, isLargeRow}) {
                     {isOpenL ? <Chevron style={{float: 'left'}} icon={ChevronLeft} onClick={scrollRight} isLargeRow={isLargeRow}/> : ''}
                     <RowPoster id="RowPoster" ref={myRef}>
                         {movies && movies.map((movie, index) => (
-                            <Container onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} key={`${movie.id}'---'`}>
+                            <Card onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} key={`${movie.id}'---'`}>
                                 {myVideoId === movie.id && vidError === false ?
                                     (
                                         <div style={{
@@ -208,7 +209,7 @@ function Row({title, url, isLargeRow}) {
                                             </Link>
                                     )
                                 }
-                            </Container>
+                            </Card>
                         ))}
                     </RowPoster>
                 </RowContainer>)

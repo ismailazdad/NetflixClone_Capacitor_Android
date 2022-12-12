@@ -1,7 +1,7 @@
 import React from "react";
 import urls from "../../utils/urls"
 import styled from "styled-components";
-import {getInfo, useFetchById} from "../../utils/hooks";
+import {getInfo, useFetch, useFetchById, useFetchTmp} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import {useParams} from "react-router";
 import Banner from "../../components/Banner";
@@ -32,7 +32,7 @@ const LoaderWrapper = styled.div`
 function Movie() {
     const {id: myId, type: myType} = useParams()
     let url = urls.findById.replace('{type}', myType).replace('{id}', myId);
-    const {isLoading, data, error} = useFetchById(url)
+    const {isLoading, data, error} = useFetch(url,false)
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,id,type} = getInfo(data,url);
     if (error ) {
         return <MovieHeader><MovieErrorLoader><span>Oups something went wrong</span></MovieErrorLoader></MovieHeader>
