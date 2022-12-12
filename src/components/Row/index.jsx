@@ -119,32 +119,6 @@ function Row({title, url, isLargeRow}) {
     playerOptions.playerVars.mute = 1;
     const movies = data;
 
-    // const scrollLeft = function () {
-    //     const leftsize = isLargeRow ? 1000 : 600;
-    //     const ec = myRef.current.offsetWidth - myRef.current.scrollLeft;
-    //     if (ec <= myRef.current.offsetWidth * 0.15) {
-    //         setIsOpenR(false);
-    //         setIsOpenL(true);
-    //     } else if (ec <= myRef.current.offsetWidth * 0.60) {
-    //         setIsOpenR(true);
-    //         setIsOpenL(true);
-    //     }
-    //     myRef.current.scrollLeft += leftsize;
-    // };
-    //
-    // const scrollRight = function () {
-    //     const leftsize = isLargeRow ? 1000 : 600;
-    //     const ec = myRef.current.offsetWidth - myRef.current.scrollLeft;
-    //     if (myRef.current.scrollLeft <= leftsize) {
-    //         setIsOpenR(true);
-    //         setIsOpenL(false);
-    //     } else if (ec <= myRef.current.offsetWidth * 0.60) {
-    //         setIsOpenR(true);
-    //         setIsOpenL(true);
-    //     }
-    //     myRef.current.scrollLeft -= leftsize
-    // };
-
     if (error) {
         return <span>Oups something went wrong</span>
     }
