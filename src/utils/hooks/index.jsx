@@ -138,7 +138,7 @@ export function useTransitionControl(duration){
             setState(state.EXITED)
         }
     };
-    return [state,enter,exit,exited,empty]
+    return [state,enter,exited]
 }
 
 function useTransitionStateImage(duration = 1000) {
@@ -186,5 +186,5 @@ export function useTransitionControlImage(duration){
             setState(state.EXITED)
         }
     };
-    return [state,enter,exit,exited,empty]
+    return [state,enter,exited]
 }
