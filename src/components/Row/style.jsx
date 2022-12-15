@@ -57,7 +57,7 @@ export const Chevron = styled.div`
         opacity : 0.4;
         height:${({isLargeRow}) => isLargeRow ? '260px;' : '160px'}; 
         width: 38px;
-        margin-top: 50px;
+        margin-top: 17px;
         background: ${({icon}) => 'url(' + icon + ') no-repeat center'};
         background-position: center;
         background-size: contain;

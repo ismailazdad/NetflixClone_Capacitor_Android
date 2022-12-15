@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {getInfo, useFetch, useFetchById, useFetchTmp} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import {useParams} from "react-router";
-import Banner from "../../components/Banner";
+import BannerVideo from "../../components/BannerVideo";
 
 const MovieHeader = styled.div`
     color: white;
@@ -28,7 +28,6 @@ const LoaderWrapper = styled.div`
     justify-content: center;
 `
 
-
 function Movie() {
     const {id: myId, type: myType} = useParams()
     let url = urls.findById.replace('{type}', myType).replace('{id}', myId);
@@ -45,7 +44,7 @@ function Movie() {
                 </LoaderWrapper>
             ) : (
                 <div style={{background: 'black',height:'100vh',    overflowX: 'hidden'}}>
-                    <Banner
+                    <BannerVideo
                         imageUrl = {imageUrl}
                         title={title}
                         adults={adults}

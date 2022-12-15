@@ -2,7 +2,7 @@ import React, {useRef, useState} from "react";
 import YouTube from "react-youtube";
 import urls from "../../utils/urls";
 import movieTrailer from "movie-trailer";
-import {playerOptions, useFetchList, useTransitionControl, useTransitionControlImage} from "../../utils/hooks";
+import {playerOptions, useFetchList, useTransitionControl} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
@@ -40,7 +40,7 @@ function Row({title, url, isLargeRow}) {
         ...defaultStyle,
         ...transitionStyles[stateVideo] ?? {},
     };
-    const [stateImage, enterImage,exitedImage] = useTransitionControlImage(500);
+    const [stateImage, enterImage,exitedImage] = useTransitionControl(500);
     const style2 = {
         ...defaultStyleImg,
         ...transitionStylesImages[stateImage] ?? {},
@@ -58,8 +58,7 @@ function Row({title, url, isLargeRow}) {
     const type = url.toString().includes('/tv') ? 'tv' : 'movie'
     playerOptions.height = '350';
     playerOptions.playerVars.mute = 1;
-    const movies = data.slice(0,3);
-    // const movies = data;
+    const movies = data;
 
     if (error) {
         return <span>Oups something went wrong</span>
