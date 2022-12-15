@@ -2,7 +2,7 @@ import React, {useRef, useState} from "react";
 import YouTube from "react-youtube";
 import urls from "../../utils/urls";
 import movieTrailer from "movie-trailer";
-import {playerOptions, useFetchList} from "../../utils/hooks";
+import {playerOptions, useFetchList, useTransitionControl, useTransitionControlImage} from "../../utils/hooks";
 import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
@@ -30,7 +30,7 @@ const RowPoster = styled.div`
     }
     animation: slide 3s linear infinite;  
     animation-iteration-count : infinite;
-    animation-direction  :  alternate-reverse;;
+    animation-direction  :  alternate-reverse;
     ${({scrollL , scroll}) => (!scrollL && !scroll ? 'animation-play-state :paused ;':'animation-play-state:running;')}     
     @keyframes slide { 
          0% {
@@ -45,12 +45,7 @@ const RowPoster = styled.div`
 const Card = styled.div`
     cursor:pointer;
     object-fit: contain;
-    max-height: 100px;
     margin-right: 10px;
-    transition: transform 3s;
-    max-height: 250px;
-    // border :solid 1px red;
-
 `
 const LoaderWrapper = styled.div`
     display: flex;
@@ -58,29 +53,29 @@ const LoaderWrapper = styled.div`
 `
 const StyledImage = styled.img`
     object-fit: contain;
-    margin-right:  ${({isLargeRow}) => (isLargeRow ? '10px' : '0px')};
-    transition: transform 450ms;
-    max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '100px')};
+    max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '150px')};
+    border:solid black;
+    transition : transform 2s;
     &:hover{
-      transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.5)')}; 
+      transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.1)' : 'scale(1.1)')}; 
     }
 `
-const Test = styled.div`
-    object-fit: contain;
-    transition: transform 3s;
-    // &:hover{
-    //   transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.5)')}; 
-    // }
-
+const VideoContainer = styled.div`
+    margin-top:  ${({isLargeRow}) => (isLargeRow ? '-5.5rem' : '-7.5rem')}; 
+    z-index:100;
+    position:initial;
+    top:0;
+    overflow: hidden;
+    display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'};   
 `
 
 const Chevron = styled.div`
     position: absolute;
     z-index:100;
     opacity : 0.4;
-    height:${({isLargeRow}) => isLargeRow ? '252px;' : '100px'}; 
+    height:${({isLargeRow}) => isLargeRow ? '250px;' : '150px'}; 
     width: 38px;
-    margin-top: 20px;
+    margin-top: 60px;
     background: ${({icon}) => 'url(' + icon + ') no-repeat center'};
     background-position: center;
     background-size: contain;
@@ -92,19 +87,51 @@ const Chevron = styled.div`
     }
 `
 const LoaderContainer = styled.div`
-    background-color: #000000;
-    // border: 1px solid red;
-    position: absolute;
-    margin-top:${({isLargeRow}) => isLargeRow ? '100px' : '123px'}; 
-    width: ${({isLargeRow}) => isLargeRow ? '400px' : '300px'};
+    position:relative;
+    width: ${({isLargeRow}) => isLargeRow ? '320px' : '300px'};
     height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
-    z-index:10;
+    z-index:1000;
+    // display: ${({isVideoLoading}) => isVideoLoading ? 'block' : 'none'};  
 `
 
+
+const transitionStyles ={
+    entering:{transform: 'scale(1)',transition : 'transform 1s'},
+    // no_data:{transform: 'scale(1)',transition : 'transform 1s'},
+    no_data:{transform: 'scale(1)',filter:'blur(5px)'},
+    entered:{transform: 'scale(1.2)',transition : 'transform 2s'},
+    exiting:{transform: 'scale(1)',filter:'blur(5px)'},
+    // exiting:{transform: 'scale(1)',transition : 'transform 100ms'},
+    exited:{transform: 'scale(1)',filter:'blur(5px)'},
+    // exited:{transition: 'opacity 0.5s',opacity:'0'}
+}
+const defaultStyle ={
+    transition : 'transform 1s',
+    transform : 'scale(1)',
+}
+const transitionStylesImages ={
+    no_data:{transform: 'scale(1)',transition : 'transform 2s'},
+    entered:{transform: 'scale(1.1)',transition : 'transform 1s'},
+    entering:{transform: 'scale(1.3)',transition : 'transform 1s'},
+}
+const defaultStyleImg ={
+    transition : 'transform 450ms',
+    transform : 'scale(1)',
+}
+
 function Row({title, url, isLargeRow}) {
+    let [state, enter,exit,exited,empty] = useTransitionControl();
+    const style = {
+        ...defaultStyle,
+        ...transitionStyles[state] ?? {},
+    };
+
+    const [state2, enter2,exited2] = useTransitionControlImage();
+    const style2 = {
+        ...defaultStyleImg,
+        ...transitionStylesImages[state2] ?? {},
+    };
     const myRef = useRef(null);
-    // const [isOpenL, setIsOpenL] = useState(false);
-    // const [isOpenR, setIsOpenR] = useState(true);
     const [trailerURL, setTrailerURL] = useState("");
     const {isLoading, data, error} = useFetchList(url);
     const [myVideoId, setMyVideoId] = useState(null);
@@ -112,18 +139,24 @@ function Row({title, url, isLargeRow}) {
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoShown, setIsVideoShown] = useState(false);
     const [scroll,setScroll]= useState(false);
-    const [scrollL,setScrollL]= useState(false);
-    const [vidEffect,setVidEffect]=useState(false);
+    const [scrollLeft,setScrollLeft]= useState(false);
+    const [mouseLeave,setMouseLeave]=useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie'
-    playerOptions.height = '390';
+    playerOptions.height = '350';
     playerOptions.playerVars.mute = 1;
-    const movies = data;
+    const movies = data.slice(0,3);
 
     if (error) {
         return <span>Oups something went wrong</span>
     }
 
-    const resetStateVideo = async function (e) {
+
+    // if((state === 'no_data' || state === 'entered') && mouseLeave){
+    //     empty();
+    // }
+
+    const ResetStateVideo =  function (e) {
+        setMouseLeave(true);
         setTrailerURL("");
         setVidError(false);
         setIsVideoLoading(false);
@@ -131,12 +164,15 @@ function Row({title, url, isLargeRow}) {
         setMyVideoId(null);
     }
 
+
     const HandleVideo = async (movie) => {
         if (!isVideoShown) {
+            setMouseLeave(false);
             setTrailerURL("");
             setVidError(false);
             setIsVideoLoading(true);
             setMyVideoId(null);
+            console.log('video loading')
             movieTrailer(movie?.name || movie?.title || movie?.original_title || "")
                 .then((url) => {
                     const urlParams = new URLSearchParams(new URL(url).search);
@@ -162,73 +198,89 @@ function Row({title, url, isLargeRow}) {
                 <RowContainer id="RowContainer">
                     <h2>{title}</h2>
                     <Chevron  style={{right: '0'}} icon={ChevronRight} onMouseOver={()=>setScroll(true)} onMouseLeave={()=>setScroll(false)} isLargeRow={isLargeRow}/>
-                    <Chevron  style={{left: '0'}} icon={ChevronLeft} onMouseOver={()=>setScrollL(true)} onMouseLeave={()=>setScrollL(false)}  isLargeRow={isLargeRow}/>
-                    <RowPoster id="RowPoster" ref={myRef}  scroll={scroll} scrollL={scrollL}>
+                    <Chevron  style={{left: '0'}} icon={ChevronLeft} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
+                    state: {state}
+                    <br></br>
+                    state2: {state2}
+                    <RowPoster id="RowPoster" ref={myRef}  scroll={scroll} scrollL={scrollLeft}>
                         {movies && movies.map((movie, index) => (
-
-                            <Card onMouseLeave={() => resetStateVideo()} onMouseEnter={() => HandleVideo(movie)} key={`${movie.id}'---'`}>
-                                {myVideoId === movie.id && vidError === false && !scroll && !scrollL && !vidEffect  ?
+                            <Card key={`${movie.id}'---'`} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)}>
+                                { (myVideoId === movie.id && vidError === false && !scroll && !scrollLeft)  ?
                                     (
-                                        <div
-                                            style={{
-                                            width: isLargeRow ? '400px' : '300px',
-                                            height: isLargeRow ? '300px' : '100px',
-                                            marginTop: isLargeRow ? '-7.5rem' : '-9rem',
-                                        }}
+                                        <div style={{
+                                                width: isLargeRow ? '320px' : '300px',
+                                                height: isLargeRow ? '260px' : '150px',
+                                            }}
                                         >
                                             {isVideoLoading  ?
-                                                <LoaderContainer isLargeRow={isLargeRow}>
-                                                    <StyledImage
-                                                        key={movie.id}
-                                                        src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                                        alt={movie.name}
-                                                        isLargeRow={isLargeRow}
-                                                        style={{width:'100%'}}
-                                                    />
-                                                    <LoaderWrapper data-testid='loader'>
-                                                        <Loader id='myloader'
-                                                                style={{margin: '-36% 0% 0% 0%', position: 'absolute'}}/>
-                                                    </LoaderWrapper>
-                                                </LoaderContainer>
-                                                 : ''}
-                                                <Test
-                                                    // onAnimationEnd={()=>{console.log('animation end');setVidEffect(true)}} onAnimationStart={()=>{console.log('animation start');setVidEffect(false)}}
-                                                      // onMouseOver={()=>setVidEffect(true)} onMouseLeave={()=>setVidEffect(false)}
-                                                >
-                                                    <YouTube
-                                                        onPlay={e => {setIsVideoLoading(false);}}
-                                                        onError={e => setVidError(true)}
-                                                        id="vidContainer"
-                                                        videoId={trailerURL}
-                                                        opts={playerOptions}/>
-                                                    <PlayerMenu
-                                                        id={movie.id}
-                                                        name={movie.name}
-                                                        title={movie.title}
-                                                        overview={movie.overview}
-                                                        media_type={movie.media_type}
-                                                        genre_ids={movie.genre_ids}
-                                                        popularity={movie.popularity}
-                                                        vote_average={movie.vote_average}
-                                                        isLargeRow={isLargeRow}
-                                                        type={type}
-                                                    />
-                                                </Test>
-                                        </div>
-                                    ) :
-                                    (
-                                        <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
-                                            <StyledImage
-                                                key={movie.id}
-                                                src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                                alt={movie.name}
-                                                isLargeRow={isLargeRow}
-                                            />
-                                        </Link>
+                                            <LoaderContainer  id='test'
+                                                // onMouseEnter={enter2}
+                                                // onMouseLeave={exited2}
+                                                // style={style2}
+                                                isVideoLoading={isVideoLoading}
+                                                isLargeRow={isLargeRow}>
+                                                <StyledImage
+                                                             key={movie.id}
+                                                             src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                                             alt={movie.name}
+                                                             isLargeRow={isLargeRow}
+                                                             style={{width:'100%'}}
 
-                                    )
+                                                />
+                                                <LoaderWrapper  data-testid='loader'>
+                                                    <Loader id='myloader'
+                                                            style={{margin: '-36% 0% 0% 0%', position: 'absolute'}}/>
+                                                </LoaderWrapper>
+                                            </LoaderContainer>
+                                            :''}
+
+                                            <VideoContainer id='test1'
+                                                            isLargeRow={isLargeRow}
+                                                            isVideoLoading={isVideoLoading}
+                                                            // onMouseEnter={enter}
+                                                            // onMouseLeave={exited}
+                                                            // style={style}
+                                            >
+
+                                                <YouTube
+                                                    onPlay={e => {setIsVideoLoading(false);}}
+                                                    onError={e => setVidError(true)}
+                                                    id="vidContainer"
+                                                    videoId={trailerURL}
+                                                    opts={playerOptions}/>
+
+                                                <PlayerMenu
+                                                    id={movie.id}
+                                                    name={movie.name}
+                                                    title={movie.title}
+                                                    overview={movie.overview}
+                                                    media_type={movie.media_type}
+                                                    genre_ids={movie.genre_ids}
+                                                    popularity={movie.popularity}
+                                                    vote_average={movie.vote_average}
+                                                    isLargeRow={isLargeRow}
+                                                    type={type}
+                                                />
+
+                                            </VideoContainer>
+
+                                        </div>
+
+                                    ) :
+
+
+                                    <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
+                                        <StyledImage
+                                            key={movie.id}
+                                            src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                            alt={movie.name}
+                                            isLargeRow={isLargeRow}
+                                        />
+                                    </Link>
                                 }
+
                             </Card>
+
 
                         ))}
                     </RowPoster>
