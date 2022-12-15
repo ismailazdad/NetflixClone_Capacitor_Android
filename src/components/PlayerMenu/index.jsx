@@ -42,15 +42,13 @@ const PlaySubMenuButton = styled.button`
 const PlayerTitle = styled.h1`
     font-size: 1rem;
     font-weight: 500;
-    margin-top: -1.5em;
+    margin-top: -2.5em;
     position: absolute;
 `
 const PlayerDescription = styled.h1`
     padding-left : 0.1rem;
-    padding-top: 0.3rem;
-    width: -webkit-max-content;
-    width: -moz-max-content;
-    width: max-content;
+    // padding-top: 0.1rem;
+    width: auto;
     font-size: 0.65rem;
     max-width: 400px;
     height: 28px;
@@ -80,10 +78,11 @@ function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote
             <Link  to={`/movieDetails/${id}/${type}`}>
                 <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
             </Link>
-            <span style={{maxWidth:'50%'}}>{isLargeRow ? genres.slice(0,4).join(' . '):genres.slice(0,3).join(' . ')}</span>
-            {isLargeRow ?   <GenresTypes >{notes}%</GenresTypes>:''}
+              <GenresTypes >{notes}%</GenresTypes>
+            <span style={{maxWidth:'30%'}}>{isLargeRow ? genres.slice(0,2).join(' . '):genres.slice(0,2).join(' . ')}</span>
+
             <PlayerDescription>
-                {isLargeRow ?truncate(overview, 150):''}
+                {isLargeRow ?truncate(overview, 120):''}
             </PlayerDescription>
         </PlayerContainer>
     )
