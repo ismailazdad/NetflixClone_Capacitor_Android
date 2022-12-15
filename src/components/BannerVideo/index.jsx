@@ -6,7 +6,7 @@ import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
-
+import Header from "../Header";
 const MovieHeader = styled.div`
     color: white;
     object-fit: contain;
@@ -99,6 +99,7 @@ function BannerVideo({imageUrl,title,adults,popularity,year,genres,productions,l
 
     return (
         <div>
+            <Header />
             <MovieHeader imageUrl={imageUrl}>
                 <MovieHeaderContent>
                     <MovieTitle> {title}</MovieTitle>
