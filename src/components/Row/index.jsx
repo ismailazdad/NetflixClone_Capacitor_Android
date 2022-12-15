@@ -45,7 +45,7 @@ const RowPoster = styled.div`
 const Card = styled.div`
     cursor:pointer;
     object-fit: contain;
-    margin-right: 10px;
+    margin-left: 10px;
 `
 const LoaderWrapper = styled.div`
     display: flex;
@@ -54,11 +54,10 @@ const LoaderWrapper = styled.div`
 const StyledImage = styled.img`
     object-fit: contain;
     max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '150px')};
-    border:solid black;
     transition : transform 2s;
-    &:hover{
-      transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.1)' : 'scale(1.1)')}; 
-    }
+    // &:hover{
+    //   transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.1)' : 'scale(1.1)')}; 
+    // }
 `
 const VideoContainer = styled.div`
     margin-top:  ${({isLargeRow}) => (isLargeRow ? '-5.5rem' : '-7.5rem')}; 
@@ -97,26 +96,27 @@ const LoaderContainer = styled.div`
 
 const transitionStyles ={
     entering:{transform: 'scale(1)',transition : 'transform 1s'},
-    // no_data:{transform: 'scale(1)',transition : 'transform 1s'},
-    no_data:{transform: 'scale(1)',filter:'blur(5px)'},
-    entered:{transform: 'scale(1.2)',transition : 'transform 2s'},
-    exiting:{transform: 'scale(1)',filter:'blur(5px)'},
-    // exiting:{transform: 'scale(1)',transition : 'transform 100ms'},
-    exited:{transform: 'scale(1)',filter:'blur(5px)'},
-    // exited:{transition: 'opacity 0.5s',opacity:'0'}
+    no_data:{transform: 'scale(1)',transition : 'transform 1s'},
+    entered:{transform: 'scale(1.2)',transition : 'transform 4s'},
+    exiting:{transform: 'scale(1)',transition : 'transform 60ms'},
+    exited:{transform: 'scale(1)',transition : 'transform 60ms'},
+
 }
 const defaultStyle ={
     transition : 'transform 1s',
     transform : 'scale(1)',
 }
 const transitionStylesImages ={
-    no_data:{transform: 'scale(1)',transition : 'transform 2s'},
-    entered:{transform: 'scale(1.1)',transition : 'transform 1s'},
-    entering:{transform: 'scale(1.3)',transition : 'transform 1s'},
+    entering:{transform: 'scale(1.2)',transition : 'transform 1s'},
+    no_data:{transform: 'scale(1)',transition : 'transform 1s'},
+    entered:{transform: 'scale(1.2)',transition : 'transform 2s'},
+    exiting:{transform: 'scale(1)',transition : 'transform 60ms'},
+    exited:{transform: 'scale(1)',transition : 'transform 60ms'},
 }
 const defaultStyleImg ={
-    transition : 'transform 450ms',
+    transition : 'transform 1s',
     transform : 'scale(1)',
+    width:'100%'
 }
 
 function Row({title, url, isLargeRow}) {
@@ -126,7 +126,7 @@ function Row({title, url, isLargeRow}) {
         ...transitionStyles[state] ?? {},
     };
 
-    const [state2, enter2,exited2] = useTransitionControlImage();
+    const [state2, enter2,exit2,exited2,empty2] = useTransitionControlImage();
     const style2 = {
         ...defaultStyleImg,
         ...transitionStylesImages[state2] ?? {},
@@ -144,7 +144,8 @@ function Row({title, url, isLargeRow}) {
     const type = url.toString().includes('/tv') ? 'tv' : 'movie'
     playerOptions.height = '350';
     playerOptions.playerVars.mute = 1;
-    const movies = data.slice(0,3);
+    // const movies = data.slice(0,3);
+    const movies = data;
 
     if (error) {
         return <span>Oups something went wrong</span>
@@ -161,7 +162,7 @@ function Row({title, url, isLargeRow}) {
         setVidError(false);
         setIsVideoLoading(false);
         setIsVideoShown(false);
-        setMyVideoId(null);
+        // setMyVideoId(null);
     }
 
 
@@ -214,17 +215,18 @@ function Row({title, url, isLargeRow}) {
                                         >
                                             {isVideoLoading  ?
                                             <LoaderContainer  id='test'
-                                                // onMouseEnter={enter2}
-                                                // onMouseLeave={exited2}
-                                                // style={style2}
+
                                                 isVideoLoading={isVideoLoading}
                                                 isLargeRow={isLargeRow}>
                                                 <StyledImage
+                                                    onMouseEnter={enter2}
+                                                    onMouseLeave={exited2}
+                                                    style={style2}
                                                              key={movie.id}
                                                              src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
                                                              alt={movie.name}
                                                              isLargeRow={isLargeRow}
-                                                             style={{width:'100%'}}
+                                                             // style={{width:'100%'}}
 
                                                 />
                                                 <LoaderWrapper  data-testid='loader'>
@@ -237,9 +239,9 @@ function Row({title, url, isLargeRow}) {
                                             <VideoContainer id='test1'
                                                             isLargeRow={isLargeRow}
                                                             isVideoLoading={isVideoLoading}
-                                                            // onMouseEnter={enter}
-                                                            // onMouseLeave={exited}
-                                                            // style={style}
+                                                            onMouseEnter={enter}
+                                                            onMouseLeave={exited}
+                                                            style={style}
                                             >
 
                                                 <YouTube
@@ -271,6 +273,7 @@ function Row({title, url, isLargeRow}) {
 
                                     <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
                                         <StyledImage
+
                                             key={movie.id}
                                             src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
                                             alt={movie.name}

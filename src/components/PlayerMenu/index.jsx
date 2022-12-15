@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import styled from "styled-components";
 import React from "react";
 import PlayButton from "../../assets/play2.png"
-import {MovieGenres,tvGenres} from "../../utils/hooks";
+import {MovieGenres,TvGenres} from "../../utils/hooks";
 
 const PlayerContainer = styled.div`
   position: sticky;
@@ -71,7 +71,7 @@ function truncate(str, n) {
 
 function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type}) {
     let genresMovies =  genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
-    let genresTv =  genre_ids.map((item) => tvGenres.find(x => x.id === item)?.name)
+    let genresTv =  genre_ids.map((item) => TvGenres.find(x => x.id === item)?.name)
     let genres = genresMovies.concat(genresTv).filter((item,index)=>genresMovies.indexOf(item)===index);
     let notes = Math.ceil(vote_average*10)
     return (
@@ -80,7 +80,7 @@ function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote
             <Link  to={`/movieDetails/${id}/${type}`}>
                 <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
             </Link>
-            <span style={{maxWidth:'50%'}}>{ genres.join(' . ')}</span>
+            <span style={{maxWidth:'50%'}}>{isLargeRow ? genres.slice(0,4).join(' . '):genres.slice(0,3).join(' . ')}</span>
             {isLargeRow ?   <GenresTypes >{notes}%</GenresTypes>:''}
             <PlayerDescription>
                 {isLargeRow ?truncate(overview, 150):''}
