@@ -97,19 +97,15 @@ const STATE = {
 }
 function useTransitionState(duration = 1000) {
     const [state, setState] = useState();
-    const [mouseLeave,setMouseLeave]=useState(false);
     useEffect(() => {
         let timerId;
         if (state === STATE.NO) {
             timerId = setTimeout(() => setState(STATE.FINISH), duration)
-        }
-        else if (state === STATE.ENTERING) {
+        } else if (state === STATE.ENTERING) {
             timerId = setTimeout(() => setState(STATE.ENTERED), duration)
-        }
-        else if (state === STATE.EXITING) {
+        }else if (state === STATE.EXITING) {
             timerId = setTimeout(() => setState(STATE.EXITED), duration)
-        }
-        else if (state === STATE.EXITED) {
+        } else if (state === STATE.EXITED) {
             timerId = setTimeout(() => setState(STATE.FINISH), duration)
         }
         return () => {

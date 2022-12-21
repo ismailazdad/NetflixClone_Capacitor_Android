@@ -7,9 +7,9 @@ const FooterStyle = styled.footer`
     background: #000000;
     position: absolute;
     left: 0;
-    bottom: -1.5rem;
+    bottom: 0;
     right: 0;
-    position: fixed;
+    position: relative;
 `
 const BarStyle = styled.div`
     position: absolute;

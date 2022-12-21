@@ -40,7 +40,7 @@ function Movies() {
             <Row title='Comedy Movies' url={urls.findComedyMovies} isLargeRow/>
             <Row title='NETFLIX ORIGINALS' url={urls.findTrending} />
             <Row title='Trending tv Now' url={urls.findActionMovies} isLargeRow />
-            {/*<Row title='Top Rated' url={urls.findTopRated} isLargeRow/>*/}
+            {/*<Row title='Top Rated' url={urls.findTopRated} />*/}
             {/*<Row title='Action Movies' url={urls.findTrendingTv }/>*/}
             {/*<Row title='Comedy Movies' url={urls.findComedyMovies} isLargeRow/>*/}
             {/*<Row title='Horror Movies' url={urls.findHorrorMovies}/>*/}

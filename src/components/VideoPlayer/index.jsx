@@ -21,19 +21,18 @@ const defaultStyle ={
     transform : 'scale(1)',
 }
 
-
 function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onShow,onLeave}) {
     let [stateVideo, enterVideo,exitedVideo] = useTransitionControl(500);
     const videoStyle = {
         ...defaultStyle,
         ...transitionStyles[stateVideo] ?? {},
     };
-    playerOptions.height = '350';
-    playerOptions.playerVars.mute = 1;
     const [trailerURL, setTrailerURL] = useState("");
     const [vidError, setVidError] = useState(false);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+    playerOptions.height = '350';
+    playerOptions.playerVars.mute = 1;
 
     const ResetStateVideo =  function (e) {
         setTrailerURL("");
@@ -72,7 +71,6 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
                         <LoaderContainer isVideoLoading={isVideoLoading} isLargeRow={isLargeRow} stateVideo={stateVideo}>
                             <StyledImage
                                 key={movie.id}
-                                // src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path  : movie.backdrop_path}`}
                                 src={`${urls.findImagesUrl}${ movie.backdrop_path}`}
                                 alt={movie.name}
                                 isLargeRow={isLargeRow}
@@ -122,5 +120,4 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
         </Card></div>
     );
 }
-
 export default VidePlayer;
