@@ -26,7 +26,7 @@ function Row({title, url, isLargeRow}) {
 
     const scrollToRight = function () {
         let screenWidth = window.innerWidth;
-        screenWidth = isLargeRow ? screenWidth/1.5 : screenWidth;
+        screenWidth = isLargeRow ? screenWidth/1.5 : screenWidth/2;
         myRef.current.scrollLeft -= screenWidth;
     };
 

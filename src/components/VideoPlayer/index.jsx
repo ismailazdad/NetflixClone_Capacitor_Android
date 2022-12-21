@@ -32,8 +32,8 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
     playerOptions.height = '350';
-    //to systematic auto play , make mute to 1
-    playerOptions.playerVars.mute = 0;
+    //to systematic auto play with google video api , make mute to 1
+    playerOptions.playerVars.mute = 1;
 
     const ResetStateVideo =  function (e) {
         setTrailerURL("");

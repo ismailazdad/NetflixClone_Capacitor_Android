@@ -38,16 +38,14 @@ function Movies() {
             />
             )}
             <Row title='Comedy Movies' url={urls.findComedyMovies} isLargeRow/>
-            <Row title='NETFLIX ORIGINALS' url={urls.findTrending} />
+            <Row title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals} />
             <Row title='Trending tv Now' url={urls.findActionMovies} isLargeRow />
             <Row title='Top Rated' url={urls.findTopRated} />
-            <Row title='Action Movies' url={urls.findTrendingTv }/>
-            <Row title='Comedy Movies' url={urls.findComedyMovies} isLargeRow/>
+            <Row title='Action Movies' url={urls.findTrendingTv} isLargeRow/>
             <Row title='Horror Movies' url={urls.findHorrorMovies}/>
             <Row title='Romance Movies' url={urls.findRomanceMovies}/>
             <Row title='Documentaries' url={urls.findDocumentaries} isLargeRow/>
         </div>
-
     )
 }
 
