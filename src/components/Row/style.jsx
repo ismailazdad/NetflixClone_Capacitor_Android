@@ -49,18 +49,18 @@ export const VideoContainer = styled.div`
         position:initial;
         top:0;
         overflow: hidden;
-        // display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'}; 
-        display: ${({stateVideo,isVideoLoading}) => stateVideo === 'entered' && !isVideoLoading  ? 'block' : 'none'};   
+        display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'}; 
+        // display: ${({stateVideo,isVideoLoading}) => stateVideo === 'entered' && !isVideoLoading  ? 'block' : 'none'};   
 
     `
 export const LoaderContainer = styled.div`
         position:relative;
         text-align: center;
-        width: ${({isLargeRow}) => isLargeRow ? '300px' : '300px'};
+        width: ${({isLargeRow}) => isLargeRow ? '320px' : '300px'};
         height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
         z-index:1000;
-        // display: ${({isVideoLoading}) => isVideoLoading ? 'block' : 'none'};   
-        display: ${({stateVideo,isVideoLoading}) => isVideoLoading || stateVideo === 'exiting' || stateVideo ==='exited' || stateVideo ==='entering' ? 'block' : 'none'};   
+        display: ${({isVideoLoading}) => isVideoLoading ? 'block' : 'none'};   
+        // display: ${({stateVideo,isVideoLoading}) => isVideoLoading || stateVideo === 'exiting' || stateVideo ==='exited' || stateVideo ==='entering' ? 'block' : 'none'};   
 
     `
 
