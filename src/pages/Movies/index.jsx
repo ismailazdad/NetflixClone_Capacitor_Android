@@ -37,6 +37,7 @@ function Movies() {
                 isMainMenu={true}
             />
             )}
+            <Row title='Comedy Movies' url={urls.findComedyMovies} isLargeRow/>
             <Row title='NETFLIX ORIGINALS' url={urls.findTrending} isLargeRow/>
             <Row title='Trending tv Now' url={urls.findActionMovies} />
             <Row title='Top Rated' url={urls.findTopRated} isLargeRow/>

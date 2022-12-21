@@ -6,12 +6,11 @@ import {MovieGenres,TvGenres} from "../../utils/hooks";
 
 const PlayerContainer = styled.div`
   position: sticky;
-  // bottom: 0;
   left: 0;
   width: 100%;
   background-color: #2b2b2b;
   height: ${({isLargeRow}) => isLargeRow ? '70px' : '36px'} ;
-  margin-top: ${({isLargeRow}) => isLargeRow ? '-5rem' : '-7rem'};
+  margin-top: ${({isLargeRow}) => isLargeRow ? '-5.5rem' : '-6rem'};
   max-width : ${({isLargeRow}) => isLargeRow ? 'inherit' : '300px'};
   padding-top: 10px;
   font-size : 1em;

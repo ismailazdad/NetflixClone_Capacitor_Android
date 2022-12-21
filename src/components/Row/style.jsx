@@ -41,16 +41,29 @@ export const LoaderWrapper = styled.div`
     `
 export const StyledImage = styled.img`
         object-fit: contain;
-        max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '150px')};
+        max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '150px')};        
     `
 export const VideoContainer = styled.div`
-        margin-top:  ${({isLargeRow}) => (isLargeRow ? '-6.5rem' : '-9.5rem')}; 
+        margin-top:  ${({isLargeRow}) => (isLargeRow ? '-5rem' : '-9.5rem')}; 
         z-index:100;
         position:initial;
         top:0;
         overflow: hidden;
-        display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'};   
+        // display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'}; 
+        display: ${({stateVideo,isVideoLoading}) => stateVideo === 'entered' && !isVideoLoading  ? 'block' : 'none'};   
+
     `
+export const LoaderContainer = styled.div`
+        position:relative;
+        text-align: center;
+        width: ${({isLargeRow}) => isLargeRow ? '300px' : '300px'};
+        height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
+        z-index:1000;
+        // display: ${({isVideoLoading}) => isVideoLoading ? 'block' : 'none'};   
+        display: ${({stateVideo,isVideoLoading}) => isVideoLoading || stateVideo === 'exiting' || stateVideo ==='exited' || stateVideo ==='entering' ? 'block' : 'none'};   
+
+    `
+
 export const Chevron = styled.div`
         position: absolute;
         z-index:100;
@@ -67,10 +80,4 @@ export const Chevron = styled.div`
               -moz-opacity:.50; 
               filter:alpha(opacity=50);         
         }
-    `
-export const LoaderContainer = styled.div`
-        position:relative;
-        width: ${({isLargeRow}) => isLargeRow ? '320px' : '300px'};
-        height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
-        z-index:1000;
     `

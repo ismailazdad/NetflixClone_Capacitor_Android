@@ -4,7 +4,6 @@ import urls from "../urls";
 export const MovieGenres = [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}]
 export const TvGenres = [{"id":10759,"name":"Action & Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":10762,"name":"Kids"},{"id":9648,"name":"Mystery"},{"id":10763,"name":"News"},{"id":10764,"name":"Reality"},{"id":10765,"name":"Sci-Fi & Fantasy"},{"id":10766,"name":"Soap"},{"id":10767,"name":"Talk"},{"id":10768,"name":"War & Politics"},{"id":37,"name":"Western"}]
 export const playerOptions = {
-    // height: "390",
     height: "390",
     width: "100%",
     playerVars: {
@@ -94,20 +93,24 @@ const STATE = {
     ENTERED : 'entered',
     EXITING : 'exiting',
     EXITED : 'exited',
+    FINISH : 'finish',
 }
 function useTransitionState(duration = 1000) {
     const [state, setState] = useState();
+    const [mouseLeave,setMouseLeave]=useState(false);
     useEffect(() => {
         let timerId;
         if (state === STATE.NO) {
-            timerId = setTimeout(() => setState(STATE.NO_DATA), duration)
-        } else if (state === STATE.ENTERING) {
+            timerId = setTimeout(() => setState(STATE.FINISH), duration)
+        }
+        else if (state === STATE.ENTERING) {
             timerId = setTimeout(() => setState(STATE.ENTERED), duration)
-        } else if (state === STATE.EXITING) {
+        }
+        else if (state === STATE.EXITING) {
             timerId = setTimeout(() => setState(STATE.EXITED), duration)
         }
         else if (state === STATE.EXITED) {
-            timerId = setTimeout(() => setState(STATE.NO_DATA), duration)
+            timerId = setTimeout(() => setState(STATE.FINISH), duration)
         }
         return () => {
             timerId && clearTimeout(timerId);
@@ -119,72 +122,18 @@ function useTransitionState(duration = 1000) {
 export function useTransitionControl(duration){
     const [state, setState] = useTransitionState(duration);
     const enter = () =>{
-        if(state !== STATE.EXITING || state !== STATE.NO_DATA ){
+        // exited();
+        if(state === STATE.ENTERED ){
+            setState(STATE.EXITED);
+        }
+        if(state !== STATE.EXITING ){
             setState(STATE.ENTERING);
         }
     };
-    const exit = ()=>{
-        if(state !== STATE.ENTERING){
-            setState(STATE.EXITING)
-        }
-    };
     const exited = ()=>{
-        if(state !== STATE.EXITED){
-            setState(STATE.EXITED)
-        }
+        setState(STATE.EXITED);
     };
-    const empty = ()=>{
-        if(state !== STATE.NO_DATA){
-            setState(state.EXITED)
-        }
-    };
+
     return [state,enter,exited]
 }
 
-function useTransitionStateImage(duration = 1000) {
-    const [state, setState] = useState();
-    useEffect(() => {
-        let timerId;
-        if (state === STATE.NO) {
-            timerId = setTimeout(() => setState(STATE.NO_DATA), duration)
-        } else if (state === STATE.ENTERING) {
-            timerId = setTimeout(() => setState(STATE.ENTERED), duration)
-        } else if (state === STATE.EXITING) {
-            timerId = setTimeout(() => setState(STATE.EXITED), duration)
-        } else if (state === STATE.EXITED) {
-            timerId = setTimeout(() => setState(STATE.NO_DATA), duration)
-        } else if (state === STATE.ENTERED) {
-            timerId = setTimeout(() => setState(STATE.NO_DATA), duration)
-        }
-        return () => {
-            timerId && clearTimeout(timerId);
-        };
-    });
-    return [state, setState];
-}
-
-
-export function useTransitionControlImage(duration){
-    const [state, setState] = useTransitionStateImage(duration);
-    const enter = () =>{
-        if(state !== STATE.EXITING || state !== STATE.NO_DATA ){
-            setState(STATE.ENTERING);
-        }
-    };
-    const exit = ()=>{
-        if(state !== STATE.ENTERING){
-            setState(STATE.EXITING)
-        }
-    };
-    const exited = ()=>{
-        if(state !== STATE.EXITED){
-            setState(STATE.EXITED)
-        }
-    };
-    const empty = ()=>{
-        if(state !== STATE.NO_DATA){
-            setState(state.EXITED)
-        }
-    };
-    return [state,enter,exited]
-}
