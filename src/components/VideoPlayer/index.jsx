@@ -32,7 +32,8 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
     playerOptions.height = '350';
-    playerOptions.playerVars.mute = 1;
+    //to systematic auto play , make mute to 1
+    playerOptions.playerVars.mute = 0;
 
     const ResetStateVideo =  function (e) {
         setTrailerURL("");
@@ -44,7 +45,7 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
     }
 
     const HandleVideo =  (movie) => {
-        if(!isVideoPlaying){
+        if(!isVideoPlaying && !vidError){
             enterVideo();
             setTrailerURL("");
             setVidError(false);
