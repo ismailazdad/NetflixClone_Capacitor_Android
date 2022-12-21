@@ -2,11 +2,10 @@ import React, {useState} from "react";
 import urls from "../../utils/urls";
 import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
-import {playerOptions, useFetchList, useTransitionControl} from "../../utils/hooks";
+import {playerOptions, useTransitionControl} from "../../utils/hooks";
 import PlayerMenu from "../PlayerMenu";
-import styled from "styled-components";
 import {Link} from "react-router-dom";
-import {Card, LoaderContainer, LoaderWrapper, RowPoster, StyledImage, VideoContainer} from "../Row/style";
+import {Card, LoaderContainer, LoaderWrapper, StyledImage, VideoContainer} from "./style";
 import movieTrailer from "movie-trailer";
 
 const transitionStyles ={
@@ -32,7 +31,6 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
     playerOptions.height = '350';
     playerOptions.playerVars.mute = 1;
     const [trailerURL, setTrailerURL] = useState("");
-    const [myVideoId, setMyVideoId] = useState(null);
     const [vidError, setVidError] = useState(false);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -41,53 +39,41 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
         setTrailerURL("");
         setVidError(false);
         setIsVideoLoading(false);
-        // if(stateVideo ==='entered' || stateVideo ==='entering'){
-            exitedVideo();
-        // } else{
-        //     setMyVideoId(null);
-        // }
+        exitedVideo();
         setIsVideoPlaying(false);
-        // setMyVideoId(null);
         onLeave();
     }
 
     const HandleVideo =  (movie) => {
-        onShow();
         if(!isVideoPlaying){
-        setMyVideoId(null);
-        enterVideo();
-        setTrailerURL("");
-        setVidError(false);
-        setIsVideoLoading(true);
-        movieTrailer(movie?.name || movie?.title || movie?.original_title || "")
-            .then((url) => {
-                const urlParams = new URLSearchParams(new URL(url).search);
-                setTrailerURL(urlParams.get("v"));
-                setMyVideoId(movie.id)
-                setVidError(false);
-            })
-            .catch((e) => {
-                setMyVideoId(null);
-                setTrailerURL("");
-                setVidError(true);
-                setMyVideoId(null);
-            })
+            enterVideo();
+            setTrailerURL("");
+            setVidError(false);
+            setIsVideoLoading(true);
+            movieTrailer(movie?.name || movie?.title || movie?.original_title || "")
+                .then((url) => {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    setTrailerURL(urlParams.get("v"));
+                    setVidError(false);
+                })
+                .catch((e) => {
+                    setTrailerURL("");
+                    setVidError(true);
+                })
         }
+        onShow();
     };
 
     return (<div>
-    {/*        {isActive ? (*/}
-    {/*    <p>active</p>*/}
-    {/*) : (<p>non active</p>)}*/}
-    {/*        stateVideo {stateVideo}*/}
         <Card key={`${movie.id}'---'`} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)}>
             { ((isActive || stateVideo ==='exiting'|| stateVideo ==='exited')  && !scrollLeft && !scroll && !vidError )  ?
                 (
-                    <div style={{...{position:'inherits',border:'solid 1px transparent',width: isLargeRow ? '320px' : '300px', height: isLargeRow ? '260px' : '150px',},...videoStyle}}>
+                    <div style={{...{position:'inherits',border:'solid 1px transparent',width: '400px', height: isLargeRow ? '260px' : '200px',},...videoStyle}}>
                         <LoaderContainer isVideoLoading={isVideoLoading} isLargeRow={isLargeRow} stateVideo={stateVideo}>
                             <StyledImage
                                 key={movie.id}
-                                src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path  : movie.backdrop_path}`}
+                                // src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path  : movie.backdrop_path}`}
+                                src={`${urls.findImagesUrl}${ movie.backdrop_path}`}
                                 alt={movie.name}
                                 isLargeRow={isLargeRow}
                             />

@@ -1,10 +1,10 @@
 import React, {useRef, useState} from "react";
-import {playerOptions, useFetchList} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
 import {RowContainer,RowPoster,LoaderWrapper,Chevron} from "./style"
 import VidePlayer from "../VideoPlayer";
+import {useFetchList} from "../../utils/hooks";
 
 function Row({title, url, isLargeRow}) {
     const myRef = useRef(null);
@@ -13,11 +13,8 @@ function Row({title, url, isLargeRow}) {
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
     const [activeIndex, setActiveIndex] = useState(null);
-    playerOptions.height = '350';
-    playerOptions.playerVars.mute = 1;
     const movies = data;
     // const movies = data.slice(4,8);
-
     if (error) {
         return <span>Oups something went wrong</span>
     }
@@ -38,7 +35,8 @@ function Row({title, url, isLargeRow}) {
                             <VidePlayer         isActive={ activeIndex === movie.id}
                                                 onShow={() =>{setActiveIndex(movie.id);}}
                                                 onLeave={()=>{setActiveIndex(null);}}
-                                                isLargeRow={isLargeRow} movie={movie}
+                                                isLargeRow={isLargeRow}
+                                                movie={movie}
                                                 scroll={scroll}
                                                 scrollLeft={scrollLeft}
                                                 index={index}
