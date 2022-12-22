@@ -21,7 +21,7 @@ const defaultStyle ={
     transform : 'scale(1)',
 }
 
-function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onShow,onLeave,useRank}) {
+function VideoPlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onShow,onLeave,useRank}) {
     let [stateVideo, enterVideo,exitedVideo] = useTransitionControl(500);
     const videoStyle = {
         ...defaultStyle,
@@ -118,4 +118,4 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
         </Card></div>
     );
 }
-export default VidePlayer;
+export default VideoPlayer;
