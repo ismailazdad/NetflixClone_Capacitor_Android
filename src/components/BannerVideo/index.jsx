@@ -29,7 +29,7 @@ const MovieDescription = styled.h1`
     padding-top: 0.5rem;
     font-size: 1.5rem;
     max-width: 120rem;
-    height: 100px;
+    height: 125px;
     overflow:hidden;
 `
 const MovieButton = styled.button`
