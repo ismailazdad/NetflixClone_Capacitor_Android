@@ -1,7 +1,7 @@
 # Netflix Clone movies trailer
 Demo: [link](https://moviestrailer.surge.sh/)
 
-Please rate this project if you like it !! 
+Please rate this project if you like it !!  :bowtie:
 
 This project is a simplified front end clone of Netflix. 
 It was created with React native app.
