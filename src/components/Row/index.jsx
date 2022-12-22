@@ -12,8 +12,7 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
     const [scroll,setScroll]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
-    const suffix = title.substring(0,3);
-    const movies = data.map((movie)=>{return { ...movie, id : movie.id+suffix}});
+    const movies = data.map((movie)=>{return { ...movie, id : movie.id+title.substring(0,3)}});
     if (error) {
         return <span>Oups something went wrong</span>
     }

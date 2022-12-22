@@ -55,10 +55,10 @@ function Movies() {
             <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Crime Movies' url={urls.findCrimeMovies} isLargeRow/>
             <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Animation Movies' url={urls.findAnimationMovies}/>
             <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Adventure Movies' url={urls.findAdventureMovies} isLargeRow/>
-            <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Comedy Movies' url={urls.findComedyMovies}/>
+            <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Comedy Movies' url={urls.findComedyMovies} useRank/>
             <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Horror Movies' url={urls.findHorrorMovies}/>
             <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Romance Movies' url={urls.findRomanceMovies}/>
-            <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Documentaries' url={urls.findDocumentaries} useRank isLargeRow/>
+            <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Documentaries' url={urls.findDocumentaries}  isLargeRow/>
         </div>
     )
 }
