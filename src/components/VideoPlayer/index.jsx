@@ -84,7 +84,6 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
                                         }}/>
                             </LoaderWrapper>
                         </LoaderContainer>
-
                         <VideoContainer isLargeRow={isLargeRow} isVideoLoading={isVideoLoading} stateVideo={stateVideo}>
                             <YouTube
                                 onPlay={e => {setIsVideoLoading(false);setIsVideoPlaying(true)}}
@@ -93,7 +92,6 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
                                 id="vidContainer"
                                 videoId={trailerURL}
                                 opts={playerOptions}/>
-
                             <PlayerMenu
                                 id={movie.id}
                                 name={movie.name}
@@ -108,7 +106,6 @@ function VidePlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onSh
                             />
                         </VideoContainer>
                     </div>
-
                 ) :
                 <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
                     <StyledImage

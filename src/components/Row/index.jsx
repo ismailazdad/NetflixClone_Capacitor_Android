@@ -6,14 +6,14 @@ import {RowContainer,RowPoster,LoaderWrapper,Chevron} from "./style"
 import VidePlayer from "../VideoPlayer";
 import {useFetchList} from "../../utils/hooks";
 
-function Row({title, url, isLargeRow}) {
+function Row({title, url, isLargeRow,activeIndex,setActiveIndex}) {
     const myRef = useRef(null);
     const {isLoading, data, error} = useFetchList(url);
     const [scroll,setScroll]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
-    const [activeIndex, setActiveIndex] = useState(null);
-    const movies = data;
+    const suffix = title.substring(0,3);
+    const movies = data.map((movie)=>{return { ...movie, id : movie.id+suffix}});
     if (error) {
         return <span>Oups something went wrong</span>
     }
