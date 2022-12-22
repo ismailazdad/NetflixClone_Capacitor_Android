@@ -35,7 +35,14 @@ export const LoaderWrapper = styled.div`
         display: flex;
         justify-content: center;
     `
-
+export const TrendNumber = styled.h1`
+    font-size: 210px;
+    height: fit-content;    
+    color: gray;
+    width: fit-content;
+    top: 0;
+    margin: 0;
+`
 export const Chevron = styled.div`
         position: absolute;
         z-index:100;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Card = styled.div`
         cursor:pointer;
         object-fit: contain;
-        margin-left: 10px;
+        margin-left: ${({useRank}) => useRank ? '-5px' : '10px'};   
     `
 export const LoaderContainer = styled.div`
         position:relative;

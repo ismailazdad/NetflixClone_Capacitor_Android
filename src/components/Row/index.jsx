@@ -2,13 +2,13 @@ import React, {useRef, useState} from "react";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
-import {RowContainer,RowPoster,LoaderWrapper,Chevron} from "./style"
+import {Chevron, LoaderWrapper, RowContainer, RowPoster, TrendNumber} from "./style"
 import VidePlayer from "../VideoPlayer";
 import {useFetchList} from "../../utils/hooks";
 
-function Row({title, url, isLargeRow,activeIndex,setActiveIndex}) {
+function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
     const myRef = useRef(null);
-    const {isLoading, data, error} = useFetchList(url);
+    const {isLoading, data, error} = useFetchList(url,useRank);
     const [scroll,setScroll]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
@@ -42,19 +42,37 @@ function Row({title, url, isLargeRow,activeIndex,setActiveIndex}) {
                     <Chevron style={{left: '0'}} icon={ChevronLeft} onClick={scrollToRight} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
                     <RowPoster id="RowPoster" ref={myRef}  scroll={scroll} scrollL={scrollLeft}>
                         {movies && movies.map((movie, index) => (
-                            <VidePlayer         isActive={ activeIndex === movie.id}
-                                                onShow={() =>{setActiveIndex(movie.id)}}
-                                                onLeave={()=>{setActiveIndex(null)}}
+                            useRank ?
+                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <TrendNumber>{index + 1}</TrendNumber>
+                                    <VidePlayer isActive={activeIndex === movie.id}
+                                                onShow={() => {setActiveIndex(movie.id)}}
+                                                onLeave={() => {setActiveIndex(null)}}
                                                 isLargeRow={isLargeRow}
                                                 movie={movie}
                                                 scroll={scroll}
                                                 scrollLeft={scrollLeft}
                                                 index={index}
                                                 type={type}
-                                                key={index+'_vid'}
-                            >
-                            </VidePlayer>
-                        ))}
+                                                key={index + '_vid'}
+                                                useRank={useRank}
+                                    />
+                                </div>
+                                :
+                                <VidePlayer isActive={ activeIndex === movie.id}
+                                            onShow={() =>{setActiveIndex(movie.id)}}
+                                            onLeave={()=>{setActiveIndex(null)}}
+                                            isLargeRow={isLargeRow}
+                                            movie={movie}
+                                            scroll={scroll}
+                                            scrollLeft={scrollLeft}
+                                            index={index}
+                                            type={type}
+                                            key={index+'_vid'}
+                                />
+
+                        ))
+                        }
                     </RowPoster>
                 </RowContainer>)
         ))

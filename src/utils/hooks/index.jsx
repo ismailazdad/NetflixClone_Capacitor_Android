@@ -61,7 +61,7 @@ export function useFetch(url,random=false) {
 }
 
 
-export function useFetchList(url) {
+export function useFetchList(url,useRank = false) {
     const [data, setData] = useState([])
     const [isLoading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -70,11 +70,16 @@ export function useFetchList(url) {
         fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
-                setData(jsonResponse?.results
-                    .map((item) => ({ sort: Math.random(), value: item }))
-                    .sort((a, b) => a.sort - b.sort)
-                    .map((item) => item.value)
-                );
+                if(useRank){
+                    setData(jsonResponse?.results.slice(0,9));
+                }else{
+                    setData(jsonResponse?.results
+                        .map((item) => ({ sort: Math.random(), value: item }))
+                        .sort((a, b) => a.sort - b.sort)
+                        .map((item) => item.value)
+                    );
+                }
+
             })
             .catch(e => {
                 console.log(e)
