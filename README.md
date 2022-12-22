@@ -21,7 +21,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 ### Tools used
  - React
  - Hook with UseState and UseEffect to synchronize api call and transition style effect synchronization
- - React Router with parameters.
+ - React Router with parameters(dynamic route generation).
+ - TMDB Api 
  
- 
+### Preview
+
+  
 ![](./src/assets/demo.gif?raw=true)
