@@ -70,8 +70,10 @@ export function useFetchList(url) {
         fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
-                setData(
-                    jsonResponse.results
+                setData(jsonResponse?.results
+                    .map((item) => ({ sort: Math.random(), value: item }))
+                    .sort((a, b) => a.sort - b.sort)
+                    .map((item) => item.value)
                 );
             })
             .catch(e => {
