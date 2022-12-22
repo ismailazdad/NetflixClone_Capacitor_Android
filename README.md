@@ -22,4 +22,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
  - React
  - UseState and UseEffect to synchronize call and transition style effect
  - React router
+ 
+ 
 ![](./src/assets/demo.gif?raw=true)
