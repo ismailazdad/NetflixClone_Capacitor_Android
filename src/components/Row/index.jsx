@@ -9,7 +9,7 @@ import {useFetchList} from "../../utils/hooks";
 function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
     const myRef = useRef(null);
     const {isLoading, data, error} = useFetchList(url,useRank);
-    const [scroll,setScroll]= useState(false);
+    const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
     const movies = data.map((movie)=>{return { ...movie, id : movie.id+title.substring(0,3)}});
@@ -37,9 +37,9 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
             ) : (
                 <RowContainer id="RowContainer">
                     <h2>{title}</h2>
-                    <Chevron style={{right: '0'}} icon={ChevronRight} onClick={scrollToLeft}  onMouseOver={()=>setScroll(true)} onMouseLeave={()=>setScroll(false)}  isLargeRow={isLargeRow}/>
+                    <Chevron style={{right: '0'}} icon={ChevronRight} onClick={scrollToLeft}  onMouseOver={()=>setScrollRight(true)} onMouseLeave={()=>setScrollRight(false)}  isLargeRow={isLargeRow}/>
                     <Chevron style={{left: '0'}} icon={ChevronLeft} onClick={scrollToRight} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
-                    <RowPoster id="RowPoster" ref={myRef}  scroll={scroll} scrollL={scrollLeft}>
+                    <RowPoster id="RowPoster" ref={myRef}  scrollRight={scrollRight} scrollLeft={scrollLeft}>
                         {movies && movies.map((movie, index) => (
                             useRank ?
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -49,7 +49,7 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
                                                 onLeave={() => {setActiveIndex(null)}}
                                                 isLargeRow={isLargeRow}
                                                 movie={movie}
-                                                scroll={scroll}
+                                                scrollRight={scrollRight}
                                                 scrollLeft={scrollLeft}
                                                 index={index}
                                                 type={type}
@@ -63,7 +63,7 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
                                             onLeave={()=>{setActiveIndex(null)}}
                                             isLargeRow={isLargeRow}
                                             movie={movie}
-                                            scroll={scroll}
+                                            scroll={scrollRight}
                                             scrollLeft={scrollLeft}
                                             index={index}
                                             type={type}

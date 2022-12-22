@@ -21,7 +21,7 @@ const defaultStyle ={
     transform : 'scale(1)',
 }
 
-function VideoPlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onShow,onLeave,useRank}) {
+function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActive,onShow,onLeave,useRank}) {
     let [stateVideo, enterVideo,exitedVideo] = useTransitionControl(500);
     const videoStyle = {
         ...defaultStyle,
@@ -66,7 +66,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scroll,index,isActive,onS
 
     return (<div>
         <Card key={`${movie.id}'---'`} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)} useRank={useRank}>
-            { ((isActive || stateVideo ==='exiting'|| stateVideo ==='exited')  && !scrollLeft && !scroll && !vidError )  ?
+            { ((isActive || stateVideo ==='exiting'|| stateVideo ==='exited')  && !scrollLeft && !scrollRight && !vidError )  ?
                 (
                     <div style={{...{position:'inherits',border:'solid 1px transparent',width: '400px', height: isLargeRow ? '260px' : '200px',},...videoStyle}}>
                         <LoaderContainer isVideoLoading={isVideoLoading} isLargeRow={isLargeRow} stateVideo={stateVideo}>

@@ -15,6 +15,9 @@ function Movies() {
     const {isLoading, data, error} = useFetch(urls.findNetflixOriginals,true);
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = getInfo(data,urls.findNetflixOriginals);
     const [activeIndex, setActiveIndex] = useState(null);
+    if (error) {
+        return <span>Oups something went wrong</span>
+    }
     return (
         <div style={{background: 'black'}}>
             {isLoading ? (

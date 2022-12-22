@@ -20,7 +20,7 @@ export const RowPoster = styled.div`
     // animation: slide 3s linear infinite;  
     // animation-iteration-count : infinite;
     // animation-direction  :  alternate-reverse;
-    // ${({scrollL, scroll}) => (!scrollL && !scroll ? 'animation-play-state :paused ;' : 'animation-play-state:running;')}     
+    // ${({scrollLeft, scrollRight}) => (!scrollLeft && !scrollRight ? 'animation-play-state :paused ;' : 'animation-play-state:running;')}     
     // @keyframes slide { 
     //      0% {
     //     transform: translate3d(-50%, 0, 0);
