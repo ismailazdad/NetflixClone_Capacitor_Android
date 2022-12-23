@@ -38,10 +38,11 @@ export const LoaderWrapper = styled.div`
 export const TrendNumber = styled.h1`
     font-size: 210px;
     height: fit-content;    
-    color: gray;
+    color: black;
     width: fit-content;
     top: 0;
     margin: 0;
+    -webkit-text-stroke: 2px white; 
 `
 export const Chevron = styled.div`
     position: absolute;
