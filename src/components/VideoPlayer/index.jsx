@@ -2,11 +2,14 @@ import React, {useState} from "react";
 import urls from "../../utils/urls";
 import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
-import {playerOptions, useTransitionControl} from "../../utils/hooks";
+import {MovieGenres, playerOptions, TvGenres, useTransitionControl} from "../../utils/hooks";
 import PlayerMenu from "../PlayerMenu";
 import {Link} from "react-router-dom";
-import {Card, LoaderContainer, LoaderWrapper, StyledImage, VideoContainer} from "./style";
+import {Card, GenresTypes, LoaderContainer, LoaderWrapper, StyledImage, VideoContainer,PlayModalMenuButton} from "./style";
 import movieTrailer from "movie-trailer";
+import {Button, Modal} from "react-bootstrap"
+import "bootstrap/dist/css/bootstrap.css"
+import PlayButton from "../../assets/play2.png";
 
 const transitionStyles ={
     no_data:{transform: 'scale(1)',transition : 'transform 1s'},
@@ -34,6 +37,12 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
     playerOptions.height = '350';
     //to systematic auto play with google video api , make mute to 1
     playerOptions.playerVars.mute = 1;
+    const [show, setShow] = useState(false);
+    let year = (movie?.release_date ? movie?.release_date : movie?.first_air_date).substring(0, 4);
+    let genresMovies = movie.genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
+    let genresTv = movie.genre_ids.map((item) => TvGenres.find(x => x.id === item)?.name)
+    let genres = genresMovies.concat(genresTv).filter((item, index) => genresMovies.indexOf(item) === index);
+    let notes = Math.ceil(movie.vote_average * 10);
 
     const ResetStateVideo =  function (e) {
         setTrailerURL("");
@@ -103,6 +112,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                                 vote_average={movie.vote_average}
                                 isLargeRow={isLargeRow}
                                 type={type}
+                                onDetails={()=>{setShow(true); }}
                             />
                         </VideoContainer>
                     </div>
@@ -115,7 +125,30 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                         isLargeRow={isLargeRow}
                     />
                 </Link>}
-        </Card></div>
+        </Card>
+            <Modal key={`${movie.id}'--Card'`} show={show}>
+                <Modal.Header onClick={() => setShow(false)} style={{color: 'white', backgroundColor: '#6C757D'}}>
+                    <Modal.Title><h1>{movie?.title} </h1></Modal.Title>
+                    <button type="button" style={{border: 'transparent'}} aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </Modal.Header>
+                <img src={`${urls.findImagesUrl}${movie.backdrop_path}`} alt={`${movie?.title} cover`}/>
+                <div style={{color: 'white', backgroundColor: '#6C757D'}}>
+                    <Link to={`/movieDetails/${movie.id}/${type}`}>
+                        <PlayModalMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlayModalMenuButton>
+                    </Link>
+                    <span>{genres.join(' . ')}</span>
+                    <GenresTypes>{notes}%</GenresTypes> {year}
+                    <Modal.Body>
+                        <span>{movie?.overview}</span>
+                    </Modal.Body>
+                </div>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShow(false)}>Close </Button>
+                </Modal.Footer>
+            </Modal>
+    </div>
     );
 }
 export default VideoPlayer;

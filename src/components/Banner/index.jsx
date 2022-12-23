@@ -17,7 +17,6 @@ const MovieHeader = styled.div`
 const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
-    height: 190px;
 `
 const MovieTitle = styled.h1`
     font-size: 3rem;

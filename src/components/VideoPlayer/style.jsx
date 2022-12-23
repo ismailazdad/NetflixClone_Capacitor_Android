@@ -33,3 +33,33 @@ export const VideoContainer = styled.div`
         // display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'}; 
         display: ${({stateVideo,isVideoLoading}) => ( stateVideo === 'exiting' || stateVideo ==='exited'  || stateVideo === 'entered') && !isVideoLoading  ? 'block' : 'none'};   
     `
+export const GenresTypes = styled.div`
+    display:initial;
+    color:lightgreen;
+    float:right;
+    padding-right:1%;
+    font-size: 1rem;
+`
+export const PlayModalMenuButton = styled.button`       
+    cursor: pointer;
+    color: #fff;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    border-radius: 0.2vw;
+    padding-left: 0.5rem ;
+    height:  35px;
+    padding-right: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 20px;
+    padding-top: 0.3rem;
+    padding-bottom: 0.2rem;
+    background-color: #c4c4c4;
+    width :30px ;  
+    margin-left: 6px;
+    &:hover{
+        color: #000;
+        background-color: #e6e6e6;
+        transition: all 0.2s;
+}
+`

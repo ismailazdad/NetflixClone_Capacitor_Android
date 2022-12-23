@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Link} from 'react-router-dom'
 import styled from "styled-components"
 import LogoImg from "../../assets/Logo.svg"
-
 
 const HomeWrapper = styled.div`
   display: flex;
@@ -10,14 +9,12 @@ const HomeWrapper = styled.div`
   background-color: #000000;
 `
 
-
 const HomerContainer = styled.div`
   display: flex;
   flex-direction: row;
   width : 100%;
   height : 100vh
 `
-
 const LogoContainer = styled.img`
     position: fixed;
     left: 40%;
@@ -25,7 +22,6 @@ const LogoContainer = styled.img`
     top: 40%;
     bottom: 40%;
 `
-
 function Home() {
 
     return (

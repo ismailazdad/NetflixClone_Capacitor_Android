@@ -3,7 +3,7 @@ import styled from "styled-components";
 import React from "react";
 import PlayButton from "../../assets/play2.png"
 import {MovieGenres,TvGenres} from "../../utils/hooks";
-
+import InfoSvg from "../../assets/info.svg"
 const PlayerContainer = styled.div`
   position: sticky;
   left: 0;
@@ -66,7 +66,7 @@ function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
 }
 
-function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type}) {
+function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type,onDetails}) {
     let genresMovies =  genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
     let genresTv =  genre_ids.map((item) => TvGenres.find(x => x.id === item)?.name)
     let genres = genresMovies.concat(genresTv).filter((item,index)=>genresMovies.indexOf(item)===index);
@@ -79,8 +79,10 @@ function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote
             </Link>
               <GenresTypes >{notes}%</GenresTypes>
             <span style={{maxWidth:'30%'}}>{isLargeRow ? genres.slice(0,2).join(' . '):genres.slice(0,2).join(' . ')}</span>
-
-            <PlayerDescription>
+            <div title='more details' onClick={onDetails} style={{position:'relative',float:'right', right:'10px'}}>
+                <img src={InfoSvg}/>
+            </div>
+            <PlayerDescription >
                 {isLargeRow ?truncate(overview, 120):''}
             </PlayerDescription>
         </PlayerContainer>

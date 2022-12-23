@@ -42,7 +42,7 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
                     <RowPoster id="RowPoster" ref={myRef}  scrollRight={scrollRight} scrollLeft={scrollLeft}>
                         {movies && movies.map((movie, index) => (
                             useRank ?
-                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <div key={index +'_container'} style={{display: 'flex', justifyContent: 'space-between'}}>
                                     <TrendNumber>{index + 1}</TrendNumber>
                                     <VideoPlayer isActive={activeIndex === movie.id}
                                                 onShow={() => {setActiveIndex(movie.id)}}
