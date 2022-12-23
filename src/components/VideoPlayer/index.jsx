@@ -127,7 +127,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                     />
                 </Link>}
         </Card>
-            <Modal id='hello' key={`${movie.id}'--Card'`} show={show} className="my-modal" >
+            <Modal key={`${movie.id}'--Card'`} show={show} className="my-modal" >
                 <Modal.Dialog style={{backgroundSize: 'cover',backgroundImage: `url(${urls.findImagesUrl+movie.backdrop_path})`}}>
                     <Modal.Header onClick={() => setShow(false)} style={{border: 'transparent'}}  >
                         <Modal.Title><h1>{movie?.title} </h1></Modal.Title>
