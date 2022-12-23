@@ -7,7 +7,7 @@ This project is a simplified front end clone of Netflix.
 It was created with React native app.
 It uses [The MovieDB Api](https://www.themoviedb.org/documentation/api) 
 to get  movies and display details and preview trailer when mouse hover, and movie details in full page.
-
+Movie data was pulled from TMDB and trailer videos from Youtube.
 Running Project Locally
 
 Install dependencies: run npm install in root project
