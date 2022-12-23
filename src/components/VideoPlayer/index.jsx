@@ -5,9 +5,10 @@ import YouTube from "react-youtube";
 import {MovieGenres, playerOptions, TvGenres, useTransitionControl} from "../../utils/hooks";
 import PlayerMenu from "../PlayerMenu";
 import {Link} from "react-router-dom";
-import {Card, GenresTypes, LoaderContainer, LoaderWrapper, StyledImage, VideoContainer,PlayModalMenuButton} from "./style";
+import './style.css'
+import {Card, GenresTypes, LoaderContainer, LoaderWrapper, PlayModalMenuButton, StyledImage, VideoContainer} from "./style";
 import movieTrailer from "movie-trailer";
-import {Button, Modal} from "react-bootstrap"
+import {Modal} from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.css"
 import PlayButton from "../../assets/play2.png";
 
@@ -126,27 +127,27 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                     />
                 </Link>}
         </Card>
-            <Modal key={`${movie.id}'--Card'`} show={show}>
-                <Modal.Header onClick={() => setShow(false)} style={{color: 'white', backgroundColor: '#6C757D'}}>
-                    <Modal.Title><h1>{movie?.title} </h1></Modal.Title>
-                    <button type="button" style={{border: 'transparent'}} aria-label="Close">
-                        <span>&times;</span>
-                    </button>
-                </Modal.Header>
-                <img src={`${urls.findImagesUrl}${movie.backdrop_path}`} alt={`${movie?.title} cover`}/>
-                <div style={{color: 'white', backgroundColor: '#6C757D'}}>
-                    <Link to={`/movieDetails/${movie.id}/${type}`}>
-                        <PlayModalMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlayModalMenuButton>
-                    </Link>
-                    <span>{genres.join(' . ')}</span>
-                    <GenresTypes>{notes}%</GenresTypes> {year}
-                    <Modal.Body>
+            <Modal id='hello' key={`${movie.id}'--Card'`} show={show} className="my-modal" >
+                <Modal.Dialog style={{backgroundSize: 'cover',backgroundImage: `url(${urls.findImagesUrl+movie.backdrop_path})`}}>
+                    <Modal.Header onClick={() => setShow(false)} style={{border: 'transparent'}}  >
+                        <Modal.Title><h1>{movie?.title} </h1></Modal.Title>
+                        <button type="button" style={{border: 'transparent'}} aria-label="Close">
+                            <span>&times;</span>
+                        </button>
+                    </Modal.Header>
+                    <Modal.Body style={{paddingTop: '20%'}}>
                         <span>{movie?.overview}</span>
                     </Modal.Body>
-                </div>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShow(false)}>Close </Button>
-                </Modal.Footer>
+                    <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <Link to={`/movieDetails/${movie.id}/${type}`}>
+                                <PlayModalMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlayModalMenuButton>
+                            </Link>
+                            <span>{genres.join(' . ')}</span>
+                            <GenresTypes>{notes}%</GenresTypes> {year}
+                        </div>
+                    </Modal.Footer>
+                </Modal.Dialog>
             </Modal>
     </div>
     );

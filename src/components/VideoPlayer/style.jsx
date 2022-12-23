@@ -47,15 +47,15 @@ export const PlayModalMenuButton = styled.button`
     border: none;
     font-weight: 700;
     border-radius: 0.2vw;
-    padding-left: 0.5rem ;
+    padding-left: 0.7rem ;
     height:  35px;
     padding-right: 0.5rem;
     margin-right: 0.5rem;
     border-radius: 20px;
     padding-top: 0.3rem;
-    padding-bottom: 0.2rem;
+    padding-bottom: 0.3rem;
     background-color: #c4c4c4;
-    width :30px ;  
+    width :35px ;  
     margin-left: 6px;
     &:hover{
         color: #000;

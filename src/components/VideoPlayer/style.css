@@ -1,0 +1,7 @@
+.my-modal .modal-content {
+    color:white;
+    background: transparent linear-gradient(360deg, #030B0E 10%, transparent);
+    border: transparent;
+    height: 40vh;
+    margin:auto;
+}

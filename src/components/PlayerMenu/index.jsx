@@ -27,7 +27,7 @@ const PlaySubMenuButton = styled.button`
     padding-right: 0.5rem;
     margin-right: 0.5rem;
     border-radius: 20px;
-    padding-top: 0.3rem;
+    padding-top: 0.2rem;
     padding-bottom: 0.2rem;
     background-color: #c4c4c4;
     width :30px ;  
