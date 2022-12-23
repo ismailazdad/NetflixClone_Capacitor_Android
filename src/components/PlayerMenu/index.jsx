@@ -75,12 +75,12 @@ function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote
         <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>
             <PlayerTitle> {title ? title : name}</PlayerTitle>
             <Link  to={`/movieDetails/${id}/${type}`}>
-                <PlaySubMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlaySubMenuButton>
+                <PlaySubMenuButton isLargeRow={isLargeRow}><img alt='' src={PlayButton}/></PlaySubMenuButton>
             </Link>
               <GenresTypes >{notes}%</GenresTypes>
             <span style={{maxWidth:'30%'}}>{isLargeRow ? genres.slice(0,2).join(' . '):genres.slice(0,2).join(' . ')}</span>
             <div title='more details' onClick={onDetails} style={{position:'relative',float:'right', right:'10px'}}>
-                <img src={InfoSvg}/>
+                <img alt='' src={InfoSvg}/>
             </div>
             <PlayerDescription >
                 {isLargeRow ?truncate(overview, 120):''}

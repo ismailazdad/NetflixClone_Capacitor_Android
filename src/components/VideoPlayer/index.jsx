@@ -135,13 +135,13 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                             <span>&times;</span>
                         </button>
                     </Modal.Header>
-                    <Modal.Body style={{paddingTop: '20%'}}>
+                    <Modal.Body style={{paddingTop: '13%' ,overflow: 'hidden'}}>
                         <span>{movie?.overview}</span>
                     </Modal.Body>
                     <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
                         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                            <Link to={`/movieDetails/${movie.id}/${type}`}>
-                                <PlayModalMenuButton isLargeRow={isLargeRow}><img src={PlayButton}/></PlayModalMenuButton>
+                            <Link  to={`/movieDetails/${movie.id}/${type}`}>
+                                <PlayModalMenuButton  isLargeRow={isLargeRow}><img alt='' src={PlayButton}/></PlayModalMenuButton>
                             </Link>
                             <span>{genres.join(' . ')}</span>
                             <GenresTypes>{notes}%</GenresTypes> {year}
