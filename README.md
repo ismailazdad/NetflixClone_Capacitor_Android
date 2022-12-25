@@ -3,7 +3,7 @@ Demo: [link](https://moviestrailer.surge.sh/)
 
 Please rate this project if you like it !!  :bowtie:
 
-This project is a simplified front end clone of Netflix. 
+This project is a front end clone of Netflix. 
 It was created with React native app.
 It uses [The MovieDB Api](https://www.themoviedb.org/documentation/api) 
 to get  movies and display details and preview trailer when mouse hover, and movie details in full page.
