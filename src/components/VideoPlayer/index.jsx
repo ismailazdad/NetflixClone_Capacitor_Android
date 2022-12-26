@@ -15,7 +15,7 @@ import PlayButton from "../../assets/play2.png";
 const transitionStyles ={
     no_data:{transform: 'scale(1)',transition : 'transform 1s'},
     entering:{transform: 'scaleX(1.05)',transition : 'transform 500ms'},
-    entered:{transform: 'scaleX(1.15) scaleY(1.15)',transition : 'transform 4s'},
+    entered:{transform: 'scaleX(1.15) scaleY(1.15)',transition : 'transform 3s'},
     exiting:{transform: 'scale(1.15)',transition : 'transform 1s'},
     exited:{transform: 'scale(1)',transition : 'transform 1s'},
     finish:{transform: 'scale(1)',transition : 'transform 1s'},

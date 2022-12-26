@@ -56,7 +56,7 @@ export function useFetch(url,random=false) {
                     setLoading(false)
                 }
             )
-    }, [url])
+    }, [url,random ])
     return {isLoading, data,error}
 }
 
@@ -89,7 +89,7 @@ export function useFetchList(url,useRank = false) {
                     setLoading(false)
                 }
             )
-    }, [url])
+    }, [url,useRank])
     return {isLoading, data,error}
 }
 

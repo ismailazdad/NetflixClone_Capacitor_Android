@@ -10,9 +10,8 @@ export const LoaderContainer = styled.div`
         text-align: center;
         width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};
         height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
-        z-index:1000;
-        // display: ${({isVideoLoading}) => isVideoLoading ? 'block' : 'none'};   
-        display: ${({stateVideo,isVideoLoading}) => isVideoLoading  || stateVideo ==='entering'? 'block' : 'none'};   
+        z-index:1000; 
+         display: ${({stateVideo,isVideoLoading}) => isVideoLoading  || stateVideo !== 'entered'? 'block' : 'none'};
     `
 export const LoaderWrapper = styled.div`
         display: flex;
@@ -30,8 +29,7 @@ export const VideoContainer = styled.div`
         position:initial;
         top:0;
         overflow: hidden;
-        // display: ${({isVideoLoading}) => isVideoLoading ? 'none' : 'block'}; 
-        display: ${({stateVideo,isVideoLoading}) => ( stateVideo === 'exiting' || stateVideo ==='exited'  || stateVideo === 'entered') && !isVideoLoading  ? 'block' : 'none'};   
+        display: ${({stateVideo,isVideoLoading}) =>  stateVideo === 'entered' && !isVideoLoading  ? 'block' : 'none'};   
     `
 export const GenresTypes = styled.div`
     display:initial;
