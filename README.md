@@ -7,7 +7,8 @@ This project is a front end clone of Netflix.
 It was created with React native app.
 It uses [The MovieDB Api](https://www.themoviedb.org/documentation/api) 
 to get  movies and display details and preview trailer when mouse hover, and movie details in full page.
-Movie data was pulled from TMDB and trailer videos from Youtube.
+Movie data was pulled from TMDB and trailer videos from Youtube. To achieve this i made lazy loading techniques to efficiently render and update UI
+
 Running Project Locally
 
 Install dependencies: run npm install in root project
@@ -21,11 +22,12 @@ Run project: npm run start
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### Tools used
- - React
+ - using Route maping for rendering mutliples pages with react router
  - Bootstrap modal
- - Hook with UseState and UseEffect to synchronize api call and transition style effect synchronization
+ - Hooks with UseState and UseEffect to synchronize api call and transition style effect synchronization
  - React Router with parameters(dynamic route generation).
  - TMDB Api 
+ - handle environment variable with .env
  
 ### Preview
 
