@@ -1,7 +1,7 @@
 import React from "react";
 import urls from "../../utils/urls"
 import styled from "styled-components";
-import {getInfo, useFetch, useFetchById, useFetchTmp} from "../../utils/hooks";
+import {getInfo, useFetch} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import {useParams} from "react-router";
 import BannerVideo from "../../components/BannerVideo";
@@ -43,7 +43,7 @@ function Movie() {
                     <Loader/>
                 </LoaderWrapper>
             ) : (
-                <div style={{background: 'black',height:'100vh',    overflowX: 'hidden'}}>
+                <div key={`${id}--bannerVideo`} style={{background: 'black',height:'100vh',    overflowX: 'hidden'}}>
                     <BannerVideo
                         imageUrl = {imageUrl}
                         title={title}
