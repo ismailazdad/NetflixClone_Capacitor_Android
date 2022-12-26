@@ -22,10 +22,10 @@ Run project: npm run start
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### Tools used
- - using Route maping for rendering mutliples pages with react router
+ - using Route maping for rendering mutliples pages with react router  with parameters(dynamic route generation)
  - Bootstrap modal
- - Hooks with UseState and UseEffect to synchronize api call and transition style effect synchronization
- - React Router with parameters(dynamic route generation).
+ - use globalStyle, and style.jsx and styled component
+ - Hooks with UseState and UseEffect to synchronize api call and transition style effect synchronization and propTypes
  - TMDB Api 
  - handle environment variable with .env
  
