@@ -7,6 +7,7 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import Header from "../Header";
+import { useCallback } from 'react'
 const MovieHeader = styled.div`
     color: white;
     object-fit: contain;
@@ -66,7 +67,7 @@ function BannerVideo({imageUrl,title,adults,popularity,year,genres,productions,l
     playerOptions.playerVars.mute = 0;
     let h = playerOptions.height.toString()+'px'
 
-    const handleClick = (title) => {
+    const handleClick = useCallback((title) => {
         if(!startVideo){
             setStartVideo(true);
             if (trailerURL) {
@@ -85,12 +86,12 @@ function BannerVideo({imageUrl,title,adults,popularity,year,genres,productions,l
                     })
             }
         }
-    };
+    },[startVideo,trailerURL]);
     useEffect(() => {
         if(!isMainMenu){
             handleClick(title)
         }
-    }, [title])
+    }, [title,isMainMenu,handleClick])
 
 
     function truncate(str, n) {

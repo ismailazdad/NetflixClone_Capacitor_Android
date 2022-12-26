@@ -5,7 +5,7 @@ import {playerOptions} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
-
+import { useCallback } from 'react'
 const MovieHeader = styled.div`
     color: white;
     object-fit: contain;
@@ -84,7 +84,7 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
     playerOptions.playerVars.mute = 0;
     let h = playerOptions.height.toString()+'px'
 
-    const handleClick = (title) => {
+    const handleClick = useCallback((title) => {
         if(!startVideo){
             setStartVideo(true);
             if (trailerURL) {
@@ -103,12 +103,12 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
                     })
             }
         }
-    };
+    },[startVideo,trailerURL]);
     useEffect(() => {
         if(!isMainMenu){
             handleClick(title)
         }
-    }, [title])
+    }, [title,isMainMenu,handleClick])
 
 
     function truncate(str, n) {
