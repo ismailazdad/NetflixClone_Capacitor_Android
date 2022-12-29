@@ -10,7 +10,7 @@ const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;
 `
-
+//first version of movies page , showing poster and trailer inside the poster container
 function Movies() {
     const {isLoading, data, error} = useFetch(urls.findNetflixOriginals,true);
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = getInfo(data,urls.findNetflixOriginals);

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
+import MoviesBanner from "./pages/MoviesBanner";
 import {BrowserRouter as Router} from 'react-router-dom'
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -18,6 +19,8 @@ root.render(
             <Route exact path="/" element={<Home/>}>
             </Route>
             <Route exact path="/movies" element={<Movies />}>
+            </Route>
+            <Route exact path="/movies2" element={<MoviesBanner />}>
             </Route>
             <Route exact path="/movieDetails/:id/:type" element={ <Movie />}>
             </Route>

@@ -6,17 +6,22 @@ import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import { useCallback } from 'react'
+import './style.css'
+
 const MovieHeader = styled.div`
     color: white;
     object-fit: contain;
     height: 448px;
     background-size: cover;
     background: ${({imageUrl}) => 'url(' + imageUrl + ') ;'}
-    background-position: center ;
+    background-position: center;   
+    user-select: none;
 `
 const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
+    z-index: 10000;
+    position: absolute;
 `
 const MovieTitle = styled.h1`
     font-size: 3rem;
@@ -27,7 +32,7 @@ const MovieDescription = styled.h1`
     width: 70%;
     line-height: 1.3;
     padding-top: 0.5rem;
-    font-size: 1.5rem;
+    font-size:${({textLen}) =>  textLen < 170  ? '' : '1.5rem'}; 
     max-width: 120rem;
     height: 100px;
     overflow:hidden;
@@ -60,55 +65,59 @@ const MovieFadeBottom = styled.div`
         rgba(37, 37, 37, 0.61),
         #111  
     );
+    width: 100%;
+    position: absolute;
+    bottom: -0.5vh;
+    z-index: 1000;
 `
 
 const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;
+    position:absolute;
+    z-index: 1000;
+    margin: -15% 0% 0% 45%;
 `
 
-const VideoContainer = styled.div`
+const LoaderContainer = styled.div`
     width: 100%;
     object-fit: contain;
-    height:${({h,startVideo}) => startVideo ? `${h}`:``};
-    position: ${({startVideo}) => startVideo ? 'absolute' : 'relative'}; 
-    top:28rem;
+    position: absolute ;
+    top :0;
+    z-index:100;
 `
-
-function Banner({imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type}){
+const VideoContainer = styled.div`
+    display: ${({isVideoLoading}) =>  !isVideoLoading  ? 'block' : 'none'};   
+`
+function Banner({imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription}){
     const [trailerURL, setTrailerURL] = useState("");
     const [isVideoLoading, setIsVideoLoading] = useState(false);
+    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
     const [vidError, setVidError] = useState(false);
-    const [startVideo, setStartVideo] = useState(false);
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
-    playerOptions.playerVars.mute = 0;
-    let h = playerOptions.height.toString()+'px'
+    playerOptions.playerVars.mute = 1;
 
     const handleClick = useCallback((title) => {
-        if(!startVideo){
-            setStartVideo(true);
-            if (trailerURL) {
+        setTrailerURL("");
+        setVidError(false);
+        setIsVideoPlaying(false);
+        setIsVideoLoading(true);
+        movieTrailer(title)
+            .then((url) => {
+                const urlParams = new URLSearchParams(new URL(url).search);
+                setTrailerURL(urlParams.get("v"));
+            })
+            .catch((e) => {
                 setTrailerURL("");
-            } else {
-                setVidError(false);
-                setIsVideoLoading(true);
-                movieTrailer(title)
-                    .then((url) => {
-                        const urlParams = new URLSearchParams(new URL(url).search);
-                        setTrailerURL(urlParams.get("v"));
-                    })
-                    .catch((e) => {
-                        setTrailerURL("");
-                        setVidError(true);
-                    })
-            }
-        }
-    },[startVideo,trailerURL]);
+                setVidError(true);
+            })
+    },[]);
+
     useEffect(() => {
         if(!isMainMenu){
-            handleClick(title)
+         handleClick(title);
         }
-    }, [title,isMainMenu,handleClick])
+    }, [title,handleClick,isMainMenu])
 
 
     function truncate(str, n) {
@@ -116,19 +125,14 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
     }
 
     return (
-        <div>
-        <MovieHeader imageUrl={imageUrl}>
-            <MovieHeaderContent>
+        <MovieHeader imageUrl={imageUrl} isVideoPlaying={isVideoPlaying}>
+            <MovieHeaderContent id='test'>
                 <MovieTitle> {title}</MovieTitle>
                 <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
                     <div style={{width: '300px'}}>
-                        {isMainMenu ?
                             <Link to={`/movieDetails/${id}/${type}`}>
                                 <MovieButton>Play</MovieButton>
                             </Link>
-                            :
-                            <MovieButton onClick={() => handleClick(title)}>Play</MovieButton>
-                        }
                         <MovieButton>My List</MovieButton>
                     </div>
                     <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
@@ -138,35 +142,38 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
                         <div style={{border: 'solid 1px', height: 'fit-content', marginLeft: '5px'}}> {year}</div>
                     </div>
                 </div>
-                {!isMainMenu ?
+                {showDescription ?
                 <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
                     <div><span style={{color:'gray'}}>Genres</span> : {genres}</div>
                     <div><span style={{color:'gray'}}>Productions</span> : {productions}</div>
                     <div><span style={{color:'gray'}}>Languages</span> : {languages}</div>
                 </div>:''}
-                <MovieDescription style={{ display: 'flex'}}>
+                <MovieDescription style={{ display: 'flex'}} textLen={overview.length}>
                     {isMainMenu ? truncate(overview,250):truncate(overview,500)}
                 </MovieDescription>
             </MovieHeaderContent>
-            <MovieFadeBottom/>
-        </MovieHeader>
-            <VideoContainer startVideo={startVideo} h={h}>
+            {!isMainMenu && trailerURL?
+            <LoaderContainer >
                 {vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
-                {(isVideoLoading && trailerURL==="")?
-                    <LoaderWrapper data-testid='loader'>
-                        <Loader id='myloader' style={{margin: '14% 0% 0 0'}}/>
-                    </LoaderWrapper>
-                    :
-                    (startVideo ?
-                            <YouTube
-                                onPlay={e => setIsVideoLoading(false)}
-                                onError={e => setVidError(true)}
-                                videoId={trailerURL}
-                                opts={playerOptions}
-                            />:''
-                    )}
-            </VideoContainer>
-        </div>
+                {/*better rendering without loading icon*/}
+                {/*{(isVideoLoading )?*/}
+                {/*    <LoaderWrapper data-testid='loader'>*/}
+                {/*        <Loader id='myloader'/>*/}
+                {/*    </LoaderWrapper>*/}
+                {/*    :''}*/}
+                    <VideoContainer isVideoLoading={isVideoLoading}>
+                        <YouTube id='vidPlayer' className='video-background-banner'
+                                 onPlay={e => {setIsVideoLoading(false);setIsVideoPlaying(true)}}
+                                 onError={e => {setVidError(true);setIsVideoPlaying(false)}}
+                                 onReady={e=>{setIsVideoPlaying(false);setIsVideoLoading(true);}}
+                                 videoId={trailerURL}
+                                 opts={playerOptions}
+                        />
+                    </VideoContainer>
+            </LoaderContainer>
+            :''}
+            <MovieFadeBottom id='test2' />
+        </MovieHeader>
     )
 }
 export default  Banner
