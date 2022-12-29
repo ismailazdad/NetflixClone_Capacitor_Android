@@ -1,13 +1,17 @@
-# Netflix Clone movies trailer
-Demo: [link](https://moviestrailer.surge.sh/)
+# Netflix Clone movies trailer 
+Demo:
+ [First Version](https://moviestrailer.surge.sh/)
+
+ [Second Version](https://moviestrailer2.surge.sh/)
 
 Please rate this project if you like it !!  :bowtie:
 
 This project is a front end clone of Netflix. 
 It was created with React native app.
 It uses [The MovieDB Api](https://www.themoviedb.org/documentation/api) 
-to get  movies and display details and preview trailer when mouse hover, and movie details in full page.
+to get  movies and display details and preview trailer when mouse hover or in header, and movie details in full page.
 Movie data was pulled from TMDB and trailer videos from Youtube. To achieve this i made lazy loading techniques to efficiently render and update UI
+with hooks and useEffect technical.
 
 Running Project Locally
 
