@@ -21,7 +21,7 @@ const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
     z-index: 10000;
-    position: absolute;
+    position: ${({isMainMenu}) =>  isMainMenu   ? 'relative' : 'absolute'}; 
 `
 const MovieTitle = styled.h1`
     font-size: 3rem;
@@ -66,8 +66,8 @@ const MovieFadeBottom = styled.div`
         #111  
     );
     width: 100%;
-    position: absolute;
-    bottom: -0.5vh;
+    position: ${({isMainMenu}) =>  isMainMenu   ? 'relative' : 'absolute'}; 
+    bottom: ${({isMainMenu}) =>  isMainMenu   ? '2.5vh' : '-0.5vh'};  
     z-index: 1000;
 `
 
@@ -126,7 +126,7 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
 
     return (
         <MovieHeader imageUrl={imageUrl} isVideoPlaying={isVideoPlaying}>
-            <MovieHeaderContent id='test'>
+            <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
                 <MovieTitle> {title}</MovieTitle>
                 <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
                     <div style={{width: '300px'}}>
@@ -172,7 +172,7 @@ function Banner({imageUrl,title,adults,popularity,year,genres,productions,langua
                     </VideoContainer>
             </LoaderContainer>
             :''}
-            <MovieFadeBottom id='test2' />
+            <MovieFadeBottom id='test2' isMainMenu={isMainMenu} />
         </MovieHeader>
     )
 }

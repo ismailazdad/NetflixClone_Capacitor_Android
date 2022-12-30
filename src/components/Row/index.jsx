@@ -41,9 +41,8 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
                     <Chevron style={{left: '0'}} icon={ChevronLeft} onClick={scrollToRight} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
                     <RowPoster id="RowPoster" ref={myRef}  scrollRight={scrollRight} scrollLeft={scrollLeft}>
                         {movies && movies.map((movie, index) => (
-                            useRank ?
                                 <div key={index +'_container'} style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <TrendNumber>{index + 1}</TrendNumber>
+                                    {useRank ? <TrendNumber>{index + 1}</TrendNumber> :''}
                                     <VideoPlayer isActive={activeIndex === movie.id}
                                                 onShow={() => {setActiveIndex(movie.id)}}
                                                 onLeave={() => {setActiveIndex(null)}}
@@ -57,18 +56,6 @@ function Row({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
                                                 useRank={useRank}
                                     />
                                 </div>
-                                :
-                                <VideoPlayer isActive={ activeIndex === movie.id}
-                                            onShow={() =>{setActiveIndex(movie.id)}}
-                                            onLeave={()=>{setActiveIndex(null)}}
-                                            isLargeRow={isLargeRow}
-                                            movie={movie}
-                                            scroll={scrollRight}
-                                            scrollLeft={scrollLeft}
-                                            index={index}
-                                            type={type}
-                                            key={index+'_vid'}
-                                />
                         ))
                         }
                     </RowPoster>

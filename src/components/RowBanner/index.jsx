@@ -103,9 +103,8 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                     <Chevron style={{left: '0'}} icon={ChevronLeft} onClick={scrollToRight} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
                     <RowPoster id="RowPoster" ref={myRef}  scrollRight={scrollRight} scrollLeft={scrollLeft}>
                         {movies && movies.map((movie, index) => (
-                            useRank ?
                                 <div key={index +'_container'} style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <TrendNumber>{index + 1}</TrendNumber>
+                                    {useRank ? <TrendNumber>{index + 1}</TrendNumber> :''}
                                     <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
                                         <StyledImage
                                             key={movie.id}
@@ -120,18 +119,6 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                         />
                                     </Link>
                                 </div>
-                                :
-                                <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
-                                    <StyledImage
-                                        key={movie.id}
-                                        src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                        alt={movie.name}
-                                        isLargeRow={isLargeRow}
-                                        isActive={activeIndex === movie}
-                                        onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
-                                        // onMouseLeave={() => {setActiveIndex(null)}}
-                                    />
-                                </Link>
                         ))
                         }
                     </RowPoster>
