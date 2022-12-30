@@ -5,7 +5,7 @@ Demo:
 
  [Second Version](https://moviestrailer2.surge.sh/)
 
-Please rate this project if you like it !!  :bowtie:
+Please rate this project if you like it !!  :bowtie: :pleading_face:
 
 This project is a front end clone of Netflix. 
 It was created with React native app.
