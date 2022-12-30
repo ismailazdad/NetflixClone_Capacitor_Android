@@ -16,13 +16,14 @@ with hooks and useEffect technical.
 
 Running Project Locally
 
-Install dependencies: run npm install in root project
+Install dependencies: run ```npm install``` in the root project
 
 Get API key from [here](https://www.themoviedb.org/documentation/api)
 
 Change .env file in root project and add API_KEY=YOUR_API_KEY_HERE
 
-Run project: npm run start
+Run project: 
+```npm run start```
 
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
