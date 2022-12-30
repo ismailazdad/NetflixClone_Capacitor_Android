@@ -75,7 +75,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
     };
 
     return (<div>
-        <Card key={`${movie.id}'---'`} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)} useRank={useRank}>
+        <Card key={`${movie.id}'---'`}  onTouchStart={() =>{ HandleVideo(movie)}} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)} useRank={useRank}>
             { ((isActive || stateVideo ==='exiting'|| stateVideo ==='exited')  && !scrollLeft && !scrollRight && !vidError )  ?
                 (
                     <div style={{...{position:'inherits',border:'solid 1px transparent',width: '400px', height: isLargeRow ? '260px' : '200px',},...videoStyle}}>
