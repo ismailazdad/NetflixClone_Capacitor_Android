@@ -1,5 +1,5 @@
 # Netflix Clone movies trailer 
-Demo:
+Demo: (use desktop mode)
 
  [First Version](https://moviestrailer.surge.sh/)
 
