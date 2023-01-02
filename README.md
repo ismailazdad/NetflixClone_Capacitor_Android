@@ -1,4 +1,7 @@
 # Netflix Clone movies trailer 
+![](./src/assets/demo.gif?raw=true)
+
+
 Demo: (use desktop mode for mobile)
 
  [First Version](https://moviestrailer.surge.sh/)
@@ -49,6 +52,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 ### Preview
 
   
-![](./src/assets/demo.gif?raw=true)
+
 
 ![](./src/assets/demo2.gif?raw=true)
