@@ -16,13 +16,24 @@ with hooks and useEffect technical.
 
 Running Project Locally
 
-Install dependencies: run ```npm install``` in the root project
+Clone Project : 
 
-Get API key from [here](https://www.themoviedb.org/documentation/api)
+```git clone https://github.com/ismailazdad/Netflix_clone.git```
 
-Change .env file in root project and add API_KEY=YOUR_API_KEY_HERE
+Go to project directory :
+
+```cd Netflix_clone/```
+
+Install dependencies:  
+
+```npm install``` in the root project
+
+Get API key from [here](https://www.themoviedb.org/signup)
+
+Change .env file in root project and replace  ```YOUR_API_KEY_HERE``` by your personnal themoviedb key
 
 Run project: 
+
 ```npm run start```
 
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
