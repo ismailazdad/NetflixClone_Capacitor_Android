@@ -30,7 +30,7 @@ Install dependencies:
 
 Get API key from [here](https://www.themoviedb.org/signup)
 
-Change .env file in root project and replace  ```YOUR_API_KEY_HERE``` by your personnal themoviedb key
+Change ```.env``` file in root project and replace  ```YOUR_API_KEY_HERE``` by your personnal themoviedb key
 
 Run project: 
 
