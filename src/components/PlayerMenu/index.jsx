@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import styled from "styled-components";
 import React from "react";
 import PlayButton from "../../assets/play2.png"
-import {MovieGenres,TvGenres} from "../../utils/hooks";
+import {getGenres} from "../../utils/hooks";
 import InfoSvg from "../../assets/info.svg"
 const PlayerContainer = styled.div`
   position: sticky;
@@ -67,9 +67,7 @@ function truncate(str, n) {
 }
 
 function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type,onDetails}) {
-    let genresMovies =  genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
-    let genresTv =  genre_ids.map((item) => TvGenres.find(x => x.id === item)?.name)
-    let genres = genresMovies.concat(genresTv).filter((item,index)=>genresMovies.indexOf(item)===index);
+    let genres = getGenres(genre_ids);
     let notes = Math.ceil(vote_average*10)
     return (
         <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>

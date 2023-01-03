@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import urls from "../../utils/urls";
 import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
-import {MovieGenres, playerOptions, TvGenres, useTransitionControl} from "../../utils/hooks";
+import { playerOptions,getGenres,useTransitionControl} from "../../utils/hooks";
 import PlayerMenu from "../PlayerMenu";
 import {Link} from "react-router-dom";
 import './style.css'
@@ -40,9 +40,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
     playerOptions.playerVars.mute = 1;
     const [show, setShow] = useState(false);
     let year = (movie?.release_date ? movie?.release_date : movie?.first_air_date).substring(0, 4);
-    let genresMovies = movie.genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
-    let genresTv = movie.genre_ids.map((item) => TvGenres.find(x => x.id === item)?.name)
-    let genres = genresMovies.concat(genresTv).filter((item, index) => genresMovies.indexOf(item) === index);
+    let genres = getGenres(movie.genre_ids);
     let notes = Math.ceil(movie.vote_average * 10);
 
     const ResetStateVideo =  function (e) {
