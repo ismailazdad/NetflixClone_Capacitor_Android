@@ -69,13 +69,6 @@ const MovieFadeBottom = styled.div`
     z-index: 1000;
 `
 
-const LoaderWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    position:absolute;
-    z-index: 1000;
-    margin: -15% 0% 0% 45%;
-`
 
 const LoaderContainer = styled.div`
     width: 100%;
