@@ -1,9 +1,10 @@
 import {Link} from "react-router-dom";
 import styled from "styled-components";
-import React from "react";
+import React, {Component} from "react";
 import PlayButton from "../../assets/play2.png"
 import {getGenres} from "../../utils/hooks";
-import InfoSvg from "../../assets/info.svg"
+import InfoSvg from "../../assets/info.svg";
+
 const PlayerContainer = styled.div`
   position: sticky;
   left: 0;
@@ -46,7 +47,6 @@ const PlayerTitle = styled.h1`
 `
 const PlayerDescription = styled.h1`
     padding-left : 0.1rem;
-    // padding-top: 0.1rem;
     width: auto;
     font-size: 0.65rem;
     max-width: 400px;
@@ -62,28 +62,38 @@ const GenresTypes = styled.div`
     padding-right:1%;
     font-size: 1rem;
 `
-function truncate(str, n) {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+
+class PlayerMenu extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    truncate = (str, n) => {
+        return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+    }
+
+    render() {
+        const {id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type,onDetails}= this.props
+        let genres = getGenres(genre_ids);
+        let notes = Math.ceil(vote_average*10)
+
+        return (
+            <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>
+                <PlayerTitle> {title ? title : name}</PlayerTitle>
+                <Link  to={`/movieDetails/${id}/${type}`}>
+                    <PlaySubMenuButton isLargeRow={isLargeRow}><img alt='' src={PlayButton}/></PlaySubMenuButton>
+                </Link>
+                <GenresTypes >{notes}%</GenresTypes>
+                <span style={{maxWidth:'30%'}}>{isLargeRow ? genres.slice(0,2).join(' . '):genres.slice(0,2).join(' . ')}</span>
+                <div title='more details' onClick={onDetails} style={{position:'relative',float:'right', right:'10px'}}>
+                    <img alt='' src={InfoSvg}/>
+                </div>
+                <PlayerDescription >
+                    {isLargeRow ?this.truncate(overview, 120):''}
+                </PlayerDescription>
+            </PlayerContainer>
+        )
+    }
 }
 
-function PlayerMenu({id,name,title,overview,media_type,genre_ids,popularity,vote_average,isLargeRow,type,onDetails}) {
-    let genres = getGenres(genre_ids);
-    let notes = Math.ceil(vote_average*10)
-    return (
-        <PlayerContainer  isLargeRow={isLargeRow} key={`${id}--sub`}>
-            <PlayerTitle> {title ? title : name}</PlayerTitle>
-            <Link  to={`/movieDetails/${id}/${type}`}>
-                <PlaySubMenuButton isLargeRow={isLargeRow}><img alt='' src={PlayButton}/></PlaySubMenuButton>
-            </Link>
-              <GenresTypes >{notes}%</GenresTypes>
-            <span style={{maxWidth:'30%'}}>{isLargeRow ? genres.slice(0,2).join(' . '):genres.slice(0,2).join(' . ')}</span>
-            <div title='more details' onClick={onDetails} style={{position:'relative',float:'right', right:'10px'}}>
-                <img alt='' src={InfoSvg}/>
-            </div>
-            <PlayerDescription >
-                {isLargeRow ?truncate(overview, 120):''}
-            </PlayerDescription>
-        </PlayerContainer>
-    )
-}
 export default PlayerMenu

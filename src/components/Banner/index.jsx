@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {Component} from "react";
 import styled from "styled-components";
 import movieTrailer from "movie-trailer";
 import {playerOptions} from "../../utils/hooks";
-import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
-import { useCallback } from 'react'
 import './style.css'
 
 const MovieHeader = styled.div`
@@ -88,92 +86,131 @@ const LoaderContainer = styled.div`
 `
 const VideoContainer = styled.div`
     display: ${({isVideoLoading}) =>  !isVideoLoading  ? 'block' : 'none'};   
+    opacity : ${({videoPlaying}) =>  !videoPlaying  ? '0' : '1'};
 `
-function Banner({imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription}){
-    const [trailerURL, setTrailerURL] = useState("");
-    const [isVideoLoading, setIsVideoLoading] = useState(false);
-    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-    const [vidError, setVidError] = useState(false);
+
+class Banner extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            trailerURL: "",
+            isVideoLoading: false,
+            isVideoPlaying: false,
+            vidError: false,
+            startVideo: false
+        }
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
+    }
 
-    const handleClick = useCallback((title) => {
-        setTrailerURL("");
-        setVidError(false);
-        setIsVideoPlaying(false);
-        setIsVideoLoading(true);
-        movieTrailer(title)
-            .then((url) => {
-                const urlParams = new URLSearchParams(new URL(url).search);
-                setTrailerURL(urlParams.get("v"));
-            })
-            .catch((e) => {
-                setTrailerURL("");
-                setVidError(true);
-            })
-    },[]);
+    setTrailerURL(title) {
+        this.setState({trailerURL: title})
+    }
 
-    useEffect(() => {
-        if(!isMainMenu){
-         handleClick(title);
-        }
-    }, [title,handleClick,isMainMenu])
+    setIsVideoLoading(flag) {
+        this.setState({isVideoLoading: flag})
+    }
 
+    setVidError(flag) {
+        this.setState({vidError: flag})
+    }
 
-    function truncate(str, n) {
+    setStartVideo(flag) {
+        this.setState({startVideo: flag})
+    }
+
+    setIsVideoPlaying(flag) {
+        this.setState({isVideoPlaying: flag})
+    }
+
+    truncate = (str, n) => {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
     }
 
-    return (
-        <MovieHeader imageUrl={imageUrl} isVideoPlaying={isVideoPlaying}>
-            <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
-                <MovieTitle> {title}</MovieTitle>
-                <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                    <div style={{width: '300px'}}>
+    componentDidMount() {
+        if (!this.props.isMainMenu) {
+            this.handleClick(this.props.title)
+        }
+    }
+
+    componentWillReceiveProps(nextProps, nextState) {
+        if (nextProps.title !==  this.props.title) {
+            this.handleClick(nextProps.title)
+        }
+    }
+
+
+    handleClick = (title) => {
+        this.setTrailerURL("");
+        this.setVidError(false);
+        this.setIsVideoLoading(true);
+        this.setIsVideoPlaying(false);
+        movieTrailer(title)
+            .then((url) => {
+                const urlParams = new URLSearchParams(new URL(url).search);
+                this.setTrailerURL(urlParams.get("v"));
+            })
+            .catch((e) => {
+                this.setTrailerURL("");
+                this.setVidError(true);
+            })
+    };
+    render(){
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription} = this.props;
+        return (
+            <MovieHeader imageUrl={imageUrl} isVideoPlaying={this.state.isVideoPlaying}>
+                <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
+                    <MovieTitle> {title}</MovieTitle>
+                    <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                        <div style={{width: '300px'}}>
                             <Link to={`/movieDetails/${id}/${type}`}>
                                 <MovieButton>Play</MovieButton>
                             </Link>
-                        <MovieButton>My List</MovieButton>
-                    </div>
-                    <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
-                        <div style={{width: '10%', color: 'lightgreen', fontWeight: '800'}}>Recommand at {popularity}%
+                            <MovieButton>My List</MovieButton>
                         </div>
-                        <div> for : {!adults ? ' Adults' : ' All family'}</div>
-                        <div style={{border: 'solid 1px', height: 'fit-content', marginLeft: '5px'}}> {year}</div>
+                        <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
+                            <div style={{width: '10%', color: 'lightgreen', fontWeight: '800'}}>Recommand at {popularity}%
+                            </div>
+                            <div> for : {!adults ? ' Adults' : ' All family'}</div>
+                            <div style={{border: 'solid 1px', height: 'fit-content', marginLeft: '5px'}}> {year}</div>
+                        </div>
                     </div>
-                </div>
-                {showDescription ?
-                <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
-                    <div><span style={{color:'gray'}}>Genres</span> : {genres}</div>
-                    <div><span style={{color:'gray'}}>Productions</span> : {productions}</div>
-                    <div><span style={{color:'gray'}}>Languages</span> : {languages}</div>
-                </div>:''}
-                <MovieDescription style={{ display: 'flex'}} textLen={overview.length}>
-                    {isMainMenu ? truncate(overview,250):truncate(overview,500)}
-                </MovieDescription>
-            </MovieHeaderContent>
-            {!isMainMenu && trailerURL?
-            <LoaderContainer >
-                {vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
-                {/*better rendering without loading icon*/}
-                {/*{(isVideoLoading )?*/}
-                {/*    <LoaderWrapper data-testid='loader'>*/}
-                {/*        <Loader id='myloader'/>*/}
-                {/*    </LoaderWrapper>*/}
-                {/*    :''}*/}
-                    <VideoContainer isVideoLoading={isVideoLoading}>
-                        <YouTube id='vidPlayer' className='video-background-banner'
-                                 onPlay={e => {setIsVideoLoading(false);setIsVideoPlaying(true)}}
-                                 onError={e => {setVidError(true);setIsVideoPlaying(false)}}
-                                 onReady={e=>{setIsVideoPlaying(false);setIsVideoLoading(true);}}
-                                 videoId={trailerURL}
-                                 opts={playerOptions}
-                        />
-                    </VideoContainer>
-            </LoaderContainer>
-            :''}
-            <MovieFadeBottom id='test2' isMainMenu={isMainMenu} />
-        </MovieHeader>
-    )
+                    {showDescription ?
+                        <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
+                            <div><span style={{color:'gray'}}>Genres</span> : {genres}</div>
+                            <div><span style={{color:'gray'}}>Productions</span> : {productions}</div>
+                            <div><span style={{color:'gray'}}>Languages</span> : {languages}</div>
+                        </div>:''}
+                    <MovieDescription style={{ display: 'flex'}} textLen={overview.length}>
+                        {isMainMenu ? this.truncate(overview,250):this.truncate(overview,500)}
+                    </MovieDescription>
+                </MovieHeaderContent>
+                {!isMainMenu && this.state.trailerURL?
+                    <LoaderContainer >
+                        {this.state.vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
+                        {/*better rendering without loading icon*/}
+                        {/*{(this.state.isVideoLoading )?*/}
+                        {/*    <LoaderWrapper data-testid='loader'>*/}
+                        {/*        <Loader id='myloader'/>*/}
+                        {/*    </LoaderWrapper>*/}
+                        {/*    :''}*/}
+                        <VideoContainer isVideoLoading={this.state.isVideoLoading} videoPlaying={this.state.isVideoPlaying}>
+                            <YouTube id='vidPlayer' className='video-background-banner'
+                                     onPlay={e => {this.setIsVideoLoading(false);this.setIsVideoPlaying(true)}}
+                                     onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
+                                     onReady={e=>{this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
+                                     onEnd={ e=> {this.setIsVideoPlaying(false)}}
+                                     videoId={this.state.trailerURL}
+                                     opts={playerOptions}
+                            />
+                        </VideoContainer>
+                    </LoaderContainer>
+                    :''}
+                <MovieFadeBottom id='test2' isMainMenu={isMainMenu} />
+            </MovieHeader>
+        )
+    }
 }
+
 export default  Banner
