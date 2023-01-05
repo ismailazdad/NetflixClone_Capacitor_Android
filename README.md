@@ -1,4 +1,8 @@
 # Netflix Clone movies trailer 
+
+![image](https://user-images.githubusercontent.com/61585443/185205338-c20bb089-618f-49e2-b740-1c02838030a4.png)
+
+
 ![](./src/assets/demo.gif?raw=true)
 
 
