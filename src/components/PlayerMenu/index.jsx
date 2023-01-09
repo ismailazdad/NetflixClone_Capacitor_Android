@@ -6,15 +6,19 @@ import {getGenres} from "../../utils/hooks";
 import InfoSvg from "../../assets/info.svg";
 
 const PlayerContainer = styled.div`
-  position: sticky;
-  left: 0;
-  width: 100%;
-  background-color: #2b2b2b;
-  height: ${({isLargeRow}) => isLargeRow ? '70px' : '36px'} ;
-  margin-top: ${({isLargeRow}) => isLargeRow ? '-5.5rem' : '-6rem'};
-  max-width : inherit;
-  padding-top: 10px;
-  font-size : 1em;
+    position: sticky;
+    left: 0;
+    width: 100%;
+    background-color: #2b2b2b;
+    height: ${({isLargeRow}) => isLargeRow ? '70px' : '36px'} ;
+    margin-top: ${({isLargeRow}) => isLargeRow ? '-7rem' : '-6.5rem'};
+    max-width : inherit;
+    padding-top: 10px;
+    font-size : 1em;
+    @media  only screen and (max-width:768px ){
+        margin-top: ${({isLargeRow}) => isLargeRow ? '-8rem' : '-6rem'};
+        max-height : 7vh;
+    } 
 `
 const PlaySubMenuButton = styled.button`       
     cursor: pointer;
@@ -44,6 +48,9 @@ const PlayerTitle = styled.h1`
     font-weight: 500;
     margin-top: -2.5em;
     position: absolute;
+    @media  only screen and (max-width:768px ){
+        margin-top: -1.5em;
+    }
 `
 const PlayerDescription = styled.h1`
     padding-left : 0.1rem;
@@ -54,6 +61,9 @@ const PlayerDescription = styled.h1`
     margin: 0 0 0 0;
     overflow: hidden;    
     line-height: 0.9rem;
+    @media  only screen and (max-width:768px ){
+      display :  none;
+    } 
 `
 const GenresTypes = styled.div`
     display:initial;
@@ -61,6 +71,15 @@ const GenresTypes = styled.div`
     float:right;
     padding-right:1%;
     font-size: 1rem;
+`
+
+const Details = styled.div`
+    position:relative;
+    float:right;
+    right:10px;
+    @media  only screen and (max-width:768px ){
+      display :  none;;  
+    } 
 `
 
 class PlayerMenu extends Component {
@@ -85,9 +104,9 @@ class PlayerMenu extends Component {
                 </Link>
                 <GenresTypes >{notes}%</GenresTypes>
                 <span style={{maxWidth:'30%'}}>{isLargeRow ? genres.slice(0,2).join(' . '):genres.slice(0,2).join(' . ')}</span>
-                <div title='more details' onClick={onDetails} style={{position:'relative',float:'right', right:'10px'}}>
+                <Details title='more details' onClick={onDetails} >
                     <img alt='' src={InfoSvg}/>
-                </div>
+                </Details>
                 <PlayerDescription >
                     {isLargeRow ?this.truncate(overview, 120):''}
                 </PlayerDescription>

@@ -3,7 +3,7 @@ import React from "react";
 
 const FooterStyle = styled.footer`
     justify-content: center;
-    padding-top: 60px;
+    padding-top:2vh;
     background: #000000;
     position: absolute;
     left: 0;

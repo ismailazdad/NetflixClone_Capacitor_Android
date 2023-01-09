@@ -18,15 +18,24 @@ const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
     height: 190px;
+    @media  only screen and (max-width:768px ){
+        margin-left: 0px;
+    }    
 `
 const MovieTitle = styled.h1`
     font-size: 3rem;
     font-weight: 800;
     padding-bottom: 0.3rem;
+    @media  only screen and (max-width:768px ){
+        font-weight: 400;
+        padding-bottom: 0rem;
+        position:relative;
+        padding-right:1vh;
+    }    
 `
 const MovieDescription = styled.h1`
     width: 70%;
-    line-height: 1.3;
+    line-height: 1.8rem;
     padding-top: 0.5rem;
     font-size: 1.5rem;
     max-width: 120rem;
@@ -46,6 +55,12 @@ const MovieButton = styled.button`
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     background-color: rgba(51, 51, 51, 0.5);
+    @media  only screen and (max-width:768px ){
+        margin-top:1vh;
+        margin-left:1vh;
+        width: 20vh;
+        height:5vh;        
+    }     
     &:hover{
         color: #000;
         background-color: #e6e6e6;
@@ -56,6 +71,16 @@ const MovieButton = styled.button`
 const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;
+`
+const More = styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 5vh;
+    @media  only screen and (max-width:768px ){
+        display:block;       
+    }
 `
 
 class BannerVideo extends Component {
@@ -127,31 +152,31 @@ class BannerVideo extends Component {
                 <MovieHeader imageUrl={imageUrl}>
                     <MovieHeaderContent>
                         <MovieTitle> {title}</MovieTitle>
-                        <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                            <div style={{width: '300px'}}>
-                                {isMainMenu ?
-                                    <Link to={`/movieDetails/${id}/${type}`}>
-                                        <MovieButton>Play</MovieButton>
-                                    </Link>
-                                    :
-                                    <MovieButton onClick={() => this.handleClick(title)}>Play</MovieButton>
-                                }
-                                <MovieButton>My List</MovieButton>
-                            </div>
-                            <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
-                                <div style={{width: '10%', color: 'lightgreen', fontWeight: '800'}}>Recommand
-                                    at {popularity}%
+                            <More>
+                                <div style={{width: '300px'}}>
+                                    {isMainMenu ?
+                                        <Link to={`/movieDetails/${id}/${type}`}>
+                                            <MovieButton>Play</MovieButton>
+                                        </Link>
+                                        :
+                                        <MovieButton onClick={() => this.handleClick(title)}>Play</MovieButton>
+                                    }
+                                    <MovieButton>My List</MovieButton>
                                 </div>
-                                <div> for : {!adults ? ' Adults' : ' All family'}</div>
-                                <div style={{
-                                    border: 'solid 1px',
-                                    height: 'fit-content',
-                                    marginLeft: '5px'
-                                }}> {year}</div>
-                            </div>
-                        </div>
+                                <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
+                                    <div style={{width: '20vh', color: 'lightgreen', fontWeight: '800'}}>Recommand
+                                        at {popularity}%
+                                    </div>
+                                    <div> for : {!adults ? ' Adults' : ' All family'}</div>
+                                    <div style={{
+                                        border: 'solid 1px',
+                                        height: 'fit-content',
+                                        marginLeft: '5px'
+                                    }}> {year}</div>
+                                </div>
+                        </More>
                         {!isMainMenu ?
-                            <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
+                            <div style={{height: '10vh', width: '30rem', lineHeight: '1.3rem', float: 'left'}}>
                                 <div><span style={{color: 'gray'}}>Genres</span> : {genres}</div>
                                 <div><span style={{color: 'gray'}}>Productions</span> : {productions}</div>
                                 <div><span style={{color: 'gray'}}>Languages</span> : {languages}</div>
@@ -172,6 +197,7 @@ class BannerVideo extends Component {
                                 <YouTube className='video-background'
                                          onPlay={e => this.setIsVideoLoading(false)}
                                          onError={e => this.setVidError(true)}
+                                         onReady={e=>{ e.target.playVideo();}}
                                          videoId={this.state.trailerURL}
                                          opts={playerOptions}
                                 /> : ''

@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "prop-types": "^15.8.1",
-    "react-addons-css-transition-group": "^15.6.2"
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-responsive": "^9.0.2"
   }
 }

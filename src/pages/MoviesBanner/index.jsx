@@ -10,6 +10,14 @@ const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;
 `
+
+const RowBannerContainer = styled.div`
+    padding-top: 50vh;
+    position: relative;
+    @media  only screen and (max-width:768px ){
+        padding-top: 30vh;
+    }  
+`
 //second version of movies page , showing poster and trailer in header
 function MoviesBanner() {
     const {isLoading, data, error} = useFetch(urls.findNetflixOriginals,true);
@@ -44,7 +52,7 @@ function MoviesBanner() {
              </div>
 
             )}
-            <div style={{  paddingTop: '50vh',position: 'relative'}} >
+            <RowBannerContainer>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Trending movie' url={urls.findActionMovies} useRank isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals} />
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Western Movies' url={urls.findWesternMovies} isLargeRow/>
@@ -67,7 +75,7 @@ function MoviesBanner() {
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Horror Movies' url={urls.findHorrorMovies}/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Romance Movies' url={urls.findRomanceMovies}/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Documentaries' url={urls.findDocumentaries}  isLargeRow/>
-            </div>
+            </RowBannerContainer>
         </div>
     )
 }

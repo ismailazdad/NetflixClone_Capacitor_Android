@@ -34,7 +34,7 @@ export const RowPoster = styled.div`
 export const LoaderWrapper = styled.div`
     display: flex;
     justify-content: center;
-    `
+`
 export const TrendNumber = styled.h1`
     font-size: 210px;
     height: fit-content;    
@@ -43,6 +43,9 @@ export const TrendNumber = styled.h1`
     top: 0;
     margin: 0;
     -webkit-text-stroke: 2px white; 
+    @media  only screen and (max-width:768px ){     
+        font-size: 16vh;
+    }            
 `
 export const Chevron = styled.div`
     position: absolute;
@@ -55,6 +58,11 @@ export const Chevron = styled.div`
     background-position: center;
     background-size: contain;
     background-color:gray;
+    @media  only screen and (max-width:768px ){
+        height:${({isLargeRow}) => isLargeRow ? '20vh' : '15vh'}; 
+        width: 3vh;
+    }    
+    
      &:hover{
           opacity:.90;
           -moz-opacity:.50; 

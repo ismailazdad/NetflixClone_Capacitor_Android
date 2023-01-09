@@ -14,17 +14,33 @@ const MovieHeader = styled.div`
     background: ${({imageUrl}) => 'url(' + imageUrl + ') ;'}
     background-position: center;   
     user-select: none;
+    @media  only screen and (max-width:768px ){
+        height: 30vh;
+        background-position: 30%; 
+        background-size:cover;
+    }
 `
 const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
     z-index: 10000;
     position: ${({isMainMenu}) =>  isMainMenu   ? 'relative' : 'absolute'}; 
+    @media  only screen and (max-width:768px ){
+        padding-top: 0px;
+        margin-left: 0px;
+        height:30vh;
+    }
 `
 const MovieTitle = styled.h1`
     font-size: 3rem;
     font-weight: 800;
     padding-bottom: 0.3rem;
+    @media  only screen and (max-width:768px ){
+        font-size: 2rem;
+        font-weight: 400;
+        padding-top: 2.5rem;
+        position:relative;
+    }
 `
 const MovieDescription = styled.h1`
     width: 70%;
@@ -34,6 +50,9 @@ const MovieDescription = styled.h1`
     max-width: 120rem;
     height: 100px;
     overflow:hidden;
+    @media  only screen and (max-width:768px ){
+        display : none !important;
+    }
 `
 const MovieButton = styled.button`
     cursor: pointer;
@@ -48,13 +67,45 @@ const MovieButton = styled.button`
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     background-color: rgba(51, 51, 51, 0.5);
+    width: 15vh;
+    @media  only screen and (max-width:768px ){
+        margin-top:1vh;
+        margin-left:1vh;
+        width: 20vh;
+        height:5vh;        
+    }    
     &:hover{
         color: #000;
         background-color: #e6e6e6;
         transition: all 0.2s;
     }
 `
+const Recommended = styled.div`
+    width: 18vh;
+    color: lightgreen;
+    font-weight: 800;
+    @media  only screen and (max-width:768px ){
+       width: 20vh;        
+    }     
+`
+const RecommendedLine = styled.div`
+    width: 100%;
+    display: flex; 
+    margin-left: 20px;
+    @media  only screen and (max-width:768px ){
+       margin-top:5vh;
+    }
+`
 
+const DescriptionContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    @media  only screen and (max-width:768px ){
+        display:block;
+    }      
+`
 const MovieFadeBottom = styled.div`
     height: 7.4rem;
     background-image: linear-gradient(
@@ -67,6 +118,9 @@ const MovieFadeBottom = styled.div`
     position: ${({isMainMenu}) =>  isMainMenu   ? 'relative' : 'absolute'}; 
     bottom: ${({isMainMenu}) =>  isMainMenu   ? '2.5vh' : '-0.5vh'};  
     z-index: 1000;
+    @media  only screen and (max-width:768px ){
+        display : none ;
+    }
 `
 
 
@@ -80,6 +134,9 @@ const LoaderContainer = styled.div`
 const VideoContainer = styled.div`
     display: ${({isVideoLoading}) =>  !isVideoLoading  ? 'block' : 'none'};   
     opacity : ${({videoPlaying}) =>  !videoPlaying  ? '0' : '1'};
+    @media  only screen and (max-width:768px ){
+        height:5vh;
+    }
 `
 
 class Banner extends Component {
@@ -155,20 +212,19 @@ class Banner extends Component {
             <MovieHeader imageUrl={imageUrl} isVideoPlaying={this.state.isVideoPlaying}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
                     <MovieTitle> {title}</MovieTitle>
-                    <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                        <div style={{width: '300px'}}>
+                    <DescriptionContainer>
+                        <div style={{width: '70vh'}}>
                             <Link to={`/movieDetails/${id}/${type}`}>
                                 <MovieButton>Play</MovieButton>
                             </Link>
                             <MovieButton>My List</MovieButton>
                         </div>
-                        <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
-                            <div style={{width: '10%', color: 'lightgreen', fontWeight: '800'}}>Recommand at {popularity}%
-                            </div>
+                        <RecommendedLine style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
+                            <Recommended>Recommand at {popularity}%</Recommended>
                             <div> for : {!adults ? ' Adults' : ' All family'}</div>
                             <div style={{border: 'solid 1px', height: 'fit-content', marginLeft: '5px'}}> {year}</div>
-                        </div>
-                    </div>
+                        </RecommendedLine>
+                    </DescriptionContainer>
                     {showDescription ?
                         <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
                             <div><span style={{color:'gray'}}>Genres</span> : {genres}</div>
@@ -192,7 +248,7 @@ class Banner extends Component {
                             <YouTube id='vidPlayer' className='video-background-banner'
                                      onPlay={e => {this.setIsVideoLoading(false);this.setIsVideoPlaying(true)}}
                                      onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
-                                     onReady={e=>{this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
+                                     onReady={e=>{e.target.playVideo();this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
                                      onEnd={ e=> {this.setIsVideoPlaying(false)}}
                                      videoId={this.state.trailerURL}
                                      opts={playerOptions}

@@ -6,7 +6,7 @@ import { playerOptions,getGenres,useTransitionControl} from "../../utils/hooks";
 import PlayerMenu from "../PlayerMenu";
 import {Link} from "react-router-dom";
 import './style.css'
-import {Card, GenresTypes, LoaderContainer, LoaderWrapper, PlayModalMenuButton, StyledImage, VideoContainer} from "./style";
+import {Card, GenresTypes, LoaderContainer, LoaderWrapper, PlayModalMenuButton, StyledImage, VideoContainer,LoaderParentContainer} from "./style";
 import movieTrailer from "movie-trailer";
 import {Modal} from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.css"
@@ -76,7 +76,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
         <Card key={`${movie.id}'---'`}  onTouchStart={() =>{ HandleVideo(movie)}} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)} useRank={useRank}>
             { ((isActive || stateVideo ==='exiting'|| stateVideo ==='exited')  && !scrollLeft && !scrollRight && !vidError )  ?
                 (
-                    <div style={{...{position:'inherits',border:'solid 1px transparent',width: '400px', height: isLargeRow ? '260px' : '200px',},...videoStyle}}>
+                    <LoaderParentContainer style={{...videoStyle}}>
                         <LoaderContainer isVideoLoading={isVideoLoading} isLargeRow={isLargeRow} stateVideo={stateVideo}>
                             <StyledImage
                                 key={movie.id}
@@ -96,7 +96,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                             <YouTube
                                 onPlay={e => {setIsVideoLoading(false);setIsVideoPlaying(true)}}
                                 onError={e => {setVidError(true);setIsVideoPlaying(false)}}
-                                onReady={e=>{setIsVideoPlaying(false);setIsVideoLoading(true);}}
+                                onReady={e=>{ e.target.playVideo();setIsVideoPlaying(false);setIsVideoLoading(true);}}
                                 id="vidContainer"
                                 videoId={trailerURL}
                                 opts={playerOptions}/>
@@ -114,7 +114,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                                 onDetails={()=>{setShow(true); }}
                             />
                         </VideoContainer>
-                    </div>
+                    </LoaderParentContainer>
                 ) :
                 <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
                     <StyledImage

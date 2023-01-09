@@ -5,7 +5,7 @@ import ChevronRight from "../../assets/chevronRight.png"
 import {useFetchList} from "../../utils/hooks";
 import {Link} from "react-router-dom";
 import urls from "../../utils/urls";
-
+import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 
 export const RowContainer = styled.div`
@@ -37,6 +37,9 @@ export const TrendNumber = styled.h1`
     top: 0;
     margin: 0;
     -webkit-text-stroke: 2px white; 
+    @media  only screen and (max-width:768px ){     
+        font-size: 16vh;
+    }    
 `
 export const Chevron = styled.div`
     position: absolute;
@@ -49,22 +52,31 @@ export const Chevron = styled.div`
     background-position: center;
     background-size: contain;
     background-color:gray;
-     &:hover{
-          opacity:.90;
-          -moz-opacity:.50; 
-          filter:alpha(opacity=50);         
+    @media  only screen and (max-width:768px ){
+        height:${({isLargeRow}) => isLargeRow ? '20vh' : '15vh'}; 
+        width: 3vh;
+    }  
+    &:hover{
+        opacity:.90;
+        -moz-opacity:.50; 
+        filter:alpha(opacity=50);         
     }
 `
 export const StyledImage = styled.img`
     object-fit: contain;
     max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};     
-    height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};  
-    max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};   
+    height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};   
     margin-left: ${({useRank}) => useRank ? '-35px' : '10px'};   
     transition: transform 700ms;
       &:hover{      
-      transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.25)')};
-    }        
+        transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.25)')};
+    }  
+    max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};           
+    @media  only screen and (max-width:768px ){
+        max-height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};     
+        height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};    
+        max-width: ${({isLargeRow}) => isLargeRow ? '30vh' : '30vh'};  
+    }           
     `
 
 
@@ -75,6 +87,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
     const movies = data.map((movie)=>{return { ...movie, id : movie.id+title.substring(0,3)}});
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     if (error) {
         return <span>Oups something went wrong</span>
     }
@@ -105,7 +118,21 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                         {movies && movies.map((movie, index) => (
                                 <div key={index +'_container'} style={{display: 'flex', justifyContent: 'space-between'}}>
                                     {useRank ? <TrendNumber>{index + 1}</TrendNumber> :''}
-                                    <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
+                                    {!isMobile ?
+                                        <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
+                                            <StyledImage
+                                                key={movie.id}
+                                                src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                                alt={movie.name}
+                                                isLargeRow={isLargeRow}
+                                                isActive={activeIndex === movie}
+                                                onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
+                                                onTouchStart={() => {setActiveIndex({...movie,url:url})}}
+                                                // onMouseLeave={() => {setActiveIndex(null)}}
+                                                useRank={useRank}
+
+                                            />
+                                        </Link> :
                                         <StyledImage
                                             key={movie.id}
                                             src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
@@ -113,11 +140,13 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                             isLargeRow={isLargeRow}
                                             isActive={activeIndex === movie}
                                             onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
+                                            onTouchStart={() => {setActiveIndex({...movie,url:url})}}
                                             // onMouseLeave={() => {setActiveIndex(null)}}
                                             useRank={useRank}
 
                                         />
-                                    </Link>
+                                    }
+
                                 </div>
                         ))
                         }

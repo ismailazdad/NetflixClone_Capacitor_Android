@@ -1,36 +1,64 @@
 import styled from "styled-components";
 
 export const Card = styled.div`
-        cursor:pointer;
-        object-fit: contain;
-        margin-left: ${({useRank}) => useRank ? '-35px' : '10px'};   
+    cursor:pointer;
+    object-fit: contain;
+    margin-left: ${({useRank}) => useRank ? '-35px' : '10px'};   
+    @media  only screen and (max-width:768px ){
+        margin-left: ${({useRank}) => useRank ? '-3vh' : '2vh'};   
+    } 
     `
+export const LoaderParentContainer = styled.div`
+    position:inherit;
+    border:solid 1px transparent;
+    width: 400px;
+    height: ${({isLargeRow}) => isLargeRow ? '260px' : '200px'};
+    @media  only screen and (max-width:768px ){
+        width: ${({isLargeRow}) => isLargeRow ? '30vh' : '30vh'};
+        height: ${({isLargeRow}) => isLargeRow ? '25vh' : '15vh'};
+    } 
+`
 export const LoaderContainer = styled.div`
-        position:relative;
-        text-align: center;
-        width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};
-        height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
-        z-index:1000; 
-         display: ${({stateVideo,isVideoLoading}) => isVideoLoading  || stateVideo !== 'entered'? 'block' : 'none'};
-    `
+    position:relative;
+    text-align: center;
+    width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};
+    height: ${({isLargeRow}) => isLargeRow ? '300px' : '150px'};
+    z-index:1000; 
+    display: ${({stateVideo,isVideoLoading}) => isVideoLoading  || stateVideo !== 'entered'? 'block' : 'none'}; 
+    @media  only screen and (max-width:768px ){
+        width: ${({isLargeRow}) => isLargeRow ? '30vh' : '30vh'};
+        height: ${({isLargeRow}) => isLargeRow ? '20vh' : '15vh'};
+    } 
+`
 export const LoaderWrapper = styled.div`
-        display: flex;
-        justify-content: center;
-    `
+    display: flex;
+    justify-content: center;
+`
 export const StyledImage = styled.img`
-        object-fit: contain;
-        max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};     
-        height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};  
-        max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};   
-    `
+    object-fit: contain;
+    max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};     
+    height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};  
+    max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};           
+    @media  only screen and (max-width:768px ){
+        max-height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};     
+        height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};    
+        max-width: ${({isLargeRow}) => isLargeRow ? '30vh' : '30vh'};  
+    } 
+`
 export const VideoContainer = styled.div`
-        margin-top:  ${({isLargeRow}) => (isLargeRow ? '-5rem' : '-6rem')}; 
-        z-index:100;
-        position:initial;
-        top:0;
-        overflow: hidden;
-        display: ${({stateVideo,isVideoLoading}) =>  stateVideo === 'entered' && !isVideoLoading  ? 'block' : 'none'};   
-    `
+    margin-top:  ${({isLargeRow}) => (isLargeRow ? '-5rem' : '-6rem')}; 
+    z-index:100;
+    position:initial;
+    top:0;
+    overflow: hidden;
+    display: ${({stateVideo,isVideoLoading}) =>  stateVideo === 'entered' && !isVideoLoading  ? 'block' : 'none'};   
+    @media  only screen and (max-width:768px ){
+        margin-top:  ${({isLargeRow}) => (isLargeRow ? '-8rem' : '-11rem')};  
+        iframe{
+            padding-top:${({isLargeRow}) => (isLargeRow ? '1vh' : '10vh')};  ;
+        }
+    } 
+`
 export const GenresTypes = styled.div`
     display:initial;
     color:lightgreen;
