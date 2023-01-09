@@ -10,7 +10,7 @@ Demo: (including mobile)
  [Demo](https://moviestrailer.surge.sh/)
 
 
-Please rate this project if you like it !!  :bowtie: :pleading_face: :star:
+
 
 This project is a front end clone of Netflix with interactive mouse event with two declination.
  
