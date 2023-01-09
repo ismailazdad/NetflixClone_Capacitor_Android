@@ -49,12 +49,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### Tools used
  - All modern browsers (including mobile) with css media query
- - using Route maping for rendering mutliples pages with react router  with parameters(dynamic route generation)
+ - Route maping for rendering mutliples pages with react router  with parameters(dynamic route generation)
  - Bootstrap modal
- - use globalStyle, and style.jsx and styled component
+ - GlobalStyle, and style.jsx and styled component
  - Hooks with UseState and UseEffect to synchronize api call and transition style effect synchronization and propTypes
  - TMDB Api 
- - handle environment variable with .env
+ - Handle environment variable with .env
  
 ### Preview
 
