@@ -12,7 +12,7 @@ Demo: (including mobile)
 
 Please rate this project if you like it !!  :bowtie: :pleading_face: :star:
 
-This project is a front end clone of Netflix with interactive mouse event.
+This project is a front end clone of Netflix with interactive mouse event with two declination.
  
 It was created with React native app.
 
