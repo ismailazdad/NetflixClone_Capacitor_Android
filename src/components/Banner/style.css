@@ -14,11 +14,7 @@
     width: 100vw;
     height: 46vh;
 }
-@media  only screen and (max-width:768px ) {
-    .video-background-banner {
-         height: 30vh;
-    }
-}
+
 .video-background-banner iframe {
     position: absolute;
     top: 50%;
@@ -26,4 +22,14 @@
     width: var(--video-width);
     height: var(--video-height);
     transform: translate(-50%, -50%);
+}
+
+@media  only screen and (max-width:768px ) {
+    .video-background-banner {
+        height: 30vh;
+    }
+    .video-background-banner iframe {
+        width: 100vh;
+        height: 40vh;
+    }
 }

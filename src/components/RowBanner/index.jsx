@@ -76,6 +76,9 @@ export const StyledImage = styled.img`
         max-height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};     
         height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};    
         max-width: ${({isLargeRow}) => isLargeRow ? '30vh' : '30vh'};  
+        &:hover{      
+            transform:  scale(1.25);
+        } 
     }           
     `
 

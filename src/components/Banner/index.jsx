@@ -36,10 +36,14 @@ const MovieTitle = styled.h1`
     font-weight: 800;
     padding-bottom: 0.3rem;
     @media  only screen and (max-width:768px ){
-        font-size: 2rem;
+        font-size: 1.7rem;
         font-weight: 400;
-        padding-top: 2.5rem;
+        padding-top: 0.5rem;
         position:relative;
+        width:40vh;
+        height:10vh;
+        max-width:40vh;
+        max-height:20vh;
     }
 `
 const MovieDescription = styled.h1`
