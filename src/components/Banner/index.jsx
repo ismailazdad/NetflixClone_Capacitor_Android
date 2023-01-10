@@ -44,6 +44,7 @@ const MovieTitle = styled.h1`
         height:10vh;
         max-width:45vh;
         max-height:20vh;
+        margin-top: 4vh;
     }
 `
 const MovieDescription = styled.h1`
