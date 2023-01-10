@@ -40,9 +40,9 @@ const MovieTitle = styled.h1`
         font-weight: 400;
         padding-top: 0.5rem;
         position:relative;
-        width:40vh;
+        width:45vh;
         height:10vh;
-        max-width:40vh;
+        max-width:45vh;
         max-height:20vh;
     }
 `
