@@ -39,7 +39,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
     //to systematic auto play with google video api , make mute to 1
     playerOptions.playerVars.mute = 1;
     const [show, setShow] = useState(false);
-    let year = (movie?.release_date ? movie?.release_date : movie?.first_air_date).substring(0, 4);
+    let year = (movie?.release_date ? movie?.release_date : movie?.first_air_date)?.substring(0, 4);
     let genres = getGenres(movie.genre_ids);
     let notes = Math.ceil(movie.vote_average * 10);
 

@@ -5,7 +5,7 @@ import ChevronRight from "../../assets/chevronRight.png"
 import {useFetchList} from "../../utils/hooks";
 import {Link} from "react-router-dom";
 import urls from "../../utils/urls";
-import { useMediaQuery } from "react-responsive";
+import {useMediaQuery} from "react-responsive";
 import styled from "styled-components";
 
 export const RowContainer = styled.div`
@@ -89,7 +89,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
     const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
-    const movies = data.map((movie)=>{return { ...movie, id : movie.id+title.substring(0,3)}});
+    const movies = data.map((movie)=>{return { ...movie, id : movie.id+title?.substring(0,3)}});
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     if (error) {
         return <span>Oups something went wrong</span>
@@ -97,13 +97,13 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
 
     const scrollToLeft = function () {
         let screenWidth = window.innerWidth;
-        screenWidth = isLargeRow ? screenWidth/1.5 : screenWidth/2;
+        screenWidth = isMobile ? screenWidth : isLargeRow ? screenWidth / 1.5 : screenWidth / 2;
         myRef.current.scrollLeft += screenWidth ;
     };
 
     const scrollToRight = function () {
         let screenWidth = window.innerWidth;
-        screenWidth = isLargeRow ? screenWidth/1.5 : screenWidth/2;
+        screenWidth = isMobile ? screenWidth : isLargeRow ? screenWidth / 1.5 : screenWidth / 2;
         myRef.current.scrollLeft -= screenWidth;
     };
 
