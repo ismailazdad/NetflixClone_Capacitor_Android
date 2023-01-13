@@ -5,6 +5,8 @@ import {playerOptions} from "../../utils/hooks";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
 
 const MovieHeader = styled.div`
     color: white;
@@ -143,6 +145,29 @@ const VideoContainer = styled.div`
         height:5vh;
     }
 `
+const SoundContainer = styled.div`
+    position:absolute;
+    cursor:pointer;
+    right:1vh;
+    z-index:1000;
+    top:0;
+    @media only screen and (max-width:768px ){
+        position: fixed;
+    }
+`
+const Expand = styled.div`
+    position:absolute;
+    right:1vh;
+    z-index:1100;
+    top: 40vh;
+    cursor:pointer;
+    @media only screen and (max-width:768px ){
+        position: fixed;
+        z-index: 2000;
+        right: 1vh;
+        top: 25vh;
+    }
+`
 
 class Banner extends Component {
 
@@ -153,7 +178,9 @@ class Banner extends Component {
             isVideoLoading: false,
             isVideoPlaying: false,
             vidError: false,
-            startVideo: false
+            startVideo: false,
+            playerObj : {},
+            sound:false
         }
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
@@ -179,6 +206,10 @@ class Banner extends Component {
         this.setState({isVideoPlaying: flag})
     }
 
+    setPlayerObj(obj) {
+        this.setState({playerObj: obj})
+    }
+
     truncate = (str, n) => {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
     }
@@ -191,6 +222,7 @@ class Banner extends Component {
 
     componentWillReceiveProps(nextProps, nextState) {
         if (nextProps.title !==  this.props.title) {
+            playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
             this.handleClick(nextProps.title)
         }
     }
@@ -201,6 +233,7 @@ class Banner extends Component {
         this.setVidError(false);
         this.setIsVideoLoading(true);
         this.setIsVideoPlaying(false);
+        this.setPlayerObj({});
         movieTrailer(title)
             .then((url) => {
                 const urlParams = new URLSearchParams(new URL(url).search);
@@ -211,19 +244,66 @@ class Banner extends Component {
                 this.setVidError(true);
             })
     };
+
+    enableSound = () => {
+        if(this.state.playerObj.isMuted()){
+            this.state.playerObj.unMute()
+            this.state.playerObj.setVolume(50)
+            this.setState({sound: true})
+        }else{
+            this.state.playerObj.mute();
+            this.setState({sound: false})
+        }
+    }
+
+    enableFullScreen = () => {
+        const playerElement = document.getElementById('vidPlayer')
+        const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
+        if (requestFullScreen) {
+            requestFullScreen.bind(playerElement)()
+        }
+    }
+
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription} = this.props;
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile} = this.props;
         return (
-            <MovieHeader imageUrl={imageUrl} isVideoPlaying={this.state.isVideoPlaying}>
+            <MovieHeader imageUrl={imageUrl}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
+                    {!isMainMenu && this.state.isVideoPlaying?
+                        <div>
+                            <SoundContainer onClick={this.enableSound}>
+                                {this.state.sound ?
+                                    <FontAwesomeIcon icon={faVolumeHigh}/>
+                                    :
+                                    <FontAwesomeIcon icon={faVolumeXmark}/>
+                                }
+                            </SoundContainer>
+                            <Expand onClick={this.enableFullScreen}>
+                                <FontAwesomeIcon icon={faExpand}/>
+                            </Expand>
+                        </div>
+                        :''}
                     <MovieTitle> {title}</MovieTitle>
                     <DescriptionContainer>
-                        <div style={{width: '70vh'}}>
-                            <Link to={`/movieDetails/${id}/${type}`}>
-                                <MovieButton>Play</MovieButton>
-                            </Link>
-                            <MovieButton>My List</MovieButton>
-                        </div>
+                        {!isMobile ?
+                            <div style={{width: '70vh',height:'5vh'}}>
+                                <Link to={`/movieDetails/${id}/${type}`}>
+                                    <MovieButton>Play</MovieButton>
+                                </Link>
+                                <MovieButton>My List</MovieButton>
+                            </div>
+                            :
+                            !this.state.sound ?
+                                <div style={{width: '70vh', height: '5vh'}}>
+                                    <Link to={`/movieDetails/${id}/${type}`}>
+                                        <MovieButton>Play</MovieButton>
+                                    </Link>
+                                    <MovieButton>My List</MovieButton>
+                                </div>
+                                :
+                                <div style={{width: '70vh', height: '5vh'}}>
+                                </div>
+                        }
                         <RecommendedLine style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
                             <Recommended>Recommand at {popularity}%</Recommended>
                             <div> for : {!adults ? ' Adults' : ' All family'}</div>
@@ -251,7 +331,7 @@ class Banner extends Component {
                         {/*    :''}*/}
                         <VideoContainer isVideoLoading={this.state.isVideoLoading} videoPlaying={this.state.isVideoPlaying}>
                             <YouTube id='vidPlayer' className='video-background-banner'
-                                     onPlay={e => {this.setIsVideoLoading(false);this.setIsVideoPlaying(true)}}
+                                     onPlay={e => {this.setPlayerObj(e.target);this.setIsVideoLoading(false);this.setIsVideoPlaying(true)}}
                                      onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
                                      onReady={e=>{e.target.playVideo();this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
                                      onEnd={ e=> {this.setIsVideoPlaying(false)}}

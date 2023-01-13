@@ -89,3 +89,23 @@ export const PlayModalMenuButton = styled.button`
         transition: all 0.2s;
 }
 `
+export const SoundContainer = styled.div`
+    position:absolute;
+    right:1vh;
+    z-index:1000;
+    top:0;
+    @media only screen and (max-width:768px ){
+        position: fixed;
+    }
+`
+export const Expand = styled.div`
+    position:absolute;
+    right:1vh;
+    z-index:1100;
+    bottom: 4vh;
+    @media only screen and (max-width:768px ){
+        position: fixed;
+        z-index: 2000;
+        right: 1vh;
+    }
+`

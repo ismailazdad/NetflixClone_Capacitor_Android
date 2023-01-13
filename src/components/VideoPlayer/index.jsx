@@ -2,15 +2,17 @@ import React, {useState} from "react";
 import urls from "../../utils/urls";
 import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";
-import { playerOptions,getGenres,useTransitionControl} from "../../utils/hooks";
+import {getGenres, playerOptions, useTransitionControl} from "../../utils/hooks";
 import PlayerMenu from "../PlayerMenu";
 import {Link} from "react-router-dom";
 import './style.css'
-import {Card, GenresTypes, LoaderContainer, LoaderWrapper, PlayModalMenuButton, StyledImage, VideoContainer,LoaderParentContainer} from "./style";
+import {Card, Expand, GenresTypes, LoaderContainer, LoaderParentContainer, LoaderWrapper, PlayModalMenuButton, SoundContainer, StyledImage, VideoContainer} from "./style";
 import movieTrailer from "movie-trailer";
 import {Modal} from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.css"
 import PlayButton from "../../assets/play2.png";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
 
 const transitionStyles ={
     no_data:{transform: 'scale(1)',transition : 'transform 1s'},
@@ -35,9 +37,12 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
     const [vidError, setVidError] = useState(false);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+    const [isVideoEnding, setIsVideoEnding] = useState(false);
+    const [playerObj, setPlayerObj] = useState({});
+    const [sound, setSound] = useState(false);
     playerOptions.height = '350';
     //to systematic auto play with google video api , make mute to 1
-    playerOptions.playerVars.mute = 1;
+    playerOptions.playerVars.mute = !sound ? 1 : 0;
     const [show, setShow] = useState(false);
     let year = (movie?.release_date ? movie?.release_date : movie?.first_air_date)?.substring(0, 4);
     let genres = getGenres(movie.genre_ids);
@@ -49,6 +54,8 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
         setIsVideoLoading(false);
         exitedVideo();
         setIsVideoPlaying(false);
+        setSound(false);
+        setIsVideoEnding(false);
         onLeave();
     }
 
@@ -58,6 +65,7 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
             setTrailerURL("");
             setVidError(false);
             setIsVideoLoading(true);
+            setIsVideoEnding(false);
             movieTrailer(movie?.name || movie?.title || movie?.original_title || "")
                 .then((url) => {
                     const urlParams = new URLSearchParams(new URL(url).search);
@@ -72,6 +80,25 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
         onShow();
     };
 
+   const EnableSound = () => {
+           if(playerObj.isMuted()){
+               playerObj.unMute();
+               playerObj.setVolume(50);
+               setSound(true)
+           }else{
+               playerObj.mute();
+               setSound(false);
+           }
+    }
+
+   const enableFullScreen = () => {
+        const playerElement = document.getElementById('vidPlayer')
+        const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
+        if (requestFullScreen) {
+            requestFullScreen.bind(playerElement)();
+        }
+    }
+
     return (<div>
         <Card key={`${movie.id}'---'`}  onTouchStart={() =>{ HandleVideo(movie)}} onMouseLeave={(e) => {ResetStateVideo();}} onMouseEnter={() => HandleVideo(movie)} useRank={useRank}>
             { ((isActive || stateVideo ==='exiting'|| stateVideo ==='exited')  && !scrollLeft && !scrollRight && !vidError )  ?
@@ -84,8 +111,8 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                                 alt={movie.name}
                                 isLargeRow={isLargeRow}
                             />
-                            <LoaderWrapper data-testid='loader'>
-                                <Loader id='myloader'
+                            <LoaderWrapper  data-testid='loader'>
+                                <Loader id='myloader' isVideoEnding={isVideoEnding}
                                         style={{
                                             margin: '-36% 0% 0% 0%',
                                             position: 'absolute'
@@ -93,12 +120,27 @@ function VideoPlayer({isLargeRow,movie,type,scrollLeft,scrollRight,index,isActiv
                             </LoaderWrapper>
                         </LoaderContainer>
                         <VideoContainer isLargeRow={isLargeRow} isVideoLoading={isVideoLoading} stateVideo={stateVideo}>
+                            {isVideoPlaying?
+                                <div>
+                                    <SoundContainer onClick={EnableSound}>
+                                        {sound ?
+                                            <FontAwesomeIcon icon={faVolumeHigh}/>
+                                            :
+                                            <FontAwesomeIcon icon={faVolumeXmark}/>
+                                        }
+                                    </SoundContainer>
+                                    <Expand onClick={enableFullScreen}>
+                                        <FontAwesomeIcon icon={faExpand}/>
+                                    </Expand>
+                                </div>
+                                :''}
                             <YouTube
-                                onPlay={e => {setIsVideoLoading(false);setIsVideoPlaying(true)}}
+                                onPlay={e => { setPlayerObj(e.target);setIsVideoLoading(false);setIsVideoPlaying(true)}}
                                 onError={e => {setVidError(true);setIsVideoPlaying(false)}}
                                 onReady={e=>{ e.target.playVideo();setIsVideoPlaying(false);setIsVideoLoading(true);}}
-                                id="vidContainer"
+                                id="vidPlayer"
                                 videoId={trailerURL}
+                                onEnd={ e=> {setIsVideoLoading(true);setIsVideoPlaying(false); setIsVideoEnding(true);}}
                                 opts={playerOptions}/>
                             <PlayerMenu
                                 id={movie.id}

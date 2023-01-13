@@ -20,6 +20,7 @@ export const Loader = styled.div`
   height: 0;
   width: 0;
   margin-top: 50vh;
+  display:  ${({isVideoEnding}) => (!isVideoEnding ? 'flex' : 'none')}; 
 `
 
 export const StyledLink = styled(Link)`

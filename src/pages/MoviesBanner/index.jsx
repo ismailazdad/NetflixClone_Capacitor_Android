@@ -5,6 +5,7 @@ import urls from "../../utils/urls"
 import {getInfo, useFetch} from "../../utils/hooks";
 import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
+import {useMediaQuery} from "react-responsive";
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -23,6 +24,7 @@ function MoviesBanner() {
     const {isLoading, data, error} = useFetch(urls.findNetflixOriginals,true);
     const [activeIndex, setActiveIndex] = useState(null);
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = activeIndex ? getInfo(activeIndex,activeIndex.url):  getInfo(data,urls.findNetflixOriginals);
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     if (error) {
         return <span>Oups something went wrong</span>
     }
@@ -48,6 +50,7 @@ function MoviesBanner() {
                      type={type}
                      isMainMenu={false}
                      showDescription={false}
+                     isMobile={isMobile}
                  />
              </div>
 
