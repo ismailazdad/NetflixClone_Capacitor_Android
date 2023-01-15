@@ -14,7 +14,7 @@ Demo: (including mobile)
 
 This project is a front end clone of Netflix with interactive mouse event with two declination.
  
-It was created with React native app.
+It was created with React.js 
 
 It uses [The MovieDB Api](https://www.themoviedb.org/documentation/api) to get  movies list with all details and preview trailer when mouse hover, and movie details in full page.
 
