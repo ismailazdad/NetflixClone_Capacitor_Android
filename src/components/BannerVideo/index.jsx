@@ -208,13 +208,9 @@ class BannerVideo extends Component {
                         <MovieTitle> {title}</MovieTitle>
                             <More>
                                 <div style={{width: '300px'}}>
-                                    {isMainMenu ?
-                                        <Link to={`/movieDetails/${id}/${type}`}>
-                                            <MovieButton>Play</MovieButton>
+                                        <Link to={`/movies2`}>
+                                            <MovieButton>Back</MovieButton>
                                         </Link>
-                                        :
-                                        <MovieButton onClick={() => this.handleClick(title)}>Play</MovieButton>
-                                    }
                                     <MovieButton>My List</MovieButton>
 
                                     {!isMainMenu && this.state.startVideo?

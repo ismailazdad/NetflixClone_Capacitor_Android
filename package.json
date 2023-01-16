@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^4.6.1",
+    "@capacitor/core": "^4.6.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -47,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/cli": "^4.6.1",
     "prop-types": "^15.8.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-responsive": "^9.0.2"

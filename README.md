@@ -9,8 +9,13 @@ Demo: (including mobile)
 
  [Demo](https://moviestrailer.surge.sh/)
 
-
-
+npm i @capacitor/core
+npm i -D @capacitor/cli
+npx cap init
+npm i @capacitor/android
+npx cap add android
+npx cap sync
+npx cap run android
 
 This project is a front end clone of Netflix with interactive mouse event with two declination.
  
