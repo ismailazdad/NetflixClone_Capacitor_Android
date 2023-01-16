@@ -17,11 +17,13 @@ const HomeWrapper = styled.div`
 const HomerContainer = styled.div`
   position: relative;
   top:30vh;
-  left: 35%;
-  width : 100%;
-  height : 100vh;  
+  text-align: center;
+  width : 100vh;
+  height : 98vh;  
   @media  only screen and (max-width:768px ){
-      left: 0vh;
+    left: 0vh;    
+    width: 100vh;
+    text-align: center;      
   }
 `
 const LogoContainer = styled.img`
@@ -34,8 +36,8 @@ const LogoContainer = styled.img`
 `
 function Home() {
     return (
-        <HomeWrapper id="homewraper">
-            <HomerContainer id="homecontainer">
+        <HomeWrapper>
+            <HomerContainer>
                 <div>
                     <Link to="/movies">
                         <LogoContainer src={Title}/>

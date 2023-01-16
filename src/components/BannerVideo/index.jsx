@@ -13,11 +13,11 @@ const MovieHeader = styled.div`
     object-fit: contain;
     position:absolute;
     z-index:100;
+    overflow: hidden;
 `
 const MovieHeaderContent = styled.div`
     margin-left: 30px;
-    padding-top: 140px;
-    height: 190px;
+    padding-top: 5vh;
     @media  only screen and (max-width:768px ){
         margin-left: 0px;
     }    
@@ -26,7 +26,9 @@ const MovieTitle = styled.h1`
     font-size: 3rem;
     font-weight: 800;
     padding-bottom: 0.3rem;
-    @media  only screen and (max-width:768px ){
+    font-size: 5vh;
+    @media  only screen and (max-width:768px ){        
+        width:50vh;
         font-weight: 400;
         padding-bottom: 0rem;
         position:relative;
@@ -40,7 +42,13 @@ const MovieDescription = styled.h1`
     font-size: 1.5rem;
     max-width: 120rem;
     height: 125px;
-    overflow:hidden;
+    overflow:hidden;    
+    @media  only screen and (max-width:768px ){        
+        width: 48vh;
+        font-size: 1.1rem;
+        height: 38vh;
+    }
+   
 `
 const MovieButton = styled.button`
     cursor: pointer;
@@ -77,7 +85,6 @@ const More = styled.div`
     width: 100%;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 5vh;
     @media  only screen and (max-width:768px ){
         display:block;       
     }
@@ -176,7 +183,7 @@ class BannerVideo extends Component {
                                 </div>
                         </More>
                         {!isMainMenu ?
-                            <div style={{height: '10vh', width: '30rem', lineHeight: '1.3rem', float: 'left'}}>
+                            <div style={{ width: '50vh', lineHeight: '1.3rem', float: 'left'}}>
                                 <div><span style={{color: 'gray'}}>Genres</span> : {genres}</div>
                                 <div><span style={{color: 'gray'}}>Productions</span> : {productions}</div>
                                 <div><span style={{color: 'gray'}}>Languages</span> : {languages}</div>
