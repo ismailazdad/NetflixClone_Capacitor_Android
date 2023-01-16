@@ -7,6 +7,8 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import Header from "../Header";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
 
 const MovieHeader = styled.div`
     color: white;
@@ -89,7 +91,29 @@ const More = styled.div`
         display:block;       
     }
 `
-
+const SoundContainer = styled.div`
+    position:absolute;
+    cursor:pointer;
+    right:5vh;
+    z-index:1000;
+    top:0;
+    @media only screen and (max-width:768px ){
+        position: fixed;
+    }
+`
+const Expand = styled.div`
+    position:absolute;
+    right:5vh;
+    z-index:1100;
+    top: 15vh;
+    cursor:pointer;
+    @media only screen and (max-width:768px ){
+        position: fixed;
+        z-index: 2000;
+        right: 5vh;
+        top: 25vh;
+    }
+`
 class BannerVideo extends Component {
 
     constructor(props) {
@@ -99,9 +123,11 @@ class BannerVideo extends Component {
             isVideoLoading: false,
             vidError: false,
             startVideo: false,
+            sound:false,
+            playerObj : {},
         }
         playerOptions.height = window.screen.height - (window.screen.height * 0.35);
-        playerOptions.playerVars.mute = 0;
+        playerOptions.playerVars.mute = 1;
     }
 
     setTrailerURL(title) {
@@ -119,7 +145,9 @@ class BannerVideo extends Component {
     setStartVideo(flag) {
         this.setState({startVideo: flag})
     }
-
+    setPlayerObj(obj) {
+        this.setState({playerObj: obj})
+    }
     truncate = (str, n) => {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
     }
@@ -132,7 +160,8 @@ class BannerVideo extends Component {
 
     handleClick = (title) => {
         if (!this.state.startVideo) {
-            this.setStartVideo(true);
+            this.setStartVideo(false);
+            this.setPlayerObj({});
             if (this.state.trailerURL) {
                 this.setTrailerURL("");
             } else {
@@ -150,6 +179,24 @@ class BannerVideo extends Component {
             }
         }
     };
+    enableSound = () => {
+        if(this.state.playerObj.isMuted()){
+            this.state.playerObj.unMute()
+            this.state.playerObj.setVolume(50)
+            this.setState({sound: true})
+        }else{
+            this.state.playerObj.mute();
+            this.setState({sound: false})
+        }
+    }
+
+    enableFullScreen = () => {
+        const playerElement = document.getElementById('vidPlayer')
+        const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
+        if (requestFullScreen) {
+            requestFullScreen.bind(playerElement)()
+        }
+    }
 
     render() {
         const {imageUrl, title, adults, popularity, year, genres, productions, languages, overview, isMainMenu, id, type} = this.props
@@ -169,6 +216,21 @@ class BannerVideo extends Component {
                                         <MovieButton onClick={() => this.handleClick(title)}>Play</MovieButton>
                                     }
                                     <MovieButton>My List</MovieButton>
+
+                                    {!isMainMenu && this.state.startVideo?
+                                        <div>
+                                            <SoundContainer onClick={this.enableSound}>
+                                                {this.state.sound ?
+                                                    <FontAwesomeIcon icon={faVolumeHigh}/>
+                                                    :
+                                                    <FontAwesomeIcon icon={faVolumeXmark}/>
+                                                }
+                                            </SoundContainer>
+                                            <Expand id='expend' onClick={this.enableFullScreen}>
+                                                <FontAwesomeIcon icon={faExpand}/>
+                                            </Expand>
+                                        </div>
+                                        :''}
                                 </div>
                                 <div style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
                                     <div style={{width: '20vh', color: 'lightgreen', fontWeight: '800'}}>Recommand
@@ -200,15 +262,15 @@ class BannerVideo extends Component {
                             <Loader id='myloader' style={{margin: '14% 0% 0 0'}}/>
                         </LoaderWrapper>
                         :
-                        (this.state.startVideo ?
-                                <YouTube className='video-background'
-                                         onPlay={e => this.setIsVideoLoading(false)}
-                                         onError={e => this.setVidError(true)}
-                                         onReady={e=>{ e.target.playVideo();}}
-                                         videoId={this.state.trailerURL}
-                                         opts={playerOptions}
-                                /> : ''
-                        )}
+                        <YouTube id='vidPlayer'
+                                 className='video-background'
+                                 onPlay={e => {this.setPlayerObj(e.target);this.setIsVideoLoading(false);this.setStartVideo(true)}}
+                                 onError={e => this.setVidError(true)}
+                                 onReady={e=>{ e.target.playVideo();}}
+                                 videoId={this.state.trailerURL}
+                                 opts={playerOptions}
+                        />
+                    }
                 </div>
             </div>
         )
