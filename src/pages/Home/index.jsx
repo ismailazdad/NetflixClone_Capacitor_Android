@@ -39,13 +39,8 @@ function Home() {
         <HomeWrapper>
             <HomerContainer>
                 <div>
-                    <Link to="/movies">
-                        <LogoContainer src={Title}/>
-                    </Link>
-                </div>
-                <div>
                     <Link to="/movies2">
-                        <LogoContainer src={Title2}/>
+                        <LogoContainer src={Title}/>
                     </Link>
                 </div>
             </HomerContainer>

@@ -384,7 +384,7 @@ class Banner extends Component {
                     </LoaderContainer>
                     :''}
                 <MovieFadeBottom id='test2'  />
-                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{zIndex:'10000',top:'40vh'}} >
+                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{zIndex:'10000',top:'30vh'}} >
                     <Modal.Dialog style={{backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
                         <Modal.Header onClick={() =>  this.setState({showModal: false})} style={{border: 'transparent'}}  >
                             <Modal.Title><h1>{title} </h1></Modal.Title>
@@ -392,7 +392,7 @@ class Banner extends Component {
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>
-                        <Modal.Body style={{paddingTop: '13%' ,overflow: 'hidden'}}>
+                        <Modal.Body>
                             <span>{overview}</span>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
