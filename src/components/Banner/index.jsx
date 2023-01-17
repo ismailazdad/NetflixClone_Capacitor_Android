@@ -7,8 +7,13 @@ import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
+import { App } from '@capacitor/app';
+import {Modal} from "react-bootstrap";
+import {PlayModalMenuButton} from "../VideoPlayer/style";
+import PlayButton from "../../assets/play2.png";
+import InfoSvg from "../../assets/info.svg";
 
-const MovieHeader = styled.div`
+const MovieHeader = styled.div` 
     color: white;
     object-fit: contain;
     height: 448px;
@@ -168,6 +173,28 @@ const Expand = styled.div`
         top: 25vh;
     }
 `
+const Details = styled.div`
+    display:none; 
+     @media  only screen and (max-width:768px ){
+        display:block;
+        position: fixed;
+        z-index: 2000;
+        left:0vh;
+        top: 25vh; 
+    } 
+`
+
+//handle backButton mobile with capacitor to exit video fullScreen
+App.addListener('backButton', data => {
+    // document.exitFullscreen();
+    if(document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if(document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if(document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+});
 
 class Banner extends Component {
 
@@ -180,10 +207,18 @@ class Banner extends Component {
             vidError: false,
             startVideo: false,
             playerObj : {},
-            sound:false
+            sound:false,
+            showModal:false
         }
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
+
+    playerOptions.playerVars.fs=1;
+    playerOptions.playerVars.controls=0;
+    playerOptions.playerVars.showinfo=0;
+    playerOptions.playerVars.start=3;
+    playerOptions.playerVars.color='white';
+    playerOptions.playerVars.enablejsapi=1;
     }
 
     setTrailerURL(title) {
@@ -208,6 +243,10 @@ class Banner extends Component {
 
     setPlayerObj(obj) {
         this.setState({playerObj: obj})
+    }
+
+    setShowModal(flag) {
+        this.setState({showModal: flag})
     }
 
     truncate = (str, n) => {
@@ -281,6 +320,9 @@ class Banner extends Component {
                             <Expand onClick={this.enableFullScreen}>
                                 <FontAwesomeIcon icon={faExpand}/>
                             </Expand>
+                            <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true})}} >
+                                <img alt='' src={InfoSvg}/>
+                            </Details>
                         </div>
                         :''}
                     <MovieTitle> {title}</MovieTitle>
@@ -341,8 +383,29 @@ class Banner extends Component {
                         </VideoContainer>
                     </LoaderContainer>
                     :''}
-                <MovieFadeBottom id='test2' isMainMenu={isMainMenu} />
+                <MovieFadeBottom id='test2'  />
+                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{zIndex:'10000',top:'40vh'}} >
+                    <Modal.Dialog style={{backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
+                        <Modal.Header onClick={() =>  this.setState({showModal: false})} style={{border: 'transparent'}}  >
+                            <Modal.Title><h1>{title} </h1></Modal.Title>
+                            <button type="button" style={{border: 'transparent'}} aria-label="Close">
+                                <span>&times;</span>
+                            </button>
+                        </Modal.Header>
+                        <Modal.Body style={{paddingTop: '13%' ,overflow: 'hidden'}}>
+                            <span>{overview}</span>
+                        </Modal.Body>
+                        <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Link  to={`/movieDetails/${id}/${type}`}>
+                                    <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
+                                </Link>
+                            </div>
+                        </Modal.Footer>
+                    </Modal.Dialog>
+                </Modal>
             </MovieHeader>
+
         )
     }
 }
