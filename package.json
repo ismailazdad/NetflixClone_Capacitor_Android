@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.3",
+    "cordova-res": "^0.15.4",
     "movie-trailer": "^3.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
@@ -28,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "resources": "npx cordova-res android --skip-config --copy"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/app": "^4.1.1",
     "@capacitor/cli": "^4.6.1",
     "prop-types": "^15.8.1",
     "react-addons-css-transition-group": "^15.6.2",
