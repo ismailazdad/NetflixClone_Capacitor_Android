@@ -8,6 +8,7 @@ I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js 
 
 link to Google Play store coming soon :)
 
+### Tutorial 
 How to convert project to native app with capacitor : 
 
 [tutorial](https://capacitorjs.com/docs/getting-started)
@@ -17,6 +18,8 @@ How to convert project to native app with capacitor :
 [handle native listenner](https://capacitorjs.com/docs/apis/app)
 
 [icon app](https://capacitorjs.com/docs/guides/splash-screens-and-icons)
+
+### Install capacitor
 
 Run this command on the root of the project 
 
@@ -34,7 +37,7 @@ Run this command on the root of the project
 
 ```npx cap run android```
 
-Icon for Android
+### Icon for Android
 
 Create a folder ```resources``` in the root of your project with ```icon.png``` and ```splash.png```
 
