@@ -49,8 +49,9 @@ Go to Android Studio to fix all images declination for devices
  
 ### Preview
 
-  
+<div style="width: 30%; height: 30%">  
 ![img|200](./src/assets/demo.png?raw=true)
+</div>
 
 ![image|200](./src/assets/demo2.png?raw=true)
 
