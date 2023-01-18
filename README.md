@@ -10,6 +10,14 @@ link to Google Play store coming soon :)
 
 How to convert project to native app with capacitor : 
 
+[tutorial](https://capacitorjs.com/docs/getting-started)
+
+[tutorial android](https://capacitorjs.com/docs/android)
+
+[handle native listenner](https://capacitorjs.com/docs/apis/app)
+
+[icon app](https://capacitorjs.com/docs/guides/splash-screens-and-icons)
+
 ```npm i @capacitor/core```
 
 ```npm i -D @capacitor/cli```
@@ -42,8 +50,8 @@ Go to Android Studio to fix all images declination for devices
 ### Preview
 
   
-![image](./src/assets/demo.png?raw=true)
+![image](./src/assets/demo.png?raw=true){: width="50%"}
 
-![](./src/assets/demo2.png?raw=true)
+![image](./src/assets/demo2.png?raw=true){: width="50%"}
 
-![](./src/assets/demo3.png?raw=true)
+![image](./src/assets/demo3.png?raw=true){: width="50%"}
