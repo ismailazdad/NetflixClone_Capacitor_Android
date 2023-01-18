@@ -15,6 +15,8 @@ How to convert project to native app with capacitor :
 
 [tutorial android](https://capacitorjs.com/docs/android)
 
+you can handle native event in your project using capacitor bridge to handle not wanted behavior
+
 [handle native listenner](https://capacitorjs.com/docs/apis/app)
 
 [icon app](https://capacitorjs.com/docs/guides/splash-screens-and-icons)
