@@ -18,6 +18,8 @@ How to convert project to native app with capacitor :
 
 [icon app](https://capacitorjs.com/docs/guides/splash-screens-and-icons)
 
+Run this command on the root of the project 
+
 ```npm i @capacitor/core```
 
 ```npm i -D @capacitor/cli```
@@ -34,17 +36,21 @@ How to convert project to native app with capacitor :
 
 Icon for Android
 
-Create a folder in the root of your project with ```icon.png``` and ```splash.png```
+Create a folder ```resources``` in the root of your project with ```icon.png``` and ```splash.png```
 
 ```npm install -g cordova-res```
 
 ```cordova-res android --skip-config --copy```
 
-Go to Android Studio to fix all images declination for devices
+Synchronize your project to update android project folder
 
 ```npm run build```
 
 ```npx cap sync```
+
+Go to Android Studio to fix all images declination for devices
+
+
 
  
 ### Preview
