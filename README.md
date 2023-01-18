@@ -49,7 +49,7 @@ Go to Android Studio to fix all images declination for devices
  
 ### Preview
 
-<img src="./src/assets/demo.png" width=20% height=20%>
-<img src="./src/assets/demo2.png" width=20% height=20%>
-<img src="./src/assets/demo3.png" width=20% height=20%>
+<img src="./src/assets/demo.png" width=30% height=30%>
+<img src="./src/assets/demo2.png" width=30% height=30%>
+<img src="./src/assets/demo3.png" width=30% height=30%>
 
