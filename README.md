@@ -50,8 +50,8 @@ Go to Android Studio to fix all images declination for devices
 ### Preview
 
   
-![image](./src/assets/demo.png?raw=true){: width="50%"}
+![img|200](./src/assets/demo.png?raw=true)
 
-![image](./src/assets/demo2.png?raw=true){: width="50%"}
+![image|200](./src/assets/demo2.png?raw=true)
 
-![image](./src/assets/demo3.png?raw=true){: width="50%"}
+![image|200](./src/assets/demo3.png?raw=true)
