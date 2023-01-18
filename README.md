@@ -1,69 +1,49 @@
-# Netflix Clone movies trailer 
+# Netflix Clone movies trailer Android
 
-![image](./src/assets/preview.png?raw=true)
+This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js.
+I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
 
-![](./src/assets/demo.gif?raw=true)
 
+[Demo online](https://moviestrailer.surge.sh/)
 
-Demo: (including mobile)
+link to Google Play store coming soon :)
 
- [Demo](https://moviestrailer.surge.sh/)
+How to convert project to native app with capacitor : 
 
-npm i @capacitor/core
-npm i -D @capacitor/cli
-npx cap init
-npm i @capacitor/android
-npx cap add android
-npx cap sync
-npx cap run android
+```npm i @capacitor/core```
 
-This project is a front end clone of Netflix with interactive mouse event with two declination.
- 
-It was created with React.js 
+```npm i -D @capacitor/cli```
 
-It uses [The MovieDB Api](https://www.themoviedb.org/documentation/api) to get  movies list with all details and preview trailer when mouse hover, and movie details in full page.
+```npx cap init```
 
-Movie data was pulled from TMDB and trailer videos from Youtube. 
+```npm i @capacitor/android```
 
-To achieve this i made lazy loading techniques to efficiently render and update UI
-with hooks and useEffect technical.
+```npx cap add android```
 
-Running Project Locally
+```npx cap sync```
 
-Clone Project : 
+```npx cap run android```
 
-```git clone https://github.com/ismailazdad/Netflix_clone.git```
+Icon for Android
 
-Go to project directory :
+Create a folder in the root of your project with ```icon.png``` and ```splash.png```
 
-```cd Netflix_clone/```
+```npm install -g cordova-res```
 
-Install dependencies:  
+```cordova-res android --skip-config --copy```
 
-```npm install``` in the root project
+Go to Android Studio to fix all images declination for devices
 
-Get API key from [here](https://www.themoviedb.org/signup)
+```npm run build```
 
-Change ```.env``` file in root project and replace  ```YOUR_API_KEY_HERE``` by your personnal themoviedb key
+```npx cap sync```
 
-Run project: 
-
-```npm run start```
-
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### Tools used
- - All modern browsers (including mobile) with css media query
- - Route maping for rendering mutliples pages with react router  with parameters(dynamic route generation)
- - Bootstrap modal
- - GlobalStyle, and style.jsx and styled component
- - Hooks with UseState and UseEffect to synchronize api call and transition style effect synchronization and propTypes
- - TMDB Api 
- - Handle environment variable with .env
  
 ### Preview
 
   
+![image](./src/assets/demo.png?raw=true)
 
+![](./src/assets/demo2.png?raw=true)
 
-![](./src/assets/demo2.gif?raw=true)
+![](./src/assets/demo3.png?raw=true)
