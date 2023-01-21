@@ -2,11 +2,9 @@
 
 This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js.
 I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
+     
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)     
 
-
-[Demo online](https://moviestrailer.surge.sh/)
-
-link to Google Play store coming soon :)
 
 ### Tutorial 
 How to convert project to native app with capacitor : 
