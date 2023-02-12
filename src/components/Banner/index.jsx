@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
-import { App } from '@capacitor/app';
+import {App} from '@capacitor/app';
 import {Modal} from "react-bootstrap";
 import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
@@ -320,11 +320,11 @@ class Banner extends Component {
                             <Expand onClick={this.enableFullScreen}>
                                 <FontAwesomeIcon icon={faExpand}/>
                             </Expand>
-                            <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true})}} >
-                                <img alt='' src={InfoSvg}/>
-                            </Details>
                         </div>
                         :''}
+                    <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true})}} >
+                        <img alt='' src={InfoSvg}/>
+                    </Details>
                     <MovieTitle> {title}</MovieTitle>
                     <DescriptionContainer>
                         {!isMobile ?
@@ -383,17 +383,19 @@ class Banner extends Component {
                         </VideoContainer>
                     </LoaderContainer>
                     :''}
-                <MovieFadeBottom id='test2'  />
+                <MovieFadeBottom />
                 <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{zIndex:'10000',top:'30vh'}} >
-                    <Modal.Dialog style={{backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
+                    <Modal.Dialog style={{backgroundPosition:'bottom', backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
                         <Modal.Header onClick={() =>  this.setState({showModal: false})} style={{border: 'transparent'}}  >
                             <Modal.Title><h1>{title} </h1></Modal.Title>
                             <button type="button" style={{border: 'transparent'}} aria-label="Close">
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>
-                        <Modal.Body>
-                            <span>{overview}</span>
+                        <Modal.Body className="container d-flex">
+                            <div className="row justify-content-center align-self-center">
+                                <span>{overview}</span>
+                            </div>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>

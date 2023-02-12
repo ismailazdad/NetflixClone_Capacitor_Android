@@ -35,4 +35,13 @@
     .modal-backdrop.show {
         opacity: 0 !important;
     }
+    .modal-backdrop{
+        z-index: 1 !important;
+    }
+    .modal-dialog{
+        margin: 0 !important;
+    }
+    .modal-content{
+        height: 70vh;
+    }
 }
