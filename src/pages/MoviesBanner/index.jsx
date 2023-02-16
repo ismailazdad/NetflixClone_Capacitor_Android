@@ -40,7 +40,7 @@ const MovieButton = styled.button`
 `
 //second version of movies page , showing poster and trailer in header
 function MoviesBanner() {
-    const language =  navigator.language || navigator.userLanguage;
+    const language =  navigator?.language || navigator?.userLanguage;
     const {isLoading, data, error} = useFetch(urls.findNetflixOriginals+language,true);
     const [activeIndex, setActiveIndex] = useState(null);
     const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')

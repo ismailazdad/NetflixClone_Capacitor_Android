@@ -9,7 +9,6 @@ export const StyledImage = styled.img`
     object-fit: contain;
     max-height: 200px;    
     height:  200px; 
-    // margin-left:  10px;
     margin-left:  10%; 
     margin-right:  10%;
     transition: transform 700ms;
