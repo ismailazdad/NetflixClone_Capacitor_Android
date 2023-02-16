@@ -112,7 +112,8 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                 <LoaderWrapper data-testid='loader'>
                     <Loader/>
                 </LoaderWrapper>
-            ) : (
+            ) : ( movies.length > 0 ?
+                (
                 <RowContainer id="RowContainer">
                     <h2>{title}</h2>
                     <Chevron style={{right: '0'}} icon={ChevronRight} onClick={scrollToLeft}  onMouseOver={()=>setScrollRight(true)} onMouseLeave={()=>setScrollRight(false)}  isLargeRow={isLargeRow}/>
@@ -133,7 +134,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                                 onTouchStart={() => {setActiveIndex({...movie,url:url})}}
                                                 // onMouseLeave={() => {setActiveIndex(null)}}
                                                 useRank={useRank}
-
+                                                onError = {e => e.target.parentNode.style.display = 'none'}
                                             />
                                         </Link> :
                                         <StyledImage
@@ -147,7 +148,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                             onTouchEnd={() => {setActiveIndex({...movie,url:url})}}
                                             // onMouseLeave={() => {setActiveIndex(null)}}
                                             useRank={useRank}
-
+                                            onError = {e => e.target.parentNode.style.display = 'none'}
                                         />
                                     }
 
@@ -155,7 +156,9 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                         ))
                         }
                     </RowPoster>
-                </RowContainer>)
+                </RowContainer>):
+                    <div>No Results...</div>
+        )
         ))
 }
 export default RowBanner;

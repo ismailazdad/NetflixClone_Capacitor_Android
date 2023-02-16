@@ -45,10 +45,10 @@ function MoviesBanner() {
     const [activeIndex, setActiveIndex] = useState(null);
     const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = activeIndex ? getInfo(activeIndex,activeIndex.url):  getInfo(data,urls.findNetflixOriginals);
-    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
-    const [focus,setFocus]=useState(false)
-    const [inputs, setInputs] = useState({ searchMovie: ''});
-    const [showSearch,setShowSearch]=useState(false)
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'})
+    const [focus,setFocus] = useState(false)
+    const [inputs, setInputs] = useState({ searchMovie: ''})
+    const [showSearch,setShowSearch] = useState(false)
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -101,7 +101,7 @@ function MoviesBanner() {
                 {!isLoading ?
                     <div style={{width: '100%', display: 'flex', margin: '1vh'}}>
                     <div onClick={e => setShowSearch(!showSearch)}>
-                        <FontAwesomeIcon icon={faMagnifyingGlass}/>
+                        <FontAwesomeIcon style={{width:'3vh',height:'3vh'}} icon={faMagnifyingGlass}/>
                     </div>
                     {showSearch ?
                         <div>

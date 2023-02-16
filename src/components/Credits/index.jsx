@@ -46,7 +46,7 @@ function Credits({id}) {
         v?.known_for_department !=='Sound' &&
         v?.known_for_department !==  'Costume & Make-Up'&&
         v?.known_for_department !==  'Visual Effects'
-    ).slice(0,15)
+    )
     return (
         <div>
             {isLoading ? (
@@ -59,29 +59,33 @@ function Credits({id}) {
                         <h2 style={{marginTop:'1vh'}}>Casting</h2> :''
                     }
                     <RowCasting>
-                        {data && data?.cast.length >0 && data?.cast.slice(0,15).map((catsing, index) =>
+                        {data && data?.cast.length >0 && data?.cast.map((catsing, index) =>
                             <div className="flex-row" key={index + '_container'} >
                                 <div style={{
                                     whiteSpace: 'nowrap',
                                     fontSize: 'small',
-                                    marginLeft: '1vh',
-                                    marginBottom: '1vh',
+                                    marginLeft: '1.5vh',
+                                    width:'15vh',
+                                    maxHeight:'2.3vh',
+                                    overflow:'hidden'
                                 }}>
-                                    <h5>{catsing.name}</h5>
+                                    <h5 style={{overflow:'hidden', fontWeight: 500, fontSize:'initial'}}>{catsing.name}</h5>
                                 </div>
                                 <div style={{
                                     whiteSpace: 'nowrap',
                                     fontSize: 'small',
-                                    marginLeft: '1vh',
-                                    marginBottom: '1vh'
+                                    marginLeft: '1.5vh',
+                                    width:'15vh',
+                                    overflow:'hidden'
                                 }}>
-                                    <span>"{catsing?.character.replace(' (voice)','')}"</span>
+                                    <span >"{catsing?.character.replace(' (voice)','')}"</span>
                                 </div>
                                 <StyledImage
                                     key={catsing.id}
                                     src={`${urls.findImagesUrl}${catsing.profile_path}`}
                                     alt={catsing.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
+                                    style={{border:'solid 1px gray'}}
                                 />
                             </div>
                         )
@@ -96,16 +100,19 @@ function Credits({id}) {
                                 <div style={{
                                     whiteSpace: 'nowrap',
                                     fontSize: 'small',
-                                    marginLeft: '1vh',
-                                    marginBottom: '1vh'
+                                    marginLeft: '1.5vh',
+                                    width:'15vh',
+                                    maxHeight:'2.3vh',
+                                    overflow:'hidden'
                                 }}>
-                                    <h5>{crew.name}</h5>
+                                    <h5 style={{overflow:'hidden', fontWeight: 500, fontSize:'initial'}}>{crew.name}</h5>
                                 </div>
                                 <div style={{
                                     whiteSpace: 'nowrap',
                                     fontSize: 'small',
-                                    marginLeft: '1vh',
-                                    marginBottom: '1vh'
+                                    marginLeft: '1.5vh',
+                                    width:'15vh',
+                                    overflow:'hidden'
                                 }}>
                                     <span>{crew.known_for_department}</span>
                                 </div>
@@ -114,6 +121,7 @@ function Credits({id}) {
                                     src={`${urls.findImagesUrl}${crew.profile_path}`}
                                     alt={crew.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
+                                    style={{border:'solid 1px gray'}}
                                 />
                             </div>
                         )
