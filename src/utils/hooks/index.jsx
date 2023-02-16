@@ -31,9 +31,9 @@ export function getInfo(data,url){
 }
 
 export function getGenres(genre_ids){
-    const genresMovies = genre_ids.map((item) => MovieGenres.find(x => x.id === item)?.name)
-    const  genresTv = genre_ids.map((item) => TvGenres.find(x => x.id === item)?.name)
-    return  genresMovies.concat(genresTv).filter((item, index) => genresMovies.indexOf(item) === index);
+    const genresMovies = genre_ids?.map((item) => MovieGenres.find(x => x.id === item)?.name)
+    const  genresTv = genre_ids?.map((item) => TvGenres.find(x => x.id === item)?.name)
+    return  genresMovies?.concat(genresTv).filter((item, index) => genresMovies.indexOf(item) === index);
 }
 
 export function useFetch(url,random=false) {

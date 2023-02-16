@@ -89,7 +89,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
     const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
-    const movies = data.map((movie)=>{return { ...movie, id : movie.id+title?.substring(0,3)}});
+    const movies = data.map((movie)=>{return { ...movie, id : movie.id}});
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     if (error) {
         return <span>Oups something went wrong</span>
@@ -142,8 +142,9 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                             alt={movie.name}
                                             isLargeRow={isLargeRow}
                                             isActive={activeIndex === movie}
-                                            onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
-                                            onTouchStart={() => {setActiveIndex({...movie,url:url})}}
+                                            // onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
+                                            // onTouchStart={() => {setActiveIndex({...movie,url:url})}}
+                                            onTouchEnd={() => {setActiveIndex({...movie,url:url})}}
                                             // onMouseLeave={() => {setActiveIndex(null)}}
                                             useRank={useRank}
 

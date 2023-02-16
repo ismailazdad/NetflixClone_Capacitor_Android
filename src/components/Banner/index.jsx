@@ -12,6 +12,9 @@ import {Modal} from "react-bootstrap";
 import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
 import InfoSvg from "../../assets/info.svg";
+import Credits from "../Credits";
+import {LoaderWrapper} from "../Row/style";
+import {Loader} from "../../utils/style/Atoms";
 
 const MovieHeader = styled.div` 
     color: white;
@@ -186,7 +189,6 @@ const Details = styled.div`
 
 //handle backButton mobile with capacitor to exit video fullScreen
 App.addListener('backButton', data => {
-    // document.exitFullscreen();
     if(document.exitFullscreen) {
         document.exitFullscreen();
     } else if(document.mozCancelFullScreen) {
@@ -197,7 +199,6 @@ App.addListener('backButton', data => {
 });
 
 class Banner extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -208,11 +209,11 @@ class Banner extends Component {
             startVideo: false,
             playerObj : {},
             sound:false,
-            showModal:false
+            showModal:false,
+            focus : this.props.focus
         }
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
-
     playerOptions.playerVars.fs=1;
     playerOptions.playerVars.controls=0;
     playerOptions.playerVars.showinfo=0;
@@ -304,7 +305,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile} = this.props;
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -325,7 +326,11 @@ class Banner extends Component {
                     <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true})}} >
                         <img alt='' src={InfoSvg}/>
                     </Details>
-                    <MovieTitle> {title}</MovieTitle>
+                    {!this.state.isVideoPlaying || !this.state.showModal ?
+                        <MovieTitle> {title}</MovieTitle>
+                        : <MovieTitle/>
+                    }
+
                     <DescriptionContainer>
                         {!isMobile ?
                             <div style={{width: '70vh',height:'5vh'}}>
@@ -335,7 +340,7 @@ class Banner extends Component {
                                 <MovieButton>My List</MovieButton>
                             </div>
                             :
-                            !this.state.sound ?
+                            !this.state.isVideoPlaying || !this.state.showModal ?
                                 <div style={{width: '70vh', height: '5vh'}}>
                                     <Link to={`/movieDetails/${id}/${type}`}>
                                         <MovieButton>Play</MovieButton>
@@ -365,15 +370,21 @@ class Banner extends Component {
                 {!isMainMenu && this.state.trailerURL?
                     <LoaderContainer >
                         {this.state.vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
-                        {/*better rendering without loading icon*/}
-                        {/*{(this.state.isVideoLoading )?*/}
-                        {/*    <LoaderWrapper data-testid='loader'>*/}
-                        {/*        <Loader id='myloader'/>*/}
-                        {/*    </LoaderWrapper>*/}
-                        {/*    :''}*/}
+                        {(this.state.isVideoLoading )?
+                            <LoaderWrapper data-testid='loader'>
+                                <Loader style={{marginTop:'0vh'}} id='myloader'/>
+                            </LoaderWrapper>
+                            :''}
                         <VideoContainer isVideoLoading={this.state.isVideoLoading} videoPlaying={this.state.isVideoPlaying}>
                             <YouTube id='vidPlayer' className='video-background-banner'
-                                     onPlay={e => {this.setPlayerObj(e.target);this.setIsVideoLoading(false);this.setIsVideoPlaying(true)}}
+                                     onPlay={e => {
+                                         this.setPlayerObj(e.target);
+                                         this.setIsVideoLoading(false);
+                                         this.setIsVideoPlaying(true);
+                                         if (!focus) {
+                                             this.setShowModal(true)
+                                         }
+                                     }}
                                      onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
                                      onReady={e=>{e.target.playVideo();this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
                                      onEnd={ e=> {this.setIsVideoPlaying(false)}}
@@ -384,18 +395,22 @@ class Banner extends Component {
                     </LoaderContainer>
                     :''}
                 <MovieFadeBottom />
-                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{zIndex:'10000',top:'30vh'}} >
+                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none'}} >
                     <Modal.Dialog style={{backgroundPosition:'bottom', backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
-                        <Modal.Header onClick={() =>  this.setState({showModal: false})} style={{border: 'transparent'}}  >
+                        <Modal.Header onClick={() => { this.setState({showModal: false});}} style={{border: 'transparent',height:'9vh'}}  >
                             <Modal.Title><h1>{title} </h1></Modal.Title>
                             <button type="button" style={{border: 'transparent'}} aria-label="Close">
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>
-                        <Modal.Body className="container d-flex">
+                        <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
                             <div className="row justify-content-center align-self-center">
                                 <span>{overview}</span>
                             </div>
+                            <div style={{width: '30rem', lineHeight: '1.3rem', marginTop: '1vh'}}>
+                                <div><span style={{color: 'gray'}}>Genres</span> : {genres}</div>
+                            </div>
+                            <Credits id={id}/>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>

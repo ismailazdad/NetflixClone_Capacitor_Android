@@ -16,10 +16,11 @@ root.render(
     <Router>
         <Header/>
         <Routes>
-            <Route exact path="/" element={<Home/>}>
+            {/*<Route exact path="/" element={<Home/>}>*/}
+            <Route exact path="/" element={<MoviesBanner/>}>
             </Route>
-            <Route exact path="/movies" element={<Movies />}>
-            </Route>
+            {/*<Route exact path="/movies" element={<Movies />}>*/}
+            {/*</Route>*/}
             <Route exact path="/movies2" element={<MoviesBanner />}>
             </Route>
             <Route exact path="/movieDetails/:id/:type" element={ <Movie />}>
