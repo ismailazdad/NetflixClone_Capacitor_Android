@@ -53,6 +53,7 @@
   "devDependencies": {
     "@capacitor/app": "^4.1.1",
     "@capacitor/cli": "^4.6.3",
+    "@capacitor/dialog": "^4.1.0",
     "prop-types": "^15.8.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-responsive": "^9.0.2"

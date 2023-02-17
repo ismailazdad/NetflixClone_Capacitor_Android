@@ -8,6 +8,9 @@ import {Loader} from "../../utils/style/Atoms";
 import {useMediaQuery} from "react-responsive";
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useLocation} from 'react-router-dom'
+import {App} from '@capacitor/app';
+import {Dialog} from '@capacitor/dialog';
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -38,6 +41,26 @@ const MovieButton = styled.button`
         transition: all 0.2s;
     }
 `
+App.addListener('backButton', ({canGoBack}) => {
+    if (!!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement)) {
+        document.exitFullscreen();
+    } else {
+        if (!canGoBack) {
+            showConfirm()
+        }
+    }
+});
+
+const showConfirm = async () => {
+    const {value} = await Dialog.confirm({
+        title: 'Confirm',
+        message: `Are you sure you'd like to quit?`,
+    });
+    if (value) {
+        App.exitApp();
+    }
+};
+
 //second version of movies page , showing poster and trailer in header
 function MoviesBanner() {
     const language =  navigator?.language || navigator?.userLanguage;
@@ -49,7 +72,7 @@ function MoviesBanner() {
     const [focus,setFocus] = useState(false)
     const [inputs, setInputs] = useState({ searchMovie: ''})
     const [showSearch,setShowSearch] = useState(false)
-
+    const [touchState,setTouchState]=useState(false)
     const handleChange = (event) => {
         const name = event.target.name;
         let value = event.target.value;
@@ -64,6 +87,12 @@ function MoviesBanner() {
 
     const handleInputBlur = () => {
         setFocus(false)
+    }
+
+    const handleTouchEvent = (e)=>{
+        e.preventDefault();
+        let className = e.target.className.split(' ').includes('chevron')
+        e.target.nodeName === 'H2' || className ? setTouchState(true) : setTouchState(false)
     }
 
     if (error) {
@@ -93,11 +122,12 @@ function MoviesBanner() {
                      showDescription={false}
                      isMobile={isMobile}
                      focus={focus}
+                     touchState={touchState}
                  />
              </div>
 
             )}
-            <RowBannerContainer>
+            <RowBannerContainer onTouchStart={handleTouchEvent} >
                 {!isLoading ?
                     <div style={{width: '100%', display: 'flex', margin: '1vh'}}>
                     <div onClick={e => setShowSearch(!showSearch)}>
@@ -120,7 +150,7 @@ function MoviesBanner() {
                 </div>
                 :''}
                 {inputs.searchMovie.length > 0 && !focus?
-                    <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie).replace('{language}', language)}  isLargeRow/>:''
+                    <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
                 }
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Trending movie' url={urls.findActionMovies+language} useRank isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals+language} />

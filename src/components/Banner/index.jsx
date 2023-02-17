@@ -15,6 +15,7 @@ import InfoSvg from "../../assets/info.svg";
 import Credits from "../Credits";
 import {LoaderWrapper} from "../Row/style";
 import {Loader} from "../../utils/style/Atoms";
+import { useLocation } from 'react-router-dom'
 
 const MovieHeader = styled.div` 
     color: white;
@@ -187,17 +188,6 @@ const Details = styled.div`
     } 
 `
 
-//handle backButton mobile with capacitor to exit video fullScreen
-App.addListener('backButton', data => {
-    if(document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if(document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-    } else if(document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    }
-});
-
 class Banner extends Component {
     constructor(props) {
         super(props)
@@ -210,7 +200,8 @@ class Banner extends Component {
             playerObj : {},
             sound:false,
             showModal:false,
-            focus : this.props.focus
+            focus : this.props.focus,
+            first : true
         }
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
@@ -220,6 +211,10 @@ class Banner extends Component {
     playerOptions.playerVars.start=3;
     playerOptions.playerVars.color='white';
     playerOptions.playerVars.enablejsapi=1;
+    }
+
+    setFirst(flag){
+        this.setState({first: flag})
     }
 
     setTrailerURL(title) {
@@ -305,7 +300,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus} = this.props;
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -381,9 +376,10 @@ class Banner extends Component {
                                          this.setPlayerObj(e.target);
                                          this.setIsVideoLoading(false);
                                          this.setIsVideoPlaying(true);
-                                         if (!focus) {
+                                         if (!focus && !touchState && !this.state.first) {
                                              this.setShowModal(true)
                                          }
+                                         this.setFirst(false)
                                      }}
                                      onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
                                      onReady={e=>{e.target.playVideo();this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}

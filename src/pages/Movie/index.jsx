@@ -30,8 +30,9 @@ const LoaderWrapper = styled.div`
 
 function Movie() {
     const {id: myId, type: myType} = useParams()
+    const language =  navigator?.language || navigator?.userLanguage;
     let url = urls.findById.replace('{type}', myType).replace('{id}', myId);
-    const {isLoading, data, error} = useFetch(url,false)
+    const {isLoading, data, error} = useFetch(url+language,false)
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,id,type} = getInfo(data,url);
     if (error ) {
         return <MovieHeader><MovieErrorLoader><span>Oups something went wrong</span></MovieErrorLoader></MovieHeader>
