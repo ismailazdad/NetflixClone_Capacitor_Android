@@ -11,6 +11,7 @@ import {App} from '@capacitor/app';
 import {Modal} from "react-bootstrap";
 import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
+import Backup from "../../assets/backup.png";
 import InfoSvg from "../../assets/info.svg";
 import Credits from "../Credits";
 import {LoaderWrapper} from "../Row/style";
@@ -21,8 +22,8 @@ const MovieHeader = styled.div`
     color: white;
     object-fit: contain;
     height: 448px;
-    background-size: cover;
-    background: ${({imageUrl}) => 'url(' + imageUrl + ') ;'}
+    background-size: cover;   
+    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'},  ${({backup}) => 'url(' + backup + ')'};       
     background-position: center;   
     user-select: none;
     @media  only screen and (max-width:768px ){
@@ -302,7 +303,7 @@ class Banner extends Component {
     render(){
         const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState} = this.props;
         return (
-            <MovieHeader imageUrl={imageUrl}>
+            <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
                     {!isMainMenu && this.state.isVideoPlaying?
                         <div>
@@ -391,7 +392,7 @@ class Banner extends Component {
                     </LoaderContainer>
                     :''}
                 <MovieFadeBottom />
-                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none'}} >
+                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'gray'}} >
                     <Modal.Dialog style={{backgroundPosition:'bottom', backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
                         <Modal.Header onClick={() => { this.setState({showModal: false});}} style={{border: 'transparent',height:'9vh'}}  >
                             <Modal.Title><h1>{title} </h1></Modal.Title>

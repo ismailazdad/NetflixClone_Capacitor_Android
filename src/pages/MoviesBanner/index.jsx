@@ -8,7 +8,6 @@ import {Loader} from "../../utils/style/Atoms";
 import {useMediaQuery} from "react-responsive";
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useLocation} from 'react-router-dom'
 import {App} from '@capacitor/app';
 import {Dialog} from '@capacitor/dialog';
 
@@ -101,8 +100,8 @@ function MoviesBanner() {
     return (
         <div style={{background: 'black',color:'white'}}>
             {isLoading ? (
-            <LoaderWrapper data-testid='loader'>
-                <Loader/>
+            <LoaderWrapper >
+                <Loader />
             </LoaderWrapper>
             ) : (
              <div className="fixed-top" >
@@ -160,7 +159,7 @@ function MoviesBanner() {
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='SF Movies' url={urls.findSFMovies+language} />
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Mystery Movies' url={urls.findMysteryMovies+language} isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Music Movies' url={urls.findMusicMovies+language} />
-                {/*<RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Trending Tv ' url={urls.findTrendingTv} isLargeRow/>*/}
+                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Trending Tv ' url={urls.findTrendingTv} isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='History Movies' url={urls.findHistoryMovies+language}/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Fantasy Movies' url={urls.findFantasyMovies+language}/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Rated' url={urls.findTopRated+language} useRank/>

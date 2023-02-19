@@ -55,11 +55,11 @@ function Credits({id}) {
                 </LoaderWrapper>
             ) : (
                 <div>
-                    {data && data?.cast.length >0 ?
+                    {data && data?.cast?.length >0 ?
                         <h2 style={{marginTop:'1vh'}}>Casting</h2> :''
                     }
                     <RowCasting>
-                        {data && data?.cast.length >0 && data?.cast.map((catsing, index) =>
+                        {data && data?.cast?.length >0 && data?.cast.map((catsing, index) =>
                             <div className="flex-row" key={index + '_container'} >
                                 <div style={{
                                     whiteSpace: 'nowrap',
