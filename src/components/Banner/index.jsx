@@ -270,14 +270,26 @@ class Banner extends Component {
         this.setIsVideoLoading(true);
         this.setIsVideoPlaying(false);
         this.setPlayerObj({});
-        movieTrailer(title)
+        //test movietrailer with specified language
+        movieTrailer(title,{language : this.props.language})
             .then((url) => {
                 const urlParams = new URLSearchParams(new URL(url).search);
                 this.setTrailerURL(urlParams.get("v"));
             })
             .catch((e) => {
+                //if no trailer in specified language, call movietrailer withtout specified language
                 this.setTrailerURL("");
-                this.setVidError(true);
+                this.setVidError(false);
+                movieTrailer(title)
+                    .then((url) => {
+                        const urlParams = new URLSearchParams(new URL(url).search);
+                        this.setTrailerURL(urlParams.get("v"));
+                        console.log('urlParams', urlParams.get("v"))
+                    })
+                    .catch((e) => {
+                        this.setTrailerURL("");
+                        this.setVidError(true);
+                    })
             })
     };
 
@@ -301,7 +313,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState} = this.props;
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >

@@ -122,6 +122,7 @@ function MoviesBanner() {
                      isMobile={isMobile}
                      focus={focus}
                      touchState={touchState}
+                     language={language}
                  />
              </div>
 
