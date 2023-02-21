@@ -1,6 +1,6 @@
 # Netflix Clone movies trailer Android
 
-This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js.
+This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js with some UI modifications for a better mobile experience.
 I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
      
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)     
