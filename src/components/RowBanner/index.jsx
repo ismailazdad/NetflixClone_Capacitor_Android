@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import urls from "../../utils/urls";
 import {useMediaQuery} from "react-responsive";
 import styled from "styled-components";
+import Backup from "../../assets/backup.png";
 
 export const RowContainer = styled.div`
     color: white;
@@ -62,7 +63,7 @@ export const Chevron = styled.div`
         filter:alpha(opacity=50);         
     }
 `
-export const StyledImage = styled.img`
+export const StyledImage = styled.div`
     object-fit: contain;
     max-height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};     
     height:  ${({isLargeRow}) => (isLargeRow ? '250px' : '200px')};   
@@ -71,15 +72,22 @@ export const StyledImage = styled.img`
       &:hover{      
         transform:  ${({isLargeRow}) => (isLargeRow ? 'scale(1.15)' : 'scale(1.25)')};
     }  
-    max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};           
+         
     @media  only screen and (max-width:768px ){
         max-height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};     
         height:  ${({isLargeRow}) => (isLargeRow ? '20vh' : '15vh')};    
+        width:  ${({isLargeRow}) => (isLargeRow ? '13vh' : '25vh')};    
         max-width: ${({isLargeRow}) => isLargeRow ? '30vh' : '30vh'};  
         &:hover{      
             transform:  scale(1.25);
         } 
-    }           
+    }  
+    width:  ${({isLargeRow}) => (isLargeRow ? '18vh' : '25vh')};  
+    // max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};  
+    background-size: cover;   
+    background-repeat: no-repeat;
+    background-position: center;           
+    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};            
     `
 
 
@@ -126,7 +134,8 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                         <Link key={`rows--${index}`} to={`/movieDetails/${movie.id}/${type}`}>
                                             <StyledImage
                                                 key={movie.id}
-                                                src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                                imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                                backup={Backup}
                                                 alt={movie.name}
                                                 isLargeRow={isLargeRow}
                                                 isActive={activeIndex === movie}
@@ -137,18 +146,19 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                                 onError = {e => e.target.parentNode.style.display = 'none'}
                                             />
                                         </Link> :
-                                        <StyledImage
-                                            key={movie.id}
-                                            src={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                            alt={movie.name}
-                                            isLargeRow={isLargeRow}
-                                            isActive={activeIndex === movie}
-                                            // onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
-                                            // onTouchStart={() => {setActiveIndex({...movie,url:url})}}
-                                            onTouchEnd={() => {setActiveIndex({...movie,url:url})}}
-                                            // onMouseLeave={() => {setActiveIndex(null)}}
-                                            useRank={useRank}
-                                            onError = {e => e.target.parentNode.style.display = 'none'}
+                                            <StyledImage
+                                                key={movie.id}
+                                                imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                                backup={Backup}
+                                                alt={movie.name}
+                                                isLargeRow={isLargeRow}
+                                                isActive={activeIndex === movie}
+                                                // onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
+                                                // onTouchStart={() => {setActiveIndex({...movie,url:url})}}
+                                                onTouchEnd={() => {setActiveIndex({...movie,url:url})}}
+                                                // onMouseLeave={() => {setActiveIndex(null)}}
+                                                useRank={useRank}
+                                                onError = {e => e.target.parentNode.style.display = 'none'}
                                         />
                                     }
 

@@ -7,16 +7,16 @@ import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
-import {App} from '@capacitor/app';
 import {Modal} from "react-bootstrap";
 import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
 import Backup from "../../assets/backup.png";
 import InfoSvg from "../../assets/info.svg";
 import Credits from "../Credits";
+import VideoList from "../VideosList";
+import MovieDetails from "../MovieDetails";
 import {LoaderWrapper} from "../Row/style";
 import {Loader} from "../../utils/style/Atoms";
-import { useLocation } from 'react-router-dom'
 
 const MovieHeader = styled.div` 
     color: white;
@@ -110,7 +110,7 @@ const RecommendedLine = styled.div`
     display: flex; 
     margin-left: 20px;
     @media  only screen and (max-width:768px ){
-       margin-top:5vh;
+       margin-top:6vh;
     }
 `
 
@@ -190,6 +190,7 @@ const Details = styled.div`
 `
 
 class Banner extends Component {
+    timer;
     constructor(props) {
         super(props)
         this.state = {
@@ -250,41 +251,54 @@ class Banner extends Component {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
     }
 
+    showModalDelay = () => {
+        this.timer = setTimeout(() => {
+            if (!this.props.focus && !this.props.touchState && !this.state.first) {
+                this.setShowModal(true)
+            }
+        }, 10000);
+    }
+
     componentDidMount() {
         if (!this.props.isMainMenu) {
-            this.handleClick(this.props.title)
+            this.handleClick(this.props.id)
         }
     }
 
     componentWillReceiveProps(nextProps, nextState) {
         if (nextProps.title !==  this.props.title) {
             playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
-            this.handleClick(nextProps.title)
+            this.handleClick(nextProps.id)
         }
     }
 
+    componentWillUnmount() {
+        clearTimeout(this.timer);
+    }
 
-    handleClick = (title) => {
+
+    handleClick = (id) => {
+        clearTimeout(this.timer);
         this.setTrailerURL("");
         this.setVidError(false);
         this.setIsVideoLoading(true);
         this.setIsVideoPlaying(false);
         this.setPlayerObj({});
         //test movietrailer with specified language
-        movieTrailer(title,{language : this.props.language})
+        movieTrailer(null, {tmdbId: id, language: this.props.language})
             .then((url) => {
                 const urlParams = new URLSearchParams(new URL(url).search);
                 this.setTrailerURL(urlParams.get("v"));
+                this.setVidError(false);
             })
             .catch((e) => {
                 //if no trailer in specified language, call movietrailer withtout specified language
                 this.setTrailerURL("");
                 this.setVidError(false);
-                movieTrailer(title)
+                movieTrailer(null, {tmdbId: id})
                     .then((url) => {
                         const urlParams = new URLSearchParams(new URL(url).search);
                         this.setTrailerURL(urlParams.get("v"));
-                        console.log('urlParams', urlParams.get("v"))
                     })
                     .catch((e) => {
                         this.setTrailerURL("");
@@ -292,6 +306,13 @@ class Banner extends Component {
                     })
             })
     };
+
+    updateTrailer = (key) =>{
+        clearTimeout(this.timer);
+        playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
+        this.setVidError(false);
+        this.setTrailerURL( key)
+    }
 
     enableSound = () => {
         if(this.state.playerObj.isMuted()){
@@ -331,8 +352,8 @@ class Banner extends Component {
                             </Expand>
                         </div>
                         :''}
-                    <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true})}} >
-                        <img alt='' src={InfoSvg}/>
+                    <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true}); clearTimeout(this.timer);}} >
+                        <img style={{width:'3.5vh'}} alt='' src={InfoSvg}/>
                     </Details>
                     {!this.state.isVideoPlaying || !this.state.showModal ?
                         <MovieTitle> {title}</MovieTitle>
@@ -359,7 +380,7 @@ class Banner extends Component {
                                 <div style={{width: '70vh', height: '5vh'}}>
                                 </div>
                         }
-                        <RecommendedLine style={{width: '100%', display: 'flex', marginLeft: '20px'}}>
+                        <RecommendedLine style={{width: '100%', display: 'flex', textAlign: 'center',marginLeft:'5vh'}}>
                             <Recommended>Recommand at {popularity}%</Recommended>
                             <div> for : {!adults ? ' Adults' : ' All family'}</div>
                             <div style={{border: 'solid 1px', height: 'fit-content', marginLeft: '5px'}}> {year}</div>
@@ -389,9 +410,8 @@ class Banner extends Component {
                                          this.setPlayerObj(e.target);
                                          this.setIsVideoLoading(false);
                                          this.setIsVideoPlaying(true);
-                                         if (!focus && !touchState && !this.state.first) {
-                                             this.setShowModal(true)
-                                         }
+                                         clearTimeout(this.timer);
+                                         this.showModalDelay()
                                          this.setFirst(false)
                                      }}
                                      onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
@@ -406,19 +426,20 @@ class Banner extends Component {
                 <MovieFadeBottom />
                 <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'gray'}} >
                     <Modal.Dialog style={{backgroundPosition:'bottom', backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
-                        <Modal.Header onClick={() => { this.setState({showModal: false});}} style={{border: 'transparent',height:'9vh'}}  >
-                            <Modal.Title><h1>{title} </h1></Modal.Title>
+                        <Modal.Header onClick={() => { this.setState({showModal: false});clearTimeout(this.timer);}} style={{border: 'transparent',height:'9vh'}}  >
+                            <Modal.Title><h1 style={{ lineHeight: '0.8'}}>{title} </h1></Modal.Title>
                             <button type="button" style={{border: 'transparent'}} aria-label="Close">
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>
                         <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
+                            {overview ?
                             <div className="row justify-content-center align-self-center">
+                                <span style={{color: 'gray'}}>Synopsis:</span>
                                 <span>{overview}</span>
-                            </div>
-                            <div style={{width: '30rem', lineHeight: '1.3rem', marginTop: '1vh'}}>
-                                <div><span style={{color: 'gray'}}>Genres</span> : {genres}</div>
-                            </div>
+                            </div>:''}
+                            <MovieDetails id={id} language={language}/>
+                            <VideoList id={id} language={language} setTrailerURL={this.updateTrailer}  />
                             <Credits id={id}/>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>

@@ -27,6 +27,8 @@ const urls = {
     findImagesUrl : 'https://image.tmdb.org/t/p/original/',
     findById : API_URL+'/{type}/{id}?api_key='+API_KEY+'&language=',
     findCreditsById : API_URL+'/movie/{id}/credits?api_key='+API_KEY+'',
+    findVideosById : API_URL+'/movie/{id}/videos?api_key='+API_KEY+'&language=',
+    findVideoByIdDetails : API_URL+'/movie/{id}?api_key='+API_KEY+'&language=',
     searchMovie : API_URL+'/search/movie?api_key='+API_KEY+'&query={query}&language=',
 };
 export default urls;

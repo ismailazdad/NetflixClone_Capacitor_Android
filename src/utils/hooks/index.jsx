@@ -99,6 +99,26 @@ export function useFetchList(url,useRank = false) {
     return {isLoading, data,error}
 }
 
+export function useFetchListWithFallBack(url,url2) {
+    const [otherMovies, setOtherMovies] = useState([]);
+    const [isLoading,setIsLoading] = useState(false)
+    useEffect(() => {
+        setIsLoading(true)
+        const fetchAccountData = async () => {
+            const rawRes = await fetch(url );
+            const res = await rawRes.json();
+            const rawRes2 = await fetch(url2);
+            const res2 = await rawRes2.json();
+            setOtherMovies(otherMovies.concat(res?.results).concat(res2?.results))
+        };
+        if(otherMovies.length === 0){
+            fetchAccountData();
+        }
+        setIsLoading(false)
+    }, [setIsLoading,setOtherMovies,otherMovies,url,url2]);
+    return {isLoading, otherMovies}
+}
+
 const STATE = {
     NO : undefined,
     NO_DATA : 'no_data',
