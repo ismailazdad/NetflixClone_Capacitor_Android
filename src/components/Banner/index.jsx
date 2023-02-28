@@ -308,9 +308,9 @@ class Banner extends Component {
     };
 
     updateTrailer = (key) =>{
-        clearTimeout(this.timer);
+        clearTimeout(this.timer)
         playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
-        this.setVidError(false);
+        this.setVidError(false)
         this.setTrailerURL( key)
     }
 
@@ -330,6 +330,8 @@ class Banner extends Component {
         const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
         if (requestFullScreen) {
             requestFullScreen.bind(playerElement)()
+            clearTimeout(this.timer);
+            window.screen.orientation.lock('landscape')
         }
     }
 
