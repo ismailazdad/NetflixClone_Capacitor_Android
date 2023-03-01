@@ -441,7 +441,7 @@ class Banner extends Component {
                                 <span>{overview}</span>
                             </div>:''}
                             <MovieDetails id={id} language={language}/>
-                            <VideoList id={id} language={language} setTrailerURL={this.updateTrailer}  />
+                            <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.trailerURL}  />
                             <Credits id={id}/>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>

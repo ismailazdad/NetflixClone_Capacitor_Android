@@ -5,12 +5,11 @@ import React, {useState} from "react";
 import {LoaderWrapper} from "../RowBanner";
 import styled from "styled-components";
 import Backup from "../../assets/backup.png";
+import PlayTrailer from "../../assets/play_trailer.png";
 
 export const StyledImage = styled.div`
     max-height: 200px;    
     height:  200px; 
-    margin-left:  10%; 
-    margin-right:  10%;
     transition: transform 700ms;
       &:hover{      
         transform: scale(1.15);
@@ -19,15 +18,18 @@ export const StyledImage = styled.div`
     @media  only screen and (max-width:768px ){
         max-height:  20vh;     
         height:  20vh;    
-        max-width: 30vh;  
+        max-width: 27vh;
+        width: 27vh;
         &:hover{      
-            transform:  scale(1.10);
+            transform:  scale(1.08);
         } 
     } 
     background-size: cover;   
     background-repeat: no-repeat;
     background-position: center;           
-    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'};   
+    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};     
+    border-radius: 10px; 
+    border : solid 1px black;
  `
 export const RowCasting = styled.div`
     display: flex;
@@ -39,16 +41,71 @@ export const RowCasting = styled.div`
     }
 `
 export const Trailer = styled.div`
-    background-color: ${({index, current}) => current === index ? 'black' : 'gray'}; 
-    border-radius: 10px; 
-    border : solid 1px black;
+    background-color: ${({index, current}) => current === index ? 'black' : 'transparent'}; 
+    border-radius: ${({index, current}) => current === index ? '10px' : ''}; 
+    border : ${({index, current}) => current === index ? 'solid 1px black' : ''}; 
     margin : 0.5vh;
-    opacity : 0.8;
+    opacity : ${({index, current}) => current === index ? '1' : '0.7'}; 
 `
 
-function VideoList({id, language, setTrailerURL}) {
+export const WaitAnimated = styled.div`
+  @media  only screen and (max-width:768px ){
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      width: 2em;
+      position:inherit;
+      margin-top: 8vh;
+      margin-left: 11vh;
+  }
+`
+export const PlayAnimated = styled.div`
+  @media  only screen and (max-width:768px ){
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      width: 2em;
+      position:inherit;
+      margin-top: 6vh;
+      margin-left: 10vh;
+  }
+`
+
+export const WaitSpanAnimated = styled.span`
+  display:none;
+  @media  only screen and (max-width:768px ){
+      display:block;
+      width: 0.3em;
+      height: 1em;
+      background-color: red;      
+        &:nth-of-type(1) {
+          animation: grow 1s -0.45s ease-in-out infinite;
+        }        
+        &:nth-of-type(2) {
+          animation: grow 1s -0.3s ease-in-out infinite;
+        }        
+        &:nth-of-type(3) {
+          animation: grow 1s -0.15s ease-in-out infinite;
+        }        
+        &:nth-of-type(4) {
+          animation: grow 1s ease-in-out infinite;
+        }  
+      @keyframes grow {
+          0%,100% {
+            transform: scaleY(1);
+          }        
+          50% {
+            transform: scaleY(2);
+          }
+        }
+  }
+`
+
+
+function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL}) {
     const {isLoading, otherMovies} = useFetchListWithFallBack(urls.findVideosById.replace('{id}', id) + language, urls.findVideosById.replace('{id}', id).replace("&language=", ""))
-    const [current, setCurrent] = useState(0)
     return (
         <div>
             {isLoading ? (
@@ -61,13 +118,13 @@ function VideoList({id, language, setTrailerURL}) {
                         <h2 style={{marginTop: '1vh'}}> List of trailer(s)</h2> : ''
                     }
                     <RowCasting>
-                        {otherMovies && otherMovies?.length > 0 && otherMovies?.map((movies, index) =>
-                            <Trailer className="flex-row" key={index + '_container'} index={index} current={current}>
+                        {otherMovies && otherMovies?.length > 0 && otherMovies?.map((movie, index) =>
+                            <Trailer className="flex-row" key={index + '_container'} index={movie?.key} current={trailerURL}>
                                 <div style={{
                                     whiteSpace: 'nowrap',
                                     fontSize: 'small',
                                     marginLeft: '0.3vh',
-                                    width: '15vh',
+                                    width: '25vh',
                                     maxHeight: '2.3vh',
                                     overflow: 'hidden'
                                 }}>
@@ -75,7 +132,7 @@ function VideoList({id, language, setTrailerURL}) {
                                         overflow: 'hidden',
                                         fontWeight: 500,
                                         fontSize: 'x-small'
-                                    }}>{movies.name}</h5>
+                                    }}>{movie.name}</h5>
                                 </div>
                                 <div style={{
                                     whiteSpace: 'nowrap',
@@ -85,19 +142,31 @@ function VideoList({id, language, setTrailerURL}) {
                                     overflow: 'hidden',
                                     marginBottom: '0.5vh'
                                 }}>
-                                    <span>language {movies?.iso_639_1}</span>
+                                    <span>language {movie?.iso_639_1}</span>
                                 </div>
                                 <StyledImage
-                                    key={movies.id}
-                                    imageUrl={Backup}
-                                    alt={movies.name}
+                                    key={movie.id}
+                                    backup={Backup}
+                                    imageUrl = {'https://img.youtube.com/vi/'+movie?.key+'/0.jpg'}
+                                    alt={movie.name}
                                     onError={e => e.target.parentNode.style.display = 'none'}
-                                    style={{border: 'solid 1px gray', maxWidth: '14vh'}}
                                     onTouchEnd={() => {
-                                        setCurrent(index)
-                                        setTrailerURL(movies?.key)
+                                        setTrailerURL(movie?.key)
                                     }}
-                                />
+                                >
+                                {isVideoPlaying && movie?.key === trailerURL ?
+                                    <WaitAnimated>
+                                        <WaitSpanAnimated></WaitSpanAnimated>
+                                        <WaitSpanAnimated></WaitSpanAnimated>
+                                        <WaitSpanAnimated></WaitSpanAnimated>
+                                        <WaitSpanAnimated></WaitSpanAnimated>
+                                    </WaitAnimated>
+                                    :
+                                    <PlayAnimated>
+                                        <img style={{width:'7vh',height:'7vh'}} src={PlayTrailer}/>
+                                    </PlayAnimated>
+                                    }
+                                </StyledImage>
                             </Trailer>
                         )
                         }
