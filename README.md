@@ -5,6 +5,7 @@ I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js 
      
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)     
 
+if someone can do the same for ios and push the app to the apple store, it will be awesome :boom: :neckbeard: :monkey_face:
 
 ### Tutorial 
 How to convert project to native app with capacitor : 
