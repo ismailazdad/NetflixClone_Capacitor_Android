@@ -85,7 +85,6 @@ export function useFetchList(url,useRank = false) {
                         .map((item) => item.value)
                     );
                 }
-
             })
             .catch(e => {
                 console.log(e)
@@ -99,25 +98,24 @@ export function useFetchList(url,useRank = false) {
     return {isLoading, data,error}
 }
 
+
 export function useFetchListWithFallBack(url,url2) {
-    const [otherMovies, setOtherMovies] = useState([]);
+    const [data, setData] = useState([]);
     const [isLoading,setIsLoading] = useState(false)
+    const [error, setError] = useState(false)
     useEffect(() => {
         setIsLoading(true)
-        const fetchAccountData = async () => {
-            const rawRes = await fetch(url );
-            const res = await rawRes.json();
-            const rawRes2 = await fetch(url2);
-            const res2 = await rawRes2.json();
-            setOtherMovies(otherMovies.concat(res?.results).concat(res2?.results))
-        };
-        if(otherMovies.length === 0){
-            fetchAccountData();
-        }
-        setIsLoading(false)
-    }, [setIsLoading,setOtherMovies,otherMovies,url,url2]);
-    return {isLoading, otherMovies}
+        const urls = [url, url2];
+        Promise.all(urls.map(url => fetch(url).then(r => r.json())))
+            .then(([res, res2]) => {
+                setData(res?.results.concat(res2?.results))
+            })
+            .catch(error => setError(true))
+            .finally(e =>{ setIsLoading(false)})
+        }, [setIsLoading,setData,url,url2]);
+    return {isLoading, data,error}
 }
+
 
 const STATE = {
     NO : undefined,
@@ -166,3 +164,14 @@ export function useTransitionControl(duration){
     return [state,enter,exited]
 }
 
+export const TEXT_COLLAPSE_OPTIONS = {
+    collapse: false,
+    collapseText: '...show more',
+    expandText: 'show less...',
+    minHeight: 70,
+    maxHeight: 300,
+    textStyle: {
+        color: 'gray',
+        fontSize: '1rem',
+    },
+}

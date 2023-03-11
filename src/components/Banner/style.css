@@ -45,3 +45,14 @@
         height: 70vh;
     }
 }
+.nav-link[aria-selected="false"]{
+   color:white;
+}
+
+.nav-item > button{
+    font-size: small;
+    width:8vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

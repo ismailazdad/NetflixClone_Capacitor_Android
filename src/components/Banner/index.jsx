@@ -1,13 +1,17 @@
 import React, {Component} from "react";
 import styled from "styled-components";
 import movieTrailer from "movie-trailer";
-import {playerOptions} from "../../utils/hooks";
+import {playerOptions, TEXT_COLLAPSE_OPTIONS} from "../../utils/hooks";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
 import {Modal} from "react-bootstrap";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import {Fade} from "react-bootstrap";
+import ReactTextCollapse from "react-text-collapse"
 import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
 import Backup from "../../assets/backup.png";
@@ -17,6 +21,9 @@ import VideoList from "../VideosList";
 import MovieDetails from "../MovieDetails";
 import {LoaderWrapper} from "../Row/style";
 import {Loader} from "../../utils/style/Atoms";
+import MovieReviews from "../MovieReviews";
+import urls from "../../utils/urls";
+import RowBanner from "../RowBanner";
 
 const MovieHeader = styled.div` 
     color: white;
@@ -193,6 +200,7 @@ class Banner extends Component {
     timer;
     constructor(props) {
         super(props)
+        // this.handleSelect = this.handleSelect.bind(this);
         this.state = {
             trailerURL: "",
             isVideoLoading: false,
@@ -203,8 +211,10 @@ class Banner extends Component {
             sound:false,
             showModal:false,
             focus : this.props.focus,
-            first : true
+            first : true,
+            key : 1
         }
+
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
     playerOptions.playerVars.fs=1;
@@ -213,6 +223,8 @@ class Banner extends Component {
     playerOptions.playerVars.start=3;
     playerOptions.playerVars.color='white';
     playerOptions.playerVars.enablejsapi=1;
+    TEXT_COLLAPSE_OPTIONS.minHeight = 150;
+    TEXT_COLLAPSE_OPTIONS.maxHeight = 250;
     }
 
     setFirst(flag){
@@ -269,6 +281,7 @@ class Banner extends Component {
         if (nextProps.title !==  this.props.title) {
             playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
             this.handleClick(nextProps.id)
+            this.setState({key: 1})
         }
     }
 
@@ -335,8 +348,12 @@ class Banner extends Component {
         }
     }
 
+    handleSelect = (key) =>{
+           this.setState({key: key})
+    }
+
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language} = this.props;
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -435,14 +452,46 @@ class Banner extends Component {
                             </button>
                         </Modal.Header>
                         <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
-                            {overview ?
-                            <div className="row justify-content-center align-self-center">
-                                <span style={{color: 'gray'}}>Synopsis:</span>
-                                <span>{overview}</span>
-                            </div>:''}
-                            <MovieDetails id={id} language={language}/>
-                            <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.trailerURL}  />
-                            <Credits id={id}/>
+
+                            <Tabs
+                                className="mb-3"
+                                transition={Fade}
+                                activeKey={this.state.key }
+                                onSelect={this.handleSelect}
+                                // fill
+                                // justify
+                            >
+                                <Tab eventKey={1} title="Movie" >
+                                    {overview ?
+                                        <div className="row justify-content-center align-self-center">
+                                            <span style={{color: 'gray'}}>Synopsis:</span>
+                                            <div key={id + '_container'} style={{display:"inline-block"}}>
+                                            {overview.length > 400 ?
+                                                <ReactTextCollapse options={TEXT_COLLAPSE_OPTIONS}>
+                                                    <div style={{textTransform: 'inherit', position:'relative'}}>{overview}</div>
+                                                </ReactTextCollapse>
+                                                :
+                                                <div style={{textTransform: 'inherit', position:'relative'}}>{overview}</div>
+                                            }
+                                            </div>
+                                        </div>:''}
+                                    <MovieDetails id={id} language={language}/>
+                                </Tab>
+                                <Tab eventKey={2} title="trailers">
+                                    <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.trailerURL}  />
+                                </Tab>
+                                <Tab eventKey={3} title="Casting">
+                                    <Credits id={id}/>
+                                </Tab>
+                                <Tab eventKey={4} title="Similar">
+                                    <RowBanner style={{position:'relative'}} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Similar Movie' url={urls.findRecommendedById.replace("{id}",id)+language} isLargeRow={true}/>
+                                    <RowBanner style={{position:'relative'}} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Recommended Movie' url={urls.findSimilarById.replace("{id}",id)+language} isLargeRow={true}/>
+                                </Tab>
+                                <Tab eventKey={5} title="Review">
+                                    <MovieReviews language={language} id={id}/>
+                                </Tab>
+
+                            </Tabs>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>

@@ -124,6 +124,8 @@ function MoviesBanner() {
                      focus={focus}
                      touchState={touchState}
                      language={language}
+                     activeIndex={activeIndex}
+                     setActiveIndex={setActiveIndex}
                  />
              </div>
 
@@ -153,7 +155,10 @@ function MoviesBanner() {
                 {inputs.searchMovie.length > 0 && !focus?
                     <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
                 }
+                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Popular Movies' url={urls.findPopular+language} isLargeRow/>
+                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Now Playing' url={urls.findNowPlaying+language} />
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Trending movie' url={urls.findActionMovies+language} useRank isLargeRow/>
+                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='UpComing' url={urls.findUpcoming.toString().replaceAll("{lang}",language?.split("").slice(0,2).join(""))} isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals+language} />
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Western Movies' url={urls.findWesternMovies+language} isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='War Movies' url={urls.findWarMovies+language}/>

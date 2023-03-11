@@ -7,7 +7,8 @@ import {Link} from "react-router-dom";
 import urls from "../../utils/urls";
 import {useMediaQuery} from "react-responsive";
 import styled from "styled-components";
-import Backup from "../../assets/backup.png";
+import BackupSmall from "../../assets/backup2.png";
+import BackupLarge from "../../assets/backup3.png";
 
 export const RowContainer = styled.div`
     color: white;
@@ -83,11 +84,11 @@ export const StyledImage = styled.div`
         } 
     }  
     width:  ${({isLargeRow}) => (isLargeRow ? '18vh' : '25vh')};  
-    // max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};  
-    background-size: cover;   
+    // max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};   
+    background-size: contain;   
     background-repeat: no-repeat;
     background-position: center;           
-    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};            
+    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};           
     `
 
 
@@ -135,7 +136,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                             <StyledImage
                                                 key={movie.id}
                                                 imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                                backup={Backup}
+                                                backup={ isLargeRow ? BackupLarge:BackupSmall}
                                                 alt={movie.name}
                                                 isLargeRow={isLargeRow}
                                                 isActive={activeIndex === movie}
@@ -149,7 +150,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                                             <StyledImage
                                                 key={movie.id}
                                                 imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                                backup={Backup}
+                                                backup={ isLargeRow ? BackupLarge:BackupSmall}
                                                 alt={movie.name}
                                                 isLargeRow={isLargeRow}
                                                 isActive={activeIndex === movie}
@@ -167,7 +168,7 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) 
                         }
                     </RowPoster>
                 </RowContainer>):
-                    <div>No Results...</div>
+                    <div>No Results for {title}...</div>
         )
         ))
 }

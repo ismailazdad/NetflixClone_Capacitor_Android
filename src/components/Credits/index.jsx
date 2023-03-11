@@ -4,8 +4,9 @@ import {Loader} from "../../utils/style/Atoms";
 import React from "react";
 import {LoaderWrapper} from "../RowBanner";
 import styled from "styled-components";
+import Backup from "../../assets/backup3.png";
 
-export const StyledImage = styled.img`
+export const StyledImage = styled.div`
     object-fit: contain;
     max-height: 200px;    
     height:  200px; 
@@ -24,6 +25,10 @@ export const StyledImage = styled.img`
             transform:  scale(1.10);
         } 
     }  
+    background-size: contain;   
+    background-repeat: no-repeat;
+    background-position: center;           
+    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};      
  `
 export const RowCasting = styled.div`
     display: flex;
@@ -40,6 +45,7 @@ function Credits({id}) {
     let crew = data?.crew?.filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i)
     crew = crew?.filter((v,i)=>
         v?.known_for_department !=='Acting' &&
+        v?.known_for_department !=='Art' &&
         v?.known_for_department !=='Editing' &&
         v?.known_for_department !=='Lighting' &&
         v?.known_for_department !=='Crew' &&
@@ -76,13 +82,15 @@ function Credits({id}) {
                                     fontSize: 'small',
                                     marginLeft: '1.5vh',
                                     width:'15vh',
-                                    overflow:'hidden'
+                                    overflow:'hidden',
+                                    marginBottom:'1vh'
                                 }}>
                                     <span >"{catsing?.character.replace(' (voice)','')}"</span>
                                 </div>
                                 <StyledImage
                                     key={catsing.id}
-                                    src={`${urls.findImagesUrl}${catsing.profile_path}`}
+                                    imageUrl = {`${urls.findImagesUrl}${catsing.profile_path}`}
+                                    backup={Backup}
                                     alt={catsing.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
                                     style={{border:'solid 1px gray'}}
@@ -91,9 +99,10 @@ function Credits({id}) {
                         )
                         }
                     </RowCasting>
-                    {crew && crew.length >1 ?
+                    {data && data?.crew?.length >0 ?
                         <h2 style={{marginTop:'1vh'}}>Production</h2> :''
                     }
+
                     <RowCasting>
                         {crew && crew.map((crew, index) =>
                             <div className="flex-row" key={index + '_container'}>
@@ -112,13 +121,15 @@ function Credits({id}) {
                                     fontSize: 'small',
                                     marginLeft: '1.5vh',
                                     width:'15vh',
-                                    overflow:'hidden'
+                                    overflow:'hidden',
+                                    marginBottom:'1vh'
                                 }}>
                                     <span>{crew.known_for_department}</span>
                                 </div>
                                 <StyledImage
                                     key={crew.id}
-                                    src={`${urls.findImagesUrl}${crew.profile_path}`}
+                                    imageUrl = {`${urls.findImagesUrl}${crew.profile_path}`}
+                                    backup={Backup}
                                     alt={crew.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
                                     style={{border:'solid 1px gray'}}

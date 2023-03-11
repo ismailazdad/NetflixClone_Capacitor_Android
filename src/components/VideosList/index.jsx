@@ -105,7 +105,7 @@ export const WaitSpanAnimated = styled.span`
 
 
 function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL}) {
-    const {isLoading, otherMovies} = useFetchListWithFallBack(urls.findVideosById.replace('{id}', id) + language, urls.findVideosById.replace('{id}', id).replace("&language=", ""))
+    const {isLoading, data,error} = useFetchListWithFallBack(urls.findVideosById.replace('{id}', id) + language, urls.findVideosById.replace('{id}', id).replace("&language=", ""))
     return (
         <div>
             {isLoading ? (
@@ -114,11 +114,12 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL}) {
                 </LoaderWrapper>
             ) : (
                 <div>
-                    {otherMovies && otherMovies?.length > 0 ?
-                        <h2 style={{marginTop: '1vh'}}> List of trailer(s)</h2> : ''
+                    {error ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
+                    {data && data?.length > 0 ?
+                        <h2 style={{marginTop: '1vh'}}> List of trailer(s)</h2> : 'No trailers...'
                     }
                     <RowCasting>
-                        {otherMovies && otherMovies?.length > 0 && otherMovies?.map((movie, index) =>
+                        {data && data?.length > 0 && data?.map((movie, index) =>
                             <Trailer className="flex-row" key={index + '_container'} index={movie?.key} current={trailerURL}>
                                 <div style={{
                                     whiteSpace: 'nowrap',
