@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
 import urls from "../../utils/urls"
@@ -51,13 +51,17 @@ function Actor() {
     const {id: id,language:language} = useParams()
     const [activeIndex, setActiveIndex] = useState(null);
     const [isLoadingActor, actor, actorError] = useFetch(urls.findActorById.replace("{id}",id)+language,false);
-    console.log('actor',actor)
-    console.log('actor url',urls.findActorById.replace("{id}",id)+language)
     const [isLoading, data, error] = useFetch(urls.findMoviesByActorId.replace("{id}",id)+language,true);
     const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
-    const {genres,adults,year,popularity,imageUrl,title,overview,myId,character} =  activeIndex ? getActorMovieInfo(activeIndex) :  getActorMovieInfo(data);
+    const {genres,adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster} =  activeIndex ? getActorMovieInfo(activeIndex) :  getActorMovieInfo(data);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
-    if (error) {
+    const savedCart = localStorage.getItem('myList')
+    const [myList, updateMyList] = useState(savedCart ? JSON.parse(savedCart) : [])
+    useEffect(() => {
+        localStorage.setItem('myList', JSON.stringify(myList))
+    }, [myList])
+
+    if (error && myList.length ===0) {
         return <span>Oups something went wrong</span>
     }
     return (
@@ -70,6 +74,7 @@ function Actor() {
                 <div className="fixed-top" >
                     <Banner
                         imageUrl={imageUrl}
+                        imageUrlPoster={imageUrlPoster}
                         title={title}
                         adults={adults}
                         popularity={popularity}
@@ -87,6 +92,8 @@ function Actor() {
                         setActiveIndex={setActiveIndex}
                         character={actor?.name +' role : '+character}
                         showSimilar={false}
+                        myList={myList}
+                        updateMyList={updateMyList}
                     />
                 </div>
 

@@ -85,24 +85,26 @@ export const StyledImage = styled.div`
     }  
     width:  ${({isLargeRow}) => (isLargeRow ? '18vh' : '25vh')};  
     // max-width: ${({isLargeRow}) => isLargeRow ? '400px' : '400px'};   
-    background-size: contain;   
+    // background-size: contain;
+    background-size: cover;    
     background-repeat: no-repeat;
     background-position: center;           
     background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};           
     `
 
 
-function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,sort}) {
+function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,sort,myList, updateMyList}) {
     const myRef = useRef(null);
     const {isLoading, data, error} = useFetchList(url,useRank);
     const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
-    const type = url.toString().includes('/tv') ? 'tv' : 'movie';
-    const movies = data.map((movie)=>{return { ...movie, id : movie.id}});
+    const type = url?.toString().includes('/tv') ? 'tv' : 'movie';
+    const movies = myList?.length > 0 ? myList.map((movie)=>{return { ...movie, id : movie.id}}): data.map((movie)=>{return { ...movie, id : movie.id}});
     if(sort)
         movies.sort((a,b)=>b?.release_date.split('-').join('')-a?.release_date.split('-').join(''))
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
-    if (error) {
+
+    if (error && myList.length ===0) {
         return <span>Oups something went wrong</span>
     }
 

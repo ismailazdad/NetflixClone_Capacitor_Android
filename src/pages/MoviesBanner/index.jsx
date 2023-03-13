@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
 import urls from "../../utils/urls"
@@ -67,12 +67,20 @@ function MoviesBanner() {
     const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
     const [activeIndex, setActiveIndex] = useState(null);
     const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
-    const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = activeIndex ? getInfo(activeIndex,activeIndex.url):  getInfo(data,urls.findNetflixOriginals);
+    const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = activeIndex ? getInfo(activeIndex,activeIndex.url):  getInfo(data,urls.findNetflixOriginals);
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
     const [focus,setFocus] = useState(false)
     const [inputs, setInputs] = useState({ searchMovie: ''})
     const [showSearch,setShowSearch] = useState(false)
     const [touchState,setTouchState]=useState(false)
+
+    const savedCart = localStorage.getItem('myList')
+    const [myList, updateMyList] = useState(savedCart ? JSON.parse(savedCart) : [])
+    useEffect(() => {
+        localStorage.setItem('myList', JSON.stringify(myList))
+    }, [myList])
+
+
     const handleChange = (event) => {
         const name = event.target.name;
         let value = event.target.value;
@@ -108,6 +116,7 @@ function MoviesBanner() {
              <div className="fixed-top" >
                  <Banner
                      imageUrl={imageUrl}
+                     imageUrlPoster={imageUrlPoster}
                      title={title}
                      adults={adults}
                      popularity={popularity}
@@ -127,6 +136,8 @@ function MoviesBanner() {
                      activeIndex={activeIndex}
                      setActiveIndex={setActiveIndex}
                      showSimilar={true}
+                     myList={myList}
+                     updateMyList={updateMyList}
                  />
              </div>
 
@@ -153,6 +164,10 @@ function MoviesBanner() {
                         : ''}
                 </div>
                 :''}
+                {myList.length > 0 ?
+                    <RowBanner myList={myList} updateMyList={updateMyList} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='My List'  isLargeRow/> : ''
+                }
+
                 {inputs.searchMovie.length > 0 && !focus?
                     <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
                 }

@@ -211,7 +211,7 @@ class BannerVideo extends Component {
                                         <Link to={`/movies2`}>
                                             <MovieButton>Back</MovieButton>
                                         </Link>
-                                    <MovieButton>My List</MovieButton>
+                                    {/*<MovieButton>My List</MovieButton>*/}
 
                                     {!isMainMenu && this.state.startVideo?
                                         <div>

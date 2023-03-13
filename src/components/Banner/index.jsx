@@ -24,6 +24,8 @@ import MovieReviews from "../MovieReviews";
 import urls from "../../utils/urls";
 import RowBanner from "../RowBanner";
 import MovieProvider from "../Provider";
+import imageMyList from "../../assets/list.png";
+import imageRemoveMyList from "../../assets/listremove.png";
 
 const MovieHeader = styled.div` 
     color: white;
@@ -228,6 +230,29 @@ class Banner extends Component {
     TEXT_COLLAPSE_OPTIONS.maxHeight = 250;
     }
 
+    addOneItem(id) {
+        const cartFilteredCurrentMovie = this.props.myList.filter((item) => item.id !== id)
+        let result = [...cartFilteredCurrentMovie,
+            {   id:id,
+                title:this.props.title,
+                backdrop_path:this.props.imageUrl,
+                poster_path:this.props.imageUrlPoster,
+                overview:this.props.overview,
+                genres:this.props.genres,
+                popularity:this.props.popularity,
+                release_date:this.props.year,
+                adults:this.props.adults,
+            }
+            ]
+        this.props.updateMyList(result)
+    }
+
+    removeOneItem(id) {
+        const cartFilteredCurrentMovie = this.props.myList.filter((item) => item.id !== id)
+        let result = [...cartFilteredCurrentMovie]
+        this.props.updateMyList(result)
+    }
+
     setMainMenu(flag){
         this.setState({isMainMenu: flag})
     }
@@ -362,7 +387,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex,character,showSimilar} = this.props;
+        const {imageUrl,imageUrlPoster,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex,character,showSimilar,myList, updateMyList} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -394,7 +419,7 @@ class Banner extends Component {
                                 <Link to={`/movieDetails/${id}/${type}`}>
                                     <MovieButton>Play</MovieButton>
                                 </Link>
-                                <MovieButton>My List</MovieButton>
+                                {/*<MovieButton>My List</MovieButton>*/}
                             </div>
                             :
                             !this.state.isVideoPlaying || !this.state.showModal ?
@@ -404,7 +429,7 @@ class Banner extends Component {
                                             <Link to={`/movieDetails/${id}/${type}`}>
                                                 <MovieButton>Play</MovieButton>
                                             </Link>
-                                            <MovieButton>My List</MovieButton>
+                                            {/*<MovieButton>My List</MovieButton>*/}
                                         </div>
                                         :
                                         <Link to={`/movies2`}>
@@ -474,6 +499,12 @@ class Banner extends Component {
                             </button>
                         </Modal.Header>
                         <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
+                            {
+                                this.props?.myList.map(e=>e.id).includes(id) ?
+                                    <img style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.removeOneItem(id)} src={imageRemoveMyList} />
+                                    :
+                                    <img style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.addOneItem(id)} src={imageMyList} />
+                            }
                             <Tabs
                                 className="mb-3"
                                 transition={Fade}

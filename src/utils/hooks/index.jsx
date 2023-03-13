@@ -19,15 +19,16 @@ export function getInfo(data,url){
     let year = data?.release_date ? data?.release_date : data?.first_air_date;
     let popularity = Math.ceil(data?.vote_average * 10);
     let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
+    let imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
     let title = data?.title || data?.name || data?.original_name;
     let overview = data?.overview;
     let myId = data?.id;
-    let type = url.toString().includes('/tv') ? 'tv' : 'movie';
+    let type = url?.toString().includes('/tv') ? 'tv' : 'movie';
     year = year?.toString().substring(0, 4);
-    genres = genres?.map((e) => e?.name).join(', ');
+    genres = typeof genres ==='string' ? genres : genres?.map((e) => e?.name).join(', ');
     productions = productions?.map((e) => e?.name).join(', ');
     languages = languages?.map((e) => Object.values(e)).flat().join(', ');
-    return {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type}
+    return {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster}
 }
 
 export function getActorMovieInfo(data){
@@ -36,13 +37,14 @@ export function getActorMovieInfo(data){
     let year = data?.release_date ? data?.release_date : data?.first_air_date;
     let popularity = Math.ceil(data?.vote_average * 10);
     let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
+    let imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
     let title = data?.title || data?.original_title;
     let character = data?.character ;
     let overview = data?.overview;
     let myId = data?.id;
     year = year?.toString().substring(0, 4);
     genres = genres?.map((e) => e?.name).join(', ');
-    return {genres,adults,year,popularity,imageUrl,title,overview,myId,character}
+    return {genres,adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster}
 }
 
 export function getActorInfo(data){
