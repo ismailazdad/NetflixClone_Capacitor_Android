@@ -6,7 +6,7 @@ import {LoaderWrapper} from "../RowBanner";
 import StarRating from "../StarRating";
 
 function MovieDetails({id, language}) {
-    const {isLoading, data, error} = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
+    const [isLoading, data, error] = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
     return (
         <div>
             {isLoading ? (

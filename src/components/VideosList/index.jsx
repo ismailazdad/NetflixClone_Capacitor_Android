@@ -104,7 +104,7 @@ export const WaitSpanAnimated = styled.span`
 `
 
 
-function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL}) {
+function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,updateMenuStatue}) {
     const {isLoading, data,error} = useFetchListWithFallBack(urls.findVideosById.replace('{id}', id) + language, urls.findVideosById.replace('{id}', id).replace("&language=", ""))
     return (
         <div>
@@ -153,6 +153,7 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL}) {
                                     onError={e => e.target.parentNode.style.display = 'none'}
                                     onTouchEnd={() => {
                                         setTrailerURL(movie?.key)
+                                        updateMenuStatue( false)
                                     }}
                                 >
                                 {isVideoPlaying && movie?.key === trailerURL ?

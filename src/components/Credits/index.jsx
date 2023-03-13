@@ -5,6 +5,7 @@ import React from "react";
 import {LoaderWrapper} from "../RowBanner";
 import styled from "styled-components";
 import Backup from "../../assets/backup3.png";
+import {Link} from "react-router-dom";
 
 export const StyledImage = styled.div`
     object-fit: contain;
@@ -39,9 +40,36 @@ export const RowCasting = styled.div`
         float :right;
     }
 `
+const MovieButton = styled.button`
+    cursor: pointer;
+    color: #fff;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    border-radius: 0.2vw;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: rgba(51, 51, 51, 0.5);
+    width: 15vh;
+    @media  only screen and (max-width:768px ){
+        margin-top:1vh;
+        margin-left:1vh;
+        margin-right:1vh;
+        // width: 20vh;
+        height:5vh;        
+    }    
+    &:hover{
+        color: #000;
+        background-color: #e6e6e6;
+        transition: all 0.2s;
+    }
+`
 
-function Credits({id}) {
-    const {isLoading, data, error} = useFetch(urls.findCreditsById.replace('{id}', id), false)
+function Credits({id,language}) {
+    const [isLoading, data, error] = useFetch(urls.findCreditsById.replace('{id}', id), false)
     let crew = data?.crew?.filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i)
     crew = crew?.filter((v,i)=>
         v?.known_for_department !=='Acting' &&
@@ -65,7 +93,7 @@ function Credits({id}) {
                         <h2 style={{marginTop:'1vh'}}>Casting</h2> :''
                     }
                     <RowCasting>
-                        {data && data?.cast?.length >0 && data?.cast.map((catsing, index) =>
+                        {data && data?.cast?.length >0 && data?.cast.map((casting, index) =>
                             <div className="flex-row" key={index + '_container'} >
                                 <div style={{
                                     whiteSpace: 'nowrap',
@@ -75,7 +103,7 @@ function Credits({id}) {
                                     maxHeight:'2.3vh',
                                     overflow:'hidden'
                                 }}>
-                                    <h5 style={{overflow:'hidden', fontWeight: 500, fontSize:'initial'}}>{catsing.name}</h5>
+                                    <h5 style={{overflow:'hidden', fontWeight: 500, fontSize:'3.5vw'}}>{casting.name}</h5>
                                 </div>
                                 <div style={{
                                     whiteSpace: 'nowrap',
@@ -85,16 +113,19 @@ function Credits({id}) {
                                     overflow:'hidden',
                                     marginBottom:'1vh'
                                 }}>
-                                    <span >"{catsing?.character.replace(' (voice)','')}"</span>
+                                    <span style={{overflow:'hidden', fontWeight: 500, fontSize:'3vw'}} >"{casting?.character.replace(' (voice)','')}"</span>
                                 </div>
                                 <StyledImage
-                                    key={catsing.id}
-                                    imageUrl = {`${urls.findImagesUrl}${catsing.profile_path}`}
+                                    key={casting.id}
+                                    imageUrl = {`${urls.findImagesUrl}${casting.profile_path}`}
                                     backup={Backup}
-                                    alt={catsing.name}
+                                    alt={casting.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
-                                    style={{border:'solid 1px gray'}}
+                                    // style={{border:'solid 1px gray'}}
                                 />
+                                <Link to={`/actor/${casting?.id}/${language}`}>
+                                    <MovieButton>discover</MovieButton>
+                                </Link>
                             </div>
                         )
                         }
@@ -124,7 +155,7 @@ function Credits({id}) {
                                     overflow:'hidden',
                                     marginBottom:'1vh'
                                 }}>
-                                    <span>{crew.known_for_department}</span>
+                                    <span style={{overflow:'hidden', fontWeight: 500, fontSize:'3.5vw'}}>{crew.known_for_department}</span>
                                 </div>
                                 <StyledImage
                                     key={crew.id}
@@ -132,8 +163,14 @@ function Credits({id}) {
                                     backup={Backup}
                                     alt={crew.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
-                                    style={{border:'solid 1px gray'}}
+                                    // style={{border:'solid 1px gray'}}
                                 />
+                                {crew?.known_for_department ==="Directing"?
+                                    <Link to={`/actor/${crew?.id}/${language}`}>
+                                        <MovieButton>discover</MovieButton>
+                                    </Link>:''
+                                }
+
                             </div>
                         )
                         }

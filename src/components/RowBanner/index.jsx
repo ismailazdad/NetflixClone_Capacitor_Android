@@ -92,13 +92,15 @@ export const StyledImage = styled.div`
     `
 
 
-function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex}) {
+function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,sort}) {
     const myRef = useRef(null);
     const {isLoading, data, error} = useFetchList(url,useRank);
     const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
     const type = url.toString().includes('/tv') ? 'tv' : 'movie';
     const movies = data.map((movie)=>{return { ...movie, id : movie.id}});
+    if(sort)
+        movies.sort((a,b)=>b?.release_date.split('-').join('')-a?.release_date.split('-').join(''))
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
     if (error) {
         return <span>Oups something went wrong</span>

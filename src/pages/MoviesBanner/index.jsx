@@ -63,8 +63,8 @@ const showConfirm = async () => {
 
 //second version of movies page , showing poster and trailer in header
 function MoviesBanner() {
-    const language =  navigator?.language || navigator?.userLanguage;
-    const {isLoading, data, error} = useFetch(urls.findNetflixOriginals+language,true);
+    let language =  navigator?.language || navigator?.userLanguage;
+    const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
     const [activeIndex, setActiveIndex] = useState(null);
     const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = activeIndex ? getInfo(activeIndex,activeIndex.url):  getInfo(data,urls.findNetflixOriginals);
@@ -126,6 +126,7 @@ function MoviesBanner() {
                      language={language}
                      activeIndex={activeIndex}
                      setActiveIndex={setActiveIndex}
+                     showSimilar={true}
                  />
              </div>
 

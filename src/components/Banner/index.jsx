@@ -7,10 +7,9 @@ import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
-import {Modal} from "react-bootstrap";
+import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import {Fade} from "react-bootstrap";
 import ReactTextCollapse from "react-text-collapse"
 import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
@@ -24,6 +23,7 @@ import {Loader} from "../../utils/style/Atoms";
 import MovieReviews from "../MovieReviews";
 import urls from "../../utils/urls";
 import RowBanner from "../RowBanner";
+import MovieProvider from "../Provider";
 
 const MovieHeader = styled.div` 
     color: white;
@@ -43,7 +43,7 @@ const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
     z-index: 10000;
-    position: ${({isMainMenu}) =>  isMainMenu   ? 'relative' : 'absolute'}; 
+    position: ${({isMainMenu}) =>  isMainMenu   ? 'absolute' : 'absolute'}; 
     @media  only screen and (max-width:768px ){
         padding-top: 0px;
         margin-left: 0px;
@@ -212,7 +212,8 @@ class Banner extends Component {
             showModal:false,
             focus : this.props.focus,
             first : true,
-            key : 1
+            key : 1,
+            isMainMenu : this.props.isMainMenu
         }
 
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
@@ -225,6 +226,14 @@ class Banner extends Component {
     playerOptions.playerVars.enablejsapi=1;
     TEXT_COLLAPSE_OPTIONS.minHeight = 150;
     TEXT_COLLAPSE_OPTIONS.maxHeight = 250;
+    }
+
+    setMainMenu(flag){
+        this.setState({isMainMenu: flag})
+    }
+
+    updateMenuStatue = (flag) =>{
+        this.setMainMenu( flag)
     }
 
     setFirst(flag){
@@ -353,11 +362,11 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex} = this.props;
+        const {imageUrl,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex,character,showSimilar} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
-                    {!isMainMenu && this.state.isVideoPlaying?
+                    {!this.state.isMainMenu && this.state.isVideoPlaying?
                         <div>
                             <SoundContainer onClick={this.enableSound}>
                                 {this.state.sound ?
@@ -390,10 +399,18 @@ class Banner extends Component {
                             :
                             !this.state.isVideoPlaying || !this.state.showModal ?
                                 <div style={{width: '70vh', height: '5vh'}}>
-                                    <Link to={`/movieDetails/${id}/${type}`}>
-                                        <MovieButton>Play</MovieButton>
-                                    </Link>
-                                    <MovieButton>My List</MovieButton>
+                                    {showSimilar ?
+                                        <div>
+                                            <Link to={`/movieDetails/${id}/${type}`}>
+                                                <MovieButton>Play</MovieButton>
+                                            </Link>
+                                            <MovieButton>My List</MovieButton>
+                                        </div>
+                                        :
+                                        <Link to={`/movies2`}>
+                                            <MovieButton>Back</MovieButton>
+                                        </Link>
+                                    }
                                 </div>
                                 :
                                 <div style={{width: '70vh', height: '5vh'}}>
@@ -411,11 +428,11 @@ class Banner extends Component {
                             <div><span style={{color:'gray'}}>Productions</span> : {productions}</div>
                             <div><span style={{color:'gray'}}>Languages</span> : {languages}</div>
                         </div>:''}
-                    <MovieDescription style={{ display: 'flex'}} textLen={overview.length}>
+                    <MovieDescription style={{ display: 'flex'}} textLen={overview?.length}>
                         {isMainMenu ? this.truncate(overview,250):this.truncate(overview,500)}
                     </MovieDescription>
                 </MovieHeaderContent>
-                {!isMainMenu && this.state.trailerURL?
+                {!this.state.isMainMenu && this.state.trailerURL?
                     <LoaderContainer >
                         {this.state.vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
                         {(this.state.isVideoLoading )?
@@ -445,14 +462,18 @@ class Banner extends Component {
                 <MovieFadeBottom />
                 <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'gray'}} >
                     <Modal.Dialog style={{backgroundPosition:'bottom', backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
-                        <Modal.Header onClick={() => { this.setState({showModal: false});clearTimeout(this.timer);}} style={{border: 'transparent',height:'9vh'}}  >
+                        <Modal.Header onClick={() => {
+                            this.setState({showModal: false});
+                            clearTimeout(this.timer);
+                            if(!this.props.showSimilar)
+                                this.setState({isMainMenu: true})
+                        }} style={{border: 'transparent',height:'9vh'}}  >
                             <Modal.Title><h1 style={{ lineHeight: '0.8'}}>{title} </h1></Modal.Title>
                             <button type="button" style={{border: 'transparent'}} aria-label="Close">
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>
                         <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
-
                             <Tabs
                                 className="mb-3"
                                 transition={Fade}
@@ -462,8 +483,9 @@ class Banner extends Component {
                                 // justify
                             >
                                 <Tab eventKey={1} title="Movie" >
+                                    {character ? character : ''}
                                     {overview ?
-                                        <div className="row justify-content-center align-self-center">
+                                        <div className="row align-self-center">
                                             <span style={{color: 'gray'}}>Synopsis:</span>
                                             <div key={id + '_container'} style={{display:"inline-block"}}>
                                             {overview.length > 400 ?
@@ -476,21 +498,29 @@ class Banner extends Component {
                                             </div>
                                         </div>:''}
                                     <MovieDetails id={id} language={language}/>
+                                    <MovieProvider id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
                                 </Tab>
                                 <Tab eventKey={2} title="trailers">
-                                    <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.trailerURL}  />
+                                    <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.trailerURL} updateMenuStatue={this.updateMenuStatue} />
                                 </Tab>
                                 <Tab eventKey={3} title="Casting">
-                                    <Credits id={id}/>
+                                    <Credits id={id} language={language}/>
                                 </Tab>
-                                <Tab eventKey={4} title="Similar">
-                                    <RowBanner style={{position:'relative'}} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Similar Movie' url={urls.findRecommendedById.replace("{id}",id)+language} isLargeRow={true}/>
-                                    <RowBanner style={{position:'relative'}} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Recommended Movie' url={urls.findSimilarById.replace("{id}",id)+language} isLargeRow={true}/>
-                                </Tab>
+                                {this.props.showSimilar ?
+                                    <Tab eventKey={4} title="Similar">
+                                    <RowBanner style={{position: 'relative'}} activeIndex={activeIndex}
+                                               setActiveIndex={setActiveIndex} title='Similar Movie'
+                                               url={urls.findRecommendedById.replace("{id}", id) + language}
+                                               isLargeRow={true}/>
+                                    <RowBanner style={{position: 'relative'}} activeIndex={activeIndex}
+                                               setActiveIndex={setActiveIndex} title='Recommended Movie'
+                                               url={urls.findSimilarById.replace("{id}", id) + language}
+                                               isLargeRow={true}/>
+                                    </Tab> : ''}
+
                                 <Tab eventKey={5} title="Review">
                                     <MovieReviews language={language} id={id}/>
                                 </Tab>
-
                             </Tabs>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>

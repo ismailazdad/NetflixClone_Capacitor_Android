@@ -36,5 +36,8 @@ const urls = {
     findRecommendedById : API_URL+'/movie/{id}/recommendations?api_key='+API_KEY+'&language=',
     findVideoByIdDetails : API_URL+'/movie/{id}?api_key='+API_KEY+'&language=',
     searchMovie : API_URL+'/search/movie?api_key='+API_KEY+'&query={query}&language=',
+    findActorById : API_URL+'/person/{id}?api_key='+API_KEY+'&language=',
+    findMoviesByActorId : API_URL+'/person/{id}/movie_credits?api_key='+API_KEY+'&language=',
+    findMoviesProviderById : API_URL+'/movie/{id}/watch/providers?api_key='+API_KEY,
 };
 export default urls;

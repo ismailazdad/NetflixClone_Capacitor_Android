@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import {Route, Routes} from "react-router";
 import Movie from "./pages/Movie";
+import Actor from "./pages/Actor";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,6 +19,8 @@ root.render(
         <Routes>
             {/*<Route exact path="/" element={<Home/>}>*/}
             <Route exact path="/" element={<MoviesBanner/>}>
+            </Route>
+            <Route exact path="/actor/:id/:language" element={<Actor/>}>
             </Route>
             {/*<Route exact path="/movies" element={<Movies />}>*/}
             {/*</Route>*/}

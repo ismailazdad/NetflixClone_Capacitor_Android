@@ -30,6 +30,34 @@ export function getInfo(data,url){
     return {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type}
 }
 
+export function getActorMovieInfo(data){
+    let genres = data?.genres;
+    let adults = data?.adult;
+    let year = data?.release_date ? data?.release_date : data?.first_air_date;
+    let popularity = Math.ceil(data?.vote_average * 10);
+    let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
+    let title = data?.title || data?.original_title;
+    let character = data?.character ;
+    let overview = data?.overview;
+    let myId = data?.id;
+    year = year?.toString().substring(0, 4);
+    genres = genres?.map((e) => e?.name).join(', ');
+    return {genres,adults,year,popularity,imageUrl,title,overview,myId,character}
+}
+
+export function getActorInfo(data){
+    let biography = data?.biography;
+    let birthday = data?.birthday;
+    let name = data?.name;
+    let gender = data?.gender === 1 ? 'woman' : 'men';
+    let profession = data?.known_for_department;
+    let place_of_birth = data?.place_of_birth;
+    let popularity = Math.ceil(data?.vote_average * 10);
+    let imageUrl = data?.profile_path ? urls.findImagesUrl + data.profile_path : '';
+    let myId = data?.id;
+    return {biography,birthday,name,gender,profession,place_of_birth,popularity,imageUrl,myId}
+}
+
 export function getGenres(genre_ids){
     const genresMovies = genre_ids?.map((item) => MovieGenres.find(x => x.id === item)?.name)
     const  genresTv = genre_ids?.map((item) => TvGenres.find(x => x.id === item)?.name)
@@ -46,9 +74,10 @@ export function useFetch(url,random=false) {
             .then((response) => response.json())
             .then((jsonResponse) => {
                 if(random){
-                    setData(
-                        jsonResponse.results[Math.floor(Math.random() * jsonResponse.results.length)],
-                    );
+                    if(jsonResponse?.results)
+                        setData(jsonResponse.results[Math.floor(Math.random() * jsonResponse.results.length)]);
+                    if(jsonResponse?.cast)
+                        setData(jsonResponse.cast[Math.floor(Math.random() * jsonResponse.cast.length)]);
                 }else {
                     setData(jsonResponse);
                 }
@@ -63,7 +92,7 @@ export function useFetch(url,random=false) {
                 }
             )
     }, [url,random ])
-    return {isLoading, data,error}
+    return [isLoading, data,error]
 }
 
 
@@ -79,7 +108,7 @@ export function useFetchList(url,useRank = false) {
                 if(useRank){
                     setData(jsonResponse?.results.slice(0,9));
                 }else{
-                    setData(jsonResponse?.results
+                    setData((jsonResponse?.results || jsonResponse?.cast)
                         .map((item) => ({ sort: Math.random(), value: item }))
                         .sort((a, b) => a.sort - b.sort)
                         .map((item) => item.value)

@@ -12,7 +12,7 @@ const LoaderWrapper = styled.div`
 `
 //first version of movies page , showing poster and trailer inside the poster container
 function Movies() {
-    const {isLoading, data, error} = useFetch(urls.findNetflixOriginals,true);
+    const [isLoading, data, error] = useFetch(urls.findNetflixOriginals,true);
     const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type} = getInfo(data,urls.findNetflixOriginals);
     const [activeIndex, setActiveIndex] = useState(null);
     if (error) {
@@ -38,6 +38,7 @@ function Movies() {
                 id={myId}
                 type={type}
                 isMainMenu={true}
+                showSimilar={true}
             />
             )}
             <Row activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Trending movie' url={urls.findActionMovies} useRank isLargeRow/>
