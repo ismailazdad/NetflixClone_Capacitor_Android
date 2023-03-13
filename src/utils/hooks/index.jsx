@@ -17,7 +17,7 @@ export function getInfo(data,url){
     let languages = data?.spoken_languages;
     let adults = data?.adult;
     let year = data?.release_date ? data?.release_date : data?.first_air_date;
-    let popularity = Math.ceil(data?.vote_average * 10);
+    let popularity = !data?.vote_average  ? data.popularity : Math.ceil(data?.vote_average * 10);
     let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
     let imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
     let title = data?.title || data?.name || data?.original_name;
