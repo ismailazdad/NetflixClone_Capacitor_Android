@@ -243,7 +243,7 @@ class Banner extends Component {
                 release_date:this.props.year,
                 adults:this.props.adults,
             }
-            ]
+            ].reverse()
         this.props.updateMyList(result)
     }
 
