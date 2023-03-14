@@ -1,5 +1,41 @@
 # Netflix Clone movies trailer Android
 
+## Developed functionality 
+
+Watch the lastest trailers quickly and easily like a famous streaming app.
+Search for a movie , show movie details like casting or production focus on user experience
+
+MoviesTrailer app allows you to see trailers of all popular movies, primarily in your native language. Search for an actor or director..., get the filmography  and the resume of an actor.Search any movie, find information about it and see the list of trailers for the same movie very easily.
+Make your own movie favorite list quickly 
+
+• Make you own movies list
+
+• Show actor or director filmography
+
+• Casting of the movie
+
+• Get similar movies
+
+• Manage all main languages
+
+• Get the reviews of a movie 
+
+• Get the list of provider for movies available in your country
+
+• Results according to your preferred language
+
+• View all upcoming movie trailers.
+
+• Get a list of currently popular movies.
+
+• Get a list of top rated movies.
+
+• Search any movie with its information: title, rating, release date, language, genres, synopsis, production...
+
+[Web mobile demo](https://android_netflix.surge.sh/)
+
+
+
 This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js with some UI modifications for a better mobile experience.
 I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
      
