@@ -2,6 +2,8 @@
 
 ## Developed functionality 
 
+This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js with some UI modifications for a better mobile experience.
+
 Watch the lastest trailers quickly and easily like a famous streaming app.
 Search for a movie , show movie details like casting or production focus on user experience
 
@@ -34,16 +36,15 @@ Make your own movie favorite list quickly
 
 [Web mobile demo](https://android_netflix.surge.sh/)
 
-
-
-This repository is an update of [Netflix_clone](https://github.com/ismailazdad/Netflix_clone) developing with React.js with some UI modifications for a better mobile experience.
-I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
      
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)     
 
 if someone can do the same for ios and push the app to the apple store, it will be awesome :boom: :neckbeard: :monkey_face:
 
 ### Tutorial 
+
+I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
+
 How to convert project to native app with capacitor : 
 
 [tutorial](https://capacitorjs.com/docs/getting-started)
