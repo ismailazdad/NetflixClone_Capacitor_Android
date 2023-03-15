@@ -96,7 +96,8 @@ Go to Android Studio to fix all images declination for devices
  
 ### Preview
 
-<img src="./src/assets/demo.png" width=30% height=30%>
-<img src="./src/assets/demo2.png" width=30% height=30%>
-<img src="./src/assets/demo3.png" width=30% height=30%>
+<img src="./src/assets/1676974841472.jpg" width=30% height=30%>
+<img src="./src/assets/1676974841486.jpg" width=30% height=30%>
+<img src="./src/assets/1676974841494.jpg" width=30% height=30%>
+<img src="./src/assets/1676974841505.jpg" width=30% height=30%>
 
