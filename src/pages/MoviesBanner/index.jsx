@@ -106,6 +106,9 @@ function MoviesBanner() {
     if (error) {
         return <span>Oups something went wrong</span>
     }
+    if (!isMobile) {
+        return <div style={{height:'60vh',marginTop:'30vh',position:'relative'}}>No supported device desktop mode, switch to mobile mode...</div>
+    }
     return (
         <div style={{background: 'black',color:'white'}}>
             {isLoading ? (

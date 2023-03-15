@@ -232,18 +232,19 @@ class Banner extends Component {
 
     addOneItem(id) {
         const cartFilteredCurrentMovie = this.props.myList.filter((item) => item.id !== id)
-        let result = [...cartFilteredCurrentMovie,
-            {   id:id,
-                title:this.props.title,
-                backdrop_path:this.props.imageUrl,
-                poster_path:this.props.imageUrlPoster,
-                overview:this.props.overview,
-                genres:this.props.genres,
-                popularity:this.props.popularity,
-                release_date:this.props.year,
-                adults:this.props.adults,
-            }
-            ].reverse()
+        const result = [...cartFilteredCurrentMovie]
+        result.unshift(
+            {
+                id: id,
+                title: this.props.title,
+                backdrop_path: this.props.imageUrl,
+                poster_path: this.props.imageUrlPoster,
+                overview: this.props.overview,
+                genres: this.props.genres,
+                popularity: this.props.popularity,
+                release_date: this.props.year,
+                adults: this.props.adults
+            })
         this.props.updateMyList(result)
     }
 
