@@ -41,7 +41,32 @@ Make your own movie favorite list quickly
 
 if someone can do the same for ios and push the app to the apple store, it will be awesome :boom: :neckbeard: :monkey_face:
 
-### Tutorial 
+## Running Project Locally
+
+Clone Project : 
+
+```git clone https://github.com/ismailazdad/NetflixClone_Capacitor_Android.git```
+
+Go to project directory :
+
+```cd NetflixClone_Capacitor_Android/```
+
+Install dependencies:  
+
+```npm install``` in the root project
+
+Get API key from [here](https://www.themoviedb.org/signup)
+
+Change ```.env``` file in root project and replace  ```YOUR_API_KEY_HERE``` by your personnal themoviedb key
+
+Run project: 
+
+```npm run start```
+
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+
+### Capacitor install and Tutorial 
 
 I use  [Capacitor](https://github.com/ionic-team/capacitor) to convert React.js project to native Android project.
 
