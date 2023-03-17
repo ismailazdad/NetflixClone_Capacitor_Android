@@ -10,6 +10,7 @@ import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {App} from '@capacitor/app';
 import {Dialog} from '@capacitor/dialog';
+import "bootstrap/dist/css/bootstrap.css"
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -99,16 +100,20 @@ function MoviesBanner() {
 
     const handleTouchEvent = (e)=>{
         e.preventDefault();
-        let className = e.target.className.split(' ').includes('chevron')
-        e.target.nodeName === 'H2' || className ? setTouchState(true) : setTouchState(false)
+        let className
+        if(e.target?.className?.length > 0)
+            className = e.target.className.split(' ').includes('chevron')
+        e.target.nodeName === 'H2' || e.target.nodeName === 'div' || e.target.nodeName === 'svg' || className ? setTouchState(true) : setTouchState(false)
     }
 
     if (error) {
         return <span>Oups something went wrong</span>
     }
-    if (!isMobile) {
-        return <div style={{height:'60vh',marginTop:'30vh',position:'relative'}}>No supported device desktop mode, switch to mobile mode...</div>
-    }
+
+    // if (!isMobile) {
+    //     return <div style={{height:'60vh',marginTop:'30vh',position:'relative'}}>No supported device desktop mode, switch to mobile mode...</div>
+    // }
+
     return (
         <div style={{background: 'black',color:'white'}}>
             {isLoading ? (
@@ -146,6 +151,9 @@ function MoviesBanner() {
 
             )}
             <RowBannerContainer onTouchStart={handleTouchEvent} >
+                {inputs.searchMovie.length > 0 && !focus?
+                    <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
+                }
                 {!isLoading ?
                     <div style={{width: '100%', display: 'flex', margin: '1vh'}}>
                     <div onClick={e => setShowSearch(!showSearch)}>
@@ -171,9 +179,6 @@ function MoviesBanner() {
                     <RowBanner myList={myList} updateMyList={updateMyList} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='My List'  isLargeRow/> : ''
                 }
 
-                {inputs.searchMovie.length > 0 && !focus?
-                    <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
-                }
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Popular Movies' url={urls.findPopular+language} isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Now Playing' url={urls.findNowPlaying+language} />
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Trending movie' url={urls.findActionMovies+language} useRank isLargeRow/>
@@ -185,7 +190,6 @@ function MoviesBanner() {
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='SF Movies' url={urls.findSFMovies+language} />
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Mystery Movies' url={urls.findMysteryMovies+language} isLargeRow/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Music Movies' url={urls.findMusicMovies+language} />
-                {/*<RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Trending Tv ' url={urls.findTrendingTv} isLargeRow/>*/}
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='History Movies' url={urls.findHistoryMovies+language}/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Fantasy Movies' url={urls.findFantasyMovies+language}/>
                 <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Rated' url={urls.findTopRated+language} useRank/>

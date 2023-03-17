@@ -8,9 +8,6 @@
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.3",
     "cordova-plugin-screen-orientation": "^3.0.3",
     "cordova-res": "^0.15.4",
@@ -24,7 +21,6 @@
     "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
     "react-text-collapse": "^0.6.1",
-    "react-transition-group": "^4.4.5",
     "react-youtube": "^10.1.0",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
@@ -58,8 +54,6 @@
     "@capacitor/app": "^4.1.1",
     "@capacitor/cli": "^4.6.3",
     "@capacitor/dialog": "^4.1.0",
-    "prop-types": "^15.8.1",
-    "react-addons-css-transition-group": "^15.6.2",
     "react-responsive": "^9.0.2"
   }
 }

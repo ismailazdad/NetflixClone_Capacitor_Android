@@ -11,14 +11,12 @@ import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import ReactTextCollapse from "react-text-collapse"
-import {PlayModalMenuButton} from "../VideoPlayer/style";
 import PlayButton from "../../assets/play2.png";
 import Backup from "../../assets/backup.png";
 import InfoSvg from "../../assets/info.svg";
 import Credits from "../Credits";
 import VideoList from "../VideosList";
 import MovieDetails from "../MovieDetails";
-import {LoaderWrapper} from "../Row/style";
 import {Loader} from "../../utils/style/Atoms";
 import MovieReviews from "../MovieReviews";
 import urls from "../../utils/urls";
@@ -27,15 +25,42 @@ import MovieProvider from "../Provider";
 import imageMyList from "../../assets/list.png";
 import imageRemoveMyList from "../../assets/listremove.png";
 
+export const PlayModalMenuButton = styled.button`       
+    cursor: pointer;
+    color: #fff;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    border-radius: 0.2vw;
+    padding-left: 0.7rem ;
+    height:  35px;
+    padding-right: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 20px;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    background-color: #c4c4c4;
+    width :35px ;  
+    margin-left: 6px;
+    &:hover{
+        color: #000;
+        background-color: #e6e6e6;
+        transition: all 0.2s;
+}
+`
+export const LoaderWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+`
 const MovieHeader = styled.div` 
-    color: white;
-    object-fit: contain;
-    height: 448px;
-    background-size: cover;   
-    background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'},  ${({backup}) => 'url(' + backup + ')'};       
-    background-position: center;   
-    user-select: none;
     @media  only screen and (max-width:768px ){
+        color: white;
+        object-fit: contain;
+        height: 448px;
+        background-size: cover;   
+        background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'},  ${({backup}) => 'url(' + backup + ')'};       
+        background-position: center;   
+        user-select: none;
         height: 30vh;
         background-position: 30%; 
         background-size:cover;
@@ -415,48 +440,30 @@ class Banner extends Component {
                     }
 
                     <DescriptionContainer>
-                        {!isMobile ?
-                            <div style={{width: '70vh',height:'5vh'}}>
-                                <Link to={`/movieDetails/${id}/${type}`}>
-                                    <MovieButton>Play</MovieButton>
-                                </Link>
-                                {/*<MovieButton>My List</MovieButton>*/}
+                        {!this.state.isVideoPlaying || !this.state.showModal ?
+                            <div style={{width: '70vh', height: '5vh'}}>
+                                {showSimilar ?
+                                    <div>
+                                        <Link to={`/movieDetails/${id}/${type}`}>
+                                            <MovieButton>Play</MovieButton>
+                                        </Link>
+                                    </div>
+                                    :
+                                    <Link to={`/`}>
+                                        <MovieButton>Back</MovieButton>
+                                    </Link>
+                                }
                             </div>
                             :
-                            !this.state.isVideoPlaying || !this.state.showModal ?
-                                <div style={{width: '70vh', height: '5vh'}}>
-                                    {showSimilar ?
-                                        <div>
-                                            <Link to={`/movieDetails/${id}/${type}`}>
-                                                <MovieButton>Play</MovieButton>
-                                            </Link>
-                                            {/*<MovieButton>My List</MovieButton>*/}
-                                        </div>
-                                        :
-                                        <Link to={`/movies2`}>
-                                            <MovieButton>Back</MovieButton>
-                                        </Link>
-                                    }
-                                </div>
-                                :
-                                <div style={{width: '70vh', height: '5vh'}}>
-                                </div>
-                        }
+                            <div style={{width: '70vh', height: '5vh'}}>
+                            </div>}
                         <RecommendedLine style={{width: '100%', display: 'flex', textAlign: 'center',marginLeft:'5vh'}}>
                             <Recommended>Recommand at {popularity}%</Recommended>
-                            <div> for : {!adults ? ' Adults' : ' All family'}</div>
+                            <div> for : {adults ? ' Adults  ' : 'All family'}</div>
                             <div style={{border: 'solid 1px', height: 'fit-content', marginLeft: '5px'}}> {year}</div>
                         </RecommendedLine>
                     </DescriptionContainer>
-                    {showDescription ?
-                        <div style={{height: '200px', width: '30rem', lineHeight: '1.3rem', float: 'right'}}>
-                            <div><span style={{color:'gray'}}>Genres</span> : {genres}</div>
-                            <div><span style={{color:'gray'}}>Productions</span> : {productions}</div>
-                            <div><span style={{color:'gray'}}>Languages</span> : {languages}</div>
-                        </div>:''}
-                    <MovieDescription style={{ display: 'flex'}} textLen={overview?.length}>
-                        {isMainMenu ? this.truncate(overview,250):this.truncate(overview,500)}
-                    </MovieDescription>
+
                 </MovieHeaderContent>
                 {!this.state.isMainMenu && this.state.trailerURL?
                     <LoaderContainer >

@@ -15,7 +15,7 @@ export function getInfo(data,url){
     let genres = data?.genres;
     let productions = data?.production_companies;
     let languages = data?.spoken_languages;
-    let adults = data?.adult;
+    let adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
     let year = data?.release_date ? data?.release_date : data?.first_air_date;
     let popularity = !data?.vote_average  ? data.popularity : Math.ceil(data?.vote_average * 10);
     let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
@@ -33,7 +33,7 @@ export function getInfo(data,url){
 
 export function getActorMovieInfo(data){
     let genres = data?.genres;
-    let adults = data?.adult;
+    let adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
     let year = data?.release_date ? data?.release_date : data?.first_air_date;
     let popularity = Math.ceil(data?.vote_average * 10);
     let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';

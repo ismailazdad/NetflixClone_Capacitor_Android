@@ -208,7 +208,7 @@ class BannerVideo extends Component {
                         <MovieTitle> {title}</MovieTitle>
                             <More>
                                 <div style={{width: '300px'}}>
-                                        <Link to={`/movies2`}>
+                                        <Link to={`/`}>
                                             <MovieButton>Back</MovieButton>
                                         </Link>
                                     {/*<MovieButton>My List</MovieButton>*/}
