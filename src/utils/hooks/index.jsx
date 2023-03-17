@@ -12,53 +12,37 @@ export const playerOptions = {
     }
 }
 export function getInfo(data,url){
-    let genres = data?.genres;
-    let productions = data?.production_companies;
-    let languages = data?.spoken_languages;
-    let adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
-    let year = data?.release_date ? data?.release_date : data?.first_air_date;
-    let popularity = !data?.vote_average  ? data.popularity : Math.ceil(data?.vote_average * 10);
-    let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
-    let imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
-    let title = data?.title || data?.name || data?.original_name;
-    let overview = data?.overview;
-    let myId = data?.id;
-    let type = url?.toString().includes('/tv') ? 'tv' : 'movie';
-    year = year?.toString().substring(0, 4);
-    genres = typeof genres ==='string' ? genres : genres?.map((e) => e?.name).join(', ');
-    productions = productions?.map((e) => e?.name).join(', ');
-    languages = languages?.map((e) => Object.values(e)).flat().join(', ');
-    return {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster}
+    const genres = typeof data?.genres ==='string' ? data.genres : data.genres?.map((e) => e?.name).join(', ');
+    const productions = data?.production_companies?.map((e) => e?.name).join(', ');
+    const languages = data?.spoken_languages?.map((e) => Object.values(e)).flat().join(', ');
+    const adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
+    const year = data?.release_date ? data?.release_date?.toString().substring(0, 4) : data?.first_air_date?.toString().substring(0, 4);
+    const popularity = !data?.vote_average  ? data.popularity : Math.ceil(data?.vote_average * 10);
+    const imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
+    const imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
+    const title = data?.title || data?.name || data?.original_name;
+    const overview = data?.overview;
+    const myId = data?.id;
+    const imdbId = data?.imdb_id;
+    const type = url?.toString().includes('/tv') ? 'tv' : 'movie';
+    return {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster,imdbId}
 }
 
 export function getActorMovieInfo(data){
-    let genres = data?.genres;
-    let adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
-    let year = data?.release_date ? data?.release_date : data?.first_air_date;
-    let popularity = Math.ceil(data?.vote_average * 10);
-    let imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
-    let imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
-    let title = data?.title || data?.original_title;
-    let character = data?.character ;
-    let overview = data?.overview;
-    let myId = data?.id;
-    year = year?.toString().substring(0, 4);
-    genres = genres?.map((e) => e?.name).join(', ');
-    return {genres,adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster}
+    const genres = data?.genres?.map((e) => e?.name).join(', ');
+    const adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
+    const imdbId = data?.imdb_id;
+    const year = data?.release_date ? data.release_date.toString().substring(0, 4) : data?.first_air_date?.toString().substring(0, 4);
+    const popularity = Math.ceil(data?.vote_average * 10);
+    const imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
+    const imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
+    const title = data?.title || data?.original_title;
+    const character = data?.character ;
+    const overview = data?.overview;
+    const myId = data?.id;
+    return {genres,adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster,imdbId}
 }
 
-export function getActorInfo(data){
-    let biography = data?.biography;
-    let birthday = data?.birthday;
-    let name = data?.name;
-    let gender = data?.gender === 1 ? 'woman' : 'men';
-    let profession = data?.known_for_department;
-    let place_of_birth = data?.place_of_birth;
-    let popularity = Math.ceil(data?.vote_average * 10);
-    let imageUrl = data?.profile_path ? urls.findImagesUrl + data.profile_path : '';
-    let myId = data?.id;
-    return {biography,birthday,name,gender,profession,place_of_birth,popularity,imageUrl,myId}
-}
 
 export function getGenres(genre_ids){
     const genresMovies = genre_ids?.map((item) => MovieGenres.find(x => x.id === item)?.name)

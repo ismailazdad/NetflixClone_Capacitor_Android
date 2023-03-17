@@ -1,5 +1,7 @@
 const API_KEY = process.env.REACT_APP_API_KEY
 const API_URL = process.env.REACT_APP_API_URL
+const OMDBAPI_KEY = process.env.REACT_APP_OMDBAPI_KEY
+const OMDBAPI_URL = process.env.REACT_APP_OMDBAPI_URL
 
 const urls = {
     findTrending: API_URL+`/trending/movie/week?api_key=`+API_KEY+`&language=`,
@@ -39,5 +41,6 @@ const urls = {
     findActorById : API_URL+'/person/{id}?api_key='+API_KEY+'&language=',
     findMoviesByActorId : API_URL+'/person/{id}/movie_credits?api_key='+API_KEY+'&language=',
     findMoviesProviderById : API_URL+'/movie/{id}/watch/providers?api_key='+API_KEY,
+    findReviewByImbId : OMDBAPI_URL+'?i={tmdb_id}&apikey='+OMDBAPI_KEY
 };
 export default urls;

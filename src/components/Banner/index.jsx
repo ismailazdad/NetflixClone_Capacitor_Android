@@ -268,7 +268,8 @@ class Banner extends Component {
                 genres: this.props.genres,
                 popularity: this.props.popularity,
                 release_date: this.props.year,
-                adults: this.props.adults
+                adults: this.props.adults,
+                imdbId:""
             })
         this.props.updateMyList(result)
     }
@@ -277,6 +278,13 @@ class Banner extends Component {
         const cartFilteredCurrentMovie = this.props.myList.filter((item) => item.id !== id)
         let result = [...cartFilteredCurrentMovie]
         this.props.updateMyList(result)
+    }
+
+    setImdbId(id){
+        this.setState({imdbId: id})
+    }
+    updateImdbId = (id) =>{
+        this.setImdbId( id)
     }
 
     setMainMenu(flag){
@@ -413,7 +421,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,imageUrlPoster,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex,character,showSimilar,myList, updateMyList} = this.props;
+        const {imageUrl,imageUrlPoster,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex,character,showSimilar,myList, updateMyList,imdbId} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -518,8 +526,7 @@ class Banner extends Component {
                                 transition={Fade}
                                 activeKey={this.state.key }
                                 onSelect={this.handleSelect}
-                                // fill
-                                // justify
+                                // fill  justify
                             >
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
@@ -536,7 +543,7 @@ class Banner extends Component {
                                             }
                                             </div>
                                         </div>:''}
-                                    <MovieDetails id={id} language={language}/>
+                                    <MovieDetails id={id} language={language} updateImdbId={this.updateImdbId}/>
                                     <MovieProvider id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
                                 </Tab>
                                 <Tab eventKey={2} title="trailers">
@@ -558,7 +565,7 @@ class Banner extends Component {
                                     </Tab> : ''}
 
                                 <Tab eventKey={5} title="Review">
-                                    <MovieReviews language={language} id={id}/>
+                                    <MovieReviews title={title} language={language} id={id}  imdbId={this.state.imdbId}/>
                                 </Tab>
                             </Tabs>
                         </Modal.Body>

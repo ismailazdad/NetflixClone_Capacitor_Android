@@ -1,12 +1,16 @@
 import urls from "../../utils/urls";
 import {useFetch} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
-import React from "react";
+import React, {useEffect} from "react";
 import {LoaderWrapper} from "../RowBanner";
 import StarRating from "../StarRating";
 
-function MovieDetails({id, language}) {
+function MovieDetails({id, language,updateImdbId}) {
     const [isLoading, data, error] = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
+    useEffect(() => {
+        updateImdbId(data?.imdb_id)
+    }, [data?.imdb_id,updateImdbId])
+
     return (
         <div>
             {isLoading ? (
