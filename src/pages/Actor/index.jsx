@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
 import urls from "../../utils/urls"
@@ -10,6 +10,7 @@ import {App} from '@capacitor/app';
 import {Dialog} from '@capacitor/dialog';
 import {useParams} from "react-router";
 import ActorBio from "../../components/ActorBio";
+import {MoviesContext} from "../../utils/context";
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -49,11 +50,11 @@ const showConfirm = async () => {
 //second version of movies page , showing poster and trailer in header
 function Actor() {
     const {id: id,language:language} = useParams()
-    const [activeIndex, setActiveIndex] = useState(null);
-    const [isLoadingActor, actor, actorError] = useFetch(urls.findActorById.replace("{id}",id)+language,false);
-    const [isLoading, data, error] = useFetch(urls.findMoviesByActorId.replace("{id}",id)+language,true);
-    const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
-    const {genres,adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster} =  activeIndex ? getActorMovieInfo(activeIndex) :  getActorMovieInfo(data);
+    const [isLoadingActor, actor, actorError] = useFetch(urls.findActorById.replace("{id}",id)+language,false)
+    const [isLoading, data, error] = useFetch(urls.findMoviesByActorId.replace("{id}",id)+language,true)
+    const {currentMovie} = useContext(MoviesContext)
+    const myGenres = currentMovie ? getGenres(data?.genre_ids)?.slice(0,3).join(', '): getGenres(currentMovie?.genre_ids)?.slice(0,3)?.join(', ')
+    const {adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster} =  currentMovie ? getActorMovieInfo(currentMovie) :  getActorMovieInfo(data)
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
     const savedCart = localStorage.getItem('myList')
     const [myList, updateMyList] = useState(savedCart ? JSON.parse(savedCart) : [])
@@ -88,8 +89,6 @@ function Actor() {
                         focus={false}
                         touchState={false}
                         language={language}
-                        activeIndex={activeIndex}
-                        setActiveIndex={setActiveIndex}
                         character={actor?.name +' role : '+character}
                         showSimilar={false}
                         myList={myList}
@@ -106,7 +105,7 @@ function Actor() {
                 :
                     <ActorBio id={id}  imageUrl={urls.findImagesUrl + actor?.profile_path} name={actor?.name}  place_of_birth={actor?.place_of_birth} biography={actor?.biography} birthday={actor?.birthday} gender={actor?.gender} profession={actor?.known_for_department}  />
                 }
-                <RowBanner sort={true} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title={actor?.name+' Filmography'} url={urls.findMoviesByActorId.replace("{id}",id)+language} isLargeRow/>
+                <RowBanner sort={true} title={actor?.name+' Filmography'} url={urls.findMoviesByActorId.replace("{id}",id)+language} isLargeRow/>
             </RowBannerContainer>
         </div>
     )

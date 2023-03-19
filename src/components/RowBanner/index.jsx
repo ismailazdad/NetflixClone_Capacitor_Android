@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
@@ -9,6 +9,7 @@ import styled from "styled-components";
 import BackupSmall from "../../assets/backup2.png";
 import BackupLarge from "../../assets/backup3.png";
 import './style.css'
+import { MoviesContext} from "../../utils/context";
 
 export const RowContainer = styled.div`
     color: white;
@@ -98,12 +99,13 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,so
     const {isLoading, data, error} = useFetchList(url,useRank);
     const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
+    const {moviesContext,saveMoviesContext,currentIndex, saveCurrentIndex,saveMovie} = useContext(MoviesContext)
     const movies = myList?.length > 0 ? myList.map((movie)=>{return { ...movie, id : movie.id}}): data.map((movie)=>{return { ...movie, id : movie.id}});
     if(sort)
         movies.sort((a,b)=>b?.release_date.split('-').join('')-a?.release_date.split('-').join(''))
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
-    if (error && myList.length ===0) {
+    if (error && myList?.length ===0) {
         return <span>Oups something went wrong</span>
     }
 
@@ -118,6 +120,16 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,so
         screenWidth = isMobile ? screenWidth : isLargeRow ? screenWidth / 1.5 : screenWidth / 2;
         myRef.current.scrollLeft -= screenWidth;
     };
+
+    const updateMovies = (movie,url,currentIndex)=>{
+        const currentMoviesId = JSON.stringify(movies.map(current=>current?.id))
+        const moviesContextIds= JSON.stringify(moviesContext?.map(current=>current?.id))
+        if(currentMoviesId !== moviesContextIds){
+            saveMoviesContext(movies)
+        }
+        saveCurrentIndex(currentIndex)
+        saveMovie(movie)
+    }
 
     return (
         (isLoading ? (
@@ -140,11 +152,8 @@ function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,so
                                             backup={ isLargeRow ? BackupLarge:BackupSmall}
                                             alt={movie.name}
                                             isLargeRow={isLargeRow}
-                                            isActive={activeIndex === movie}
-                                            // onMouseEnter={() => {setActiveIndex({...movie,url:url})}}
-                                            // onTouchStart={() => {setActiveIndex({...movie,url:url})}}
-                                            onTouchEnd={() => {setActiveIndex({...movie,url:url})}}
-                                            // onMouseLeave={() => {setActiveIndex(null)}}
+                                            isActive={currentIndex === movie}
+                                            onTouchEnd={() => updateMovies(movie,url,index)}
                                             useRank={useRank}
                                             onError = {e => e.target.parentNode.style.display = 'none'}
                                     />

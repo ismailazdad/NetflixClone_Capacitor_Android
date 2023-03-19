@@ -29,7 +29,7 @@ export function getInfo(data,url){
 }
 
 export function getActorMovieInfo(data){
-    const genres = data?.genres?.map((e) => e?.name).join(', ');
+    const genres =typeof data?.genres === "string" ? data?.genres :data?.genres?.map((e) => e?.name).join(', ');
     const adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
     const imdbId = data?.imdb_id;
     const year = data?.release_date ? data.release_date.toString().substring(0, 4) : data?.first_air_date?.toString().substring(0, 4);

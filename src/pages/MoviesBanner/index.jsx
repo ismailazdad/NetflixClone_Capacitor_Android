@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
 import urls from "../../utils/urls"
@@ -11,6 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {App} from '@capacitor/app';
 import {Dialog} from '@capacitor/dialog';
 import "bootstrap/dist/css/bootstrap.css"
+import {MoviesContext} from "../../utils/context";
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -66,15 +67,14 @@ const showConfirm = async () => {
 function MoviesBanner() {
     let language =  navigator?.language || navigator?.userLanguage;
     const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
-    const [activeIndex, setActiveIndex] = useState(null);
-    const myGenres = activeIndex ? getGenres(activeIndex?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
-    const {genres,productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = activeIndex ? getInfo(activeIndex,activeIndex.url):  getInfo(data,urls.findNetflixOriginals);
+    const {currentMovie} = useContext(MoviesContext)
+    const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(currentMovie?.genre_ids)?.slice(0,3)?.join(', ')
+    const {productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
     const [focus,setFocus] = useState(false)
     const [inputs, setInputs] = useState({ searchMovie: ''})
     const [showSearch,setShowSearch] = useState(false)
     const [touchState,setTouchState]=useState(false)
-
     const savedCart = localStorage.getItem('myList')
     const [myList, updateMyList] = useState(savedCart ? JSON.parse(savedCart) : [])
     useEffect(() => {
@@ -99,7 +99,6 @@ function MoviesBanner() {
     }
 
     const handleTouchEvent = (e)=>{
-        e.preventDefault();
         let className
         if(e.target?.className?.length > 0)
             className = e.target.className.split(' ').includes('chevron')
@@ -141,8 +140,6 @@ function MoviesBanner() {
                      focus={focus}
                      touchState={touchState}
                      language={language}
-                     activeIndex={activeIndex}
-                     setActiveIndex={setActiveIndex}
                      showSimilar={true}
                      myList={myList}
                      updateMyList={updateMyList}
@@ -152,7 +149,7 @@ function MoviesBanner() {
             )}
             <RowBannerContainer onTouchStart={handleTouchEvent} >
                 {inputs.searchMovie.length > 0 && !focus?
-                    <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
+                    <RowBanner title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
                 }
                 {!isLoading ?
                     <div style={{width: '100%', display: 'flex', margin: '1vh'}}>
@@ -176,33 +173,32 @@ function MoviesBanner() {
                 </div>
                 :''}
                 {myList.length > 0 ?
-                    <RowBanner myList={myList} updateMyList={updateMyList} activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='My List'  isLargeRow/> : ''
+                    <RowBanner myList={myList} updateMyList={updateMyList}  title='My List'  isLargeRow/> : ''
                 }
-
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Popular Movies' url={urls.findPopular+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Now Playing' url={urls.findNowPlaying+language} />
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Trending movie' url={urls.findActionMovies+language} useRank isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='UpComing' url={urls.findUpcoming.toString().replaceAll("{lang}",language?.split("").slice(0,2).join(""))} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals+language} />
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Western Movies' url={urls.findWesternMovies+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='War Movies' url={urls.findWarMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Thriller Movies' url={urls.findThrillerMovies+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='SF Movies' url={urls.findSFMovies+language} />
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Mystery Movies' url={urls.findMysteryMovies+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Music Movies' url={urls.findMusicMovies+language} />
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='History Movies' url={urls.findHistoryMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Fantasy Movies' url={urls.findFantasyMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Top Rated' url={urls.findTopRated+language} useRank/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Family Movies' url={urls.findFamilyMovies+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Drama Movies' url={urls.findDramaMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Trending Movies' url={urls.findTrending+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Crime Movies' url={urls.findCrimeMovies+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Animation Movies' url={urls.findAnimationMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Adventure Movies' url={urls.findAdventureMovies+language} isLargeRow/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Comedy Movies' url={urls.findComedyMovies+language} useRank/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Horror Movies' url={urls.findHorrorMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Romance Movies' url={urls.findRomanceMovies+language}/>
-                <RowBanner activeIndex={activeIndex} setActiveIndex={setActiveIndex} title='Documentaries' url={urls.findDocumentaries+language}  isLargeRow/>
+                <RowBanner title='Popular Movies' url={urls.findPopular+language} isLargeRow/>
+                <RowBanner title='Now Playing' url={urls.findNowPlaying+language} />
+                <RowBanner title='Top Trending movie' url={urls.findActionMovies+language} useRank isLargeRow/>
+                <RowBanner title='UpComing' url={urls.findUpcoming.toString().replaceAll("{lang}",language?.split("").slice(0,2).join(""))} isLargeRow/>
+                <RowBanner title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals+language} />
+                <RowBanner title='Western Movies' url={urls.findWesternMovies+language} isLargeRow/>
+                <RowBanner title='War Movies' url={urls.findWarMovies+language}/>
+                <RowBanner title='Thriller Movies' url={urls.findThrillerMovies+language} isLargeRow/>
+                <RowBanner title='SF Movies' url={urls.findSFMovies+language} />
+                <RowBanner title='Mystery Movies' url={urls.findMysteryMovies+language} isLargeRow/>
+                <RowBanner title='Music Movies' url={urls.findMusicMovies+language} />
+                <RowBanner title='History Movies' url={urls.findHistoryMovies+language}/>
+                <RowBanner title='Fantasy Movies' url={urls.findFantasyMovies+language}/>
+                <RowBanner title='Top Rated' url={urls.findTopRated+language} useRank/>
+                <RowBanner title='Family Movies' url={urls.findFamilyMovies+language} isLargeRow/>
+                <RowBanner title='Drama Movies' url={urls.findDramaMovies+language}/>
+                <RowBanner title='Trending Movies' url={urls.findTrending+language}/>
+                <RowBanner title='Crime Movies' url={urls.findCrimeMovies+language} isLargeRow/>
+                <RowBanner title='Animation Movies' url={urls.findAnimationMovies+language}/>
+                <RowBanner title='Adventure Movies' url={urls.findAdventureMovies+language} isLargeRow/>
+                <RowBanner title='Comedy Movies' url={urls.findComedyMovies+language} useRank/>
+                <RowBanner title='Horror Movies' url={urls.findHorrorMovies+language}/>
+                <RowBanner title='Romance Movies' url={urls.findRomanceMovies+language}/>
+                <RowBanner title='Documentaries' url={urls.findDocumentaries+language}  isLargeRow/>
             </RowBannerContainer>
         </div>
     )

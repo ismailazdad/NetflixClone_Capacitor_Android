@@ -8,20 +8,23 @@ import Footer from "./components/Footer";
 import {Route, Routes} from "react-router";
 import Movie from "./pages/Movie";
 import Actor from "./pages/Actor";
+import {MoviesProvider} from "./utils/context"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
-        <Header/>
-        <Routes>
-            <Route exact path="/" element={<MoviesBanner/>}>
-            </Route>
-            <Route exact path="/actor/:id/:language" element={<Actor/>}>
-            </Route>
-            <Route exact path="/movieDetails/:id/:type" element={ <Movie />}>
-            </Route>
-        </Routes>
-        <Footer />
+        <MoviesProvider>
+            <Header/>
+            <Routes>
+                <Route exact path="/" element={<MoviesBanner/>}>
+                </Route>
+                <Route exact path="/actor/:id/:language" element={<Actor/>}>
+                </Route>
+                <Route exact path="/movieDetails/:id/:type" element={<Movie/>}>
+                </Route>
+            </Routes>
+            <Footer/>
+        </MoviesProvider>
     </Router>
 );
 

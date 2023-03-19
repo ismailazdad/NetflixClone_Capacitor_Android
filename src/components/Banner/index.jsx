@@ -6,7 +6,7 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
+import {faArrowRightLong, faArrowLeftLong,faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -24,6 +24,7 @@ import RowBanner from "../RowBanner";
 import MovieProvider from "../Provider";
 import imageMyList from "../../assets/list.png";
 import imageRemoveMyList from "../../assets/listremove.png";
+import {MoviesContext} from "../../utils/context";
 
 export const PlayModalMenuButton = styled.button`       
     cursor: pointer;
@@ -225,9 +226,9 @@ const Details = styled.div`
 
 class Banner extends Component {
     timer;
+    static contextType = MoviesContext;
     constructor(props) {
         super(props)
-        // this.handleSelect = this.handleSelect.bind(this);
         this.state = {
             trailerURL: "",
             isVideoLoading: false,
@@ -421,7 +422,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,imageUrlPoster,title,adults,popularity,year,genres,productions,languages,overview,isMainMenu,id,type,showDescription,isMobile,focus,touchState,language,activeIndex,setActiveIndex,character,showSimilar,myList, updateMyList,imdbId} = this.props;
+        const {imageUrl,title,adults,popularity,year,overview,isMainMenu,id,type,language,character,showSimilar} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -450,17 +451,10 @@ class Banner extends Component {
                     <DescriptionContainer>
                         {!this.state.isVideoPlaying || !this.state.showModal ?
                             <div style={{width: '70vh', height: '5vh'}}>
-                                {showSimilar ?
-                                    <div>
-                                        <Link to={`/movieDetails/${id}/${type}`}>
-                                            <MovieButton>Play</MovieButton>
-                                        </Link>
-                                    </div>
-                                    :
+                                {!showSimilar ?
                                     <Link to={`/`}>
                                         <MovieButton>Back</MovieButton>
-                                    </Link>
-                                }
+                                    </Link>:''}
                             </div>
                             :
                             <div style={{width: '70vh', height: '5vh'}}>
@@ -554,12 +548,10 @@ class Banner extends Component {
                                 </Tab>
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
-                                    <RowBanner style={{position: 'relative'}} activeIndex={activeIndex}
-                                               setActiveIndex={setActiveIndex} title='Similar Movie'
+                                    <RowBanner style={{position: 'relative'}} title='Similar Movie'
                                                url={urls.findRecommendedById.replace("{id}", id) + language}
                                                isLargeRow={true}/>
-                                    <RowBanner style={{position: 'relative'}} activeIndex={activeIndex}
-                                               setActiveIndex={setActiveIndex} title='Recommended Movie'
+                                    <RowBanner style={{position: 'relative'}} title='Recommended Movie'
                                                url={urls.findSimilarById.replace("{id}", id) + language}
                                                isLargeRow={true}/>
                                     </Tab> : ''}
@@ -570,10 +562,34 @@ class Banner extends Component {
                             </Tabs>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <Link  to={`/movieDetails/${id}/${type}`}>
+                            <div className="d-flex justify-content-between" >
+                                {this.context.moviesContext[this.context.currentIndex - 1] ?
+                                    <div onClick={() => {
+                                        this.context.saveCurrentIndex(this.context.currentIndex - 1)
+                                        this.context.saveMovie(this.context.moviesContext[this.context.currentIndex - 1])
+                                    }}>
+                                        <FontAwesomeIcon size="xl"
+                                                         style={{color: 'white', paddingLeft: '0px !important'}}
+                                                         icon={faArrowLeftLong}/>
+                                    </div>
+                                    : ''}
+                                <div>
+                                <Link  to={`/movieDetails/${id}/${type}`} >
                                     <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
                                 </Link>
+                                </div>
+
+                                {this.context.moviesContext[this.context.currentIndex + 1] ?
+                                    <div  onClick={() => {
+                                        this.context.saveCurrentIndex(this.context.currentIndex + 1)
+                                        this.context.saveMovie(this.context.moviesContext[this.context.currentIndex + 1])
+                                    }}>
+                                        <FontAwesomeIcon size="xl"
+                                                         style={{color: 'white', paddingLeft: '0px !important'}}
+                                                         icon={faArrowRightLong}/>
+                                    </div>
+                                    : ''}
+
                             </div>
                         </Modal.Footer>
                     </Modal.Dialog>
@@ -583,5 +599,5 @@ class Banner extends Component {
         )
     }
 }
-
+// Banner.contextType = MoviesContext
 export default  Banner
