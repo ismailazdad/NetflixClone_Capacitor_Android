@@ -68,7 +68,7 @@ function MoviesBanner() {
     let language =  navigator?.language || navigator?.userLanguage;
     const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
     const {currentMovie} = useContext(MoviesContext)
-    const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(currentMovie?.genre_ids)?.slice(0,3)?.join(', ')
+    const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
     const {productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
     const [focus,setFocus] = useState(false)
@@ -109,6 +109,7 @@ function MoviesBanner() {
         return <span>Oups something went wrong</span>
     }
 
+    //include this line to prevent portrait mode for web mobile
     // if (!isMobile) {
     //     return <div style={{height:'60vh',marginTop:'30vh',position:'relative'}}>No supported device desktop mode, switch to mobile mode...</div>
     // }

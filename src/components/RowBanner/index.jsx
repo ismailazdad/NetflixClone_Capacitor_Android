@@ -54,7 +54,8 @@ export const Chevron = styled.div`
     background: ${({icon}) => 'url(' + icon + ') no-repeat center'};
     background-position: center;
     background-size: contain;
-    background-color:gray;
+    background-color: black;
+    border: solid 1px white;
     @media  only screen and (max-width:768px ){
         height:${({isLargeRow}) => isLargeRow ? '20vh' : '15vh'}; 
         width: 3vh;

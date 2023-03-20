@@ -428,7 +428,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,title,adults,popularity,year,overview,isMainMenu,id,type,language,character,showSimilar} = this.props;
+        const {imageUrl,imageUrlPoster,title,adults,popularity,year,overview,isMainMenu,id,type,language,character,showSimilar} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
@@ -502,7 +502,7 @@ class Banner extends Component {
                     :''}
                 <MovieFadeBottom />
                 <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'gray'}} >
-                    <Modal.Dialog style={{backgroundPosition:'bottom', backgroundSize: 'cover',backgroundImage: `url(${imageUrl})`}}>
+                    <Modal.Dialog style={{backgroundPosition:'top', backgroundSize: 'cover',backgroundImage: `url(${imageUrlPoster})`}}>
                         <Modal.Header onClick={() => {
                             this.setState({showModal: false});
                             clearTimeout(this.timer);
@@ -510,7 +510,7 @@ class Banner extends Component {
                                 this.setState({isMainMenu: true})
                         }} style={{border: 'transparent',height:'9vh'}}  >
                             <Modal.Title><h1 style={{ lineHeight: '0.8'}}>{title} </h1></Modal.Title>
-                            <button type="button" style={{border: 'transparent'}} aria-label="Close">
+                            <button type="button" style={{border: 'transparent',backgroundColor: 'transparent',color: 'white'}} aria-label="Close">
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>

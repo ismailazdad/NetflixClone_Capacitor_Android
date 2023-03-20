@@ -17,7 +17,7 @@ export function getInfo(data,url){
     const languages = data?.spoken_languages?.map((e) => Object.values(e)).flat().join(', ');
     const adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
     const year = data?.release_date ? data?.release_date?.toString().substring(0, 4) : data?.first_air_date?.toString().substring(0, 4);
-    const popularity = !data?.vote_average  ? data.popularity : Math.ceil(data?.vote_average * 10);
+    const popularity = !data?.vote_average  ?  data.popularity : Math.ceil(data?.vote_average * 10).toFixed(0);
     const imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
     const imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
     const title = data?.title || data?.name || data?.original_name;
@@ -33,7 +33,7 @@ export function getActorMovieInfo(data){
     const adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
     const imdbId = data?.imdb_id;
     const year = data?.release_date ? data.release_date.toString().substring(0, 4) : data?.first_air_date?.toString().substring(0, 4);
-    const popularity = Math.ceil(data?.vote_average * 10);
+    const popularity = Math.ceil(data?.vote_average * 10).toFixed(0);
     const imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
     const imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
     const title = data?.title || data?.original_title;
