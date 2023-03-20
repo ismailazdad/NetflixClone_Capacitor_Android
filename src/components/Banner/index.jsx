@@ -6,7 +6,13 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowRightLong, faArrowLeftLong,faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
+import {
+    faArrowLeftLong,
+    faArrowRightLong,
+    faExpand,
+    faVolumeHigh,
+    faVolumeXmark
+} from '@fortawesome/free-solid-svg-icons'
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -572,7 +578,12 @@ class Banner extends Component {
                                                          style={{color: 'white', paddingLeft: '0px !important'}}
                                                          icon={faArrowLeftLong}/>
                                     </div>
-                                    : ''}
+                                    : <div>
+                                        <FontAwesomeIcon size="xl"
+                                                         style={{color: 'transparent', paddingLeft: '0px !important'}}
+                                                         icon={faArrowLeftLong}/>
+                                    </div>
+                                }
                                 <div>
                                 <Link  to={`/movieDetails/${id}/${type}`} >
                                     <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
@@ -580,7 +591,7 @@ class Banner extends Component {
                                 </div>
 
                                 {this.context.moviesContext[this.context.currentIndex + 1] ?
-                                    <div  onClick={() => {
+                                    <div onClick={() => {
                                         this.context.saveCurrentIndex(this.context.currentIndex + 1)
                                         this.context.saveMovie(this.context.moviesContext[this.context.currentIndex + 1])
                                     }}>
@@ -588,8 +599,13 @@ class Banner extends Component {
                                                          style={{color: 'white', paddingLeft: '0px !important'}}
                                                          icon={faArrowRightLong}/>
                                     </div>
-                                    : ''}
-
+                                    :
+                                    <div>
+                                        <FontAwesomeIcon size="xl"
+                                                         style={{color: 'transparent', paddingLeft: '0px !important'}}
+                                                         icon={faArrowRightLong}/>
+                                    </div>
+                                }
                             </div>
                         </Modal.Footer>
                     </Modal.Dialog>
@@ -599,5 +615,4 @@ class Banner extends Component {
         )
     }
 }
-// Banner.contextType = MoviesContext
 export default  Banner
