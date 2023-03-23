@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
@@ -95,7 +95,7 @@ export const StyledImage = styled.div`
     `
 
 
-function RowBanner({title, url, isLargeRow,useRank,activeIndex,setActiveIndex,sort,myList, updateMyList}) {
+function RowBanner({title, url, isLargeRow,useRank,sort,myList}) {
     const myRef = useRef(null);
     const {isLoading, data, error} = useFetchList(url,useRank);
     const [scrollRight,setScrollRight]= useState(false);

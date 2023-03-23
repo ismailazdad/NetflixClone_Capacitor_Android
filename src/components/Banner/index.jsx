@@ -6,13 +6,7 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {
-    faArrowLeftLong,
-    faArrowRightLong,
-    faExpand,
-    faVolumeHigh,
-    faVolumeXmark
-} from '@fortawesome/free-solid-svg-icons'
+import {faArrowLeftLong, faArrowRightLong, faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -98,18 +92,6 @@ const MovieTitle = styled.h1`
         max-width:45vh;
         max-height:20vh;
         margin-top: 4vh;
-    }
-`
-const MovieDescription = styled.h1`
-    width: 70%;
-    line-height: 1.3;
-    padding-top: 0.5rem;
-    font-size:${({textLen}) =>  textLen < 170  ? '' : '1.5rem'}; 
-    max-width: 120rem;
-    height: 100px;
-    overflow:hidden;
-    @media  only screen and (max-width:768px ){
-        display : none !important;
     }
 `
 const MovieButton = styled.button`
@@ -517,9 +499,9 @@ class Banner extends Component {
                         <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
                             {
                                 this.props?.myList.map(e=>e.id).includes(id) ?
-                                    <img style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.removeOneItem(id)} src={imageRemoveMyList} />
+                                    <img alt={`add${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.removeOneItem(id)} src={imageRemoveMyList} />
                                     :
-                                    <img style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.addOneItem(id)} src={imageMyList} />
+                                    <img alt={`rem${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.addOneItem(id)} src={imageMyList} />
                             }
                             <Tabs
                                 className="mb-3"

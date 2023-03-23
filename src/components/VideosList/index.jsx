@@ -1,7 +1,7 @@
 import urls from "../../utils/urls";
 import {useFetchListWithFallBack} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
-import React, {useState} from "react";
+import React from "react";
 import {LoaderWrapper} from "../RowBanner";
 import styled from "styled-components";
 import Backup from "../../assets/backup.png";
@@ -10,7 +10,7 @@ import PlayTrailer from "../../assets/play_trailer.png";
 export const StyledImage = styled.div`
     max-height: 200px;    
     height:  200px; 
-    transition: transform 700ms;
+    transition: transform 700ms; 
       &:hover{      
         transform: scale(1.15);
     }  
@@ -165,7 +165,7 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
                                     </WaitAnimated>
                                     :
                                     <PlayAnimated>
-                                        <img style={{width:'7vh',height:'7vh'}} src={PlayTrailer}/>
+                                        <img alt="Animated"  style={{width:'7vh',height:'7vh'}} src={PlayTrailer}/>
                                     </PlayAnimated>
                                     }
                                 </StyledImage>

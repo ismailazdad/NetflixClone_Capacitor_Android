@@ -12,30 +12,30 @@ import metaCritic from "../../assets/metacritic.png";
 
 function MovieReviews({id, language,imdbId}) {
     const {isLoading, data,error} = useFetchListWithFallBack(urls.findReviewsById.replace('{id}', id) + language.split("").slice(0,2).join(""), urls.findReviewsById.replace('{id}', id).replace("&language=", ""))
-    const [isLoadingOmdbapi, dataOmdbapi, errorOmdbapi] = useFetch(urls.findReviewByImbId.replace('{tmdb_id}',imdbId), false)
+    const [isLoadingOmdbApi, dataOmdbApi] = useFetch(urls.findReviewByImbId.replace('{tmdb_id}',imdbId), false)
     return (
         <div>
             <div>
-                {isLoadingOmdbapi ? (
+                {isLoadingOmdbApi ? (
                     <LoaderWrapper data-testid='loader'>
                         <Loader style={{marginTop: '0vh'}}/>
                     </LoaderWrapper>
                 ) :
                     <div style={{lineHeight: '1.4rem',display:'flex',justifyContent: "space-around"}}>
-                        {dataOmdbapi && dataOmdbapi?.Ratings?.length > 0 && dataOmdbapi?.Ratings?.map((source, index) =>
+                        {dataOmdbApi && dataOmdbApi?.Ratings?.length > 0 && dataOmdbApi?.Ratings?.map((source, index) =>
                             <div key={index + '_container'} style={{display: "inline-block", marginTop: '2vh'}}>
                                 {source['Source'] === "Internet Movie Database" ?
                                     <div>
                                         <a href={`https://m.imdb.com/title/${imdbId}`} target="_blank">
-                                            <img style={{height: '4vh',width: '4vh'}}  src={imdbImage} />
+                                            <img alt={`${dataOmdbApi["Title"]}`}  style={{height: '4vh',width: '4vh'}}  src={imdbImage} />
                                         </a>
                                         <StarRating value={Math.floor(Number(source['Value'].split("/")[0]) / 2)}/>
                                     </div>
                                     : ""}
                                 {source['Source'] === "Metacritic" ?
                                     <div>
-                                        <a href={`https://www.metacritic.com/movie/${dataOmdbapi["Title"]?.replaceAll(" ", "-").replaceAll(":", "").replaceAll(".", "").replaceAll("'", "").toLowerCase()}`} target="_blank">
-                                            <img style={{height: '4vh',width: '4vh'}}  src={metaCritic} />
+                                        <a href={`https://www.metacritic.com/movie/${dataOmdbApi["Title"]?.replaceAll(" ", "-").replaceAll(":", "").replaceAll(".", "").replaceAll("'", "").toLowerCase()}`} target="_blank">
+                                            <img alt={`${dataOmdbApi["Title"]}`} style={{height: '4vh',width: '4vh'}}  src={metaCritic} />
                                         </a>
                                         <StarRating value={Math.floor(Number(source['Value'].split("/")[0]) / 20)}/>
                                     </div>
@@ -43,8 +43,8 @@ function MovieReviews({id, language,imdbId}) {
 
                                 {source['Source'] === "Rotten Tomatoes" ?
                                     <div>
-                                        <a href={`https://www.rottentomatoes.com/m/${dataOmdbapi["Title"]?.replaceAll(" ", "_").replaceAll(":", "").replaceAll(".", "").replaceAll("'", "").toLowerCase()}`} target="_blank">
-                                            <img style={{height: '4vh',width: '4vh'}}  src={rotten} />
+                                        <a href={`https://www.rottentomatoes.com/m/${dataOmdbApi["Title"]?.replaceAll(" ", "_").replaceAll(":", "").replaceAll(".", "").replaceAll("'", "").toLowerCase()}`} target="_blank">
+                                            <img alt={`${dataOmdbApi["Title"]}`} style={{height: '4vh',width: '4vh'}}  src={rotten} />
                                         </a>
                                         <StarRating value={Math.floor(Number(source['Value'].replace("%", "") / 20))}/>
                                     </div>
@@ -55,7 +55,6 @@ function MovieReviews({id, language,imdbId}) {
                 }
 
             </div>
-
 
             <div>
                 {error ? <span style={{color: 'white'}}>Oups something went wrong</span> : ''}
