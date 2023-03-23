@@ -122,7 +122,7 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList}) {
         myRef.current.scrollLeft -= screenWidth;
     };
 
-    const updateMovies = (movie,url,currentIndex)=>{
+    const updateMovies = (movie,currentIndex)=>{
         const currentMoviesId = JSON.stringify(movies.map(current=>current?.id))
         const moviesContextIds= JSON.stringify(moviesContext?.map(current=>current?.id))
         if(currentMoviesId !== moviesContextIds){
@@ -154,7 +154,7 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList}) {
                                             alt={movie.name}
                                             isLargeRow={isLargeRow}
                                             isActive={currentIndex === movie}
-                                            onTouchEnd={() => updateMovies(movie,url,index)}
+                                            onTouchEnd={() => updateMovies(movie,index)}
                                             useRank={useRank}
                                             onError = {e => e.target.parentNode.style.display = 'none'}
                                     />

@@ -130,14 +130,10 @@ function MoviesBanner() {
                      popularity={popularity}
                      year={year}
                      genres={myGenres}
-                     productions={productions}
-                     languages={languages}
                      overview={overview}
                      id={myId}
                      type={type}
                      isMainMenu={false}
-                     showDescription={false}
-                     isMobile={isMobile}
                      focus={focus}
                      touchState={touchState}
                      language={language}
