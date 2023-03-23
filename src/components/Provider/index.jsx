@@ -6,7 +6,7 @@ import {LoaderWrapper} from "../RowBanner";
 
 function MovieProvider({id, language}) {
     language =language.length > 2 ? language?.split("-")[1] : language.toUpperCase()
-    const [isLoading, data, error] = useFetch(urls.findMoviesProviderById.replace('{id}', id) , false)
+    const [isLoading, data] = useFetch(urls.findMoviesProviderById.replace('{id}', id) , false)
     const results = data?.results || []
     let buy = []
     let rent = []

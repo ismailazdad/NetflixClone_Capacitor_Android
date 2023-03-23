@@ -69,7 +69,7 @@ function MoviesBanner() {
     const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
     const {currentMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
-    const {productions,languages,adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
+    const {adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
     const [focus,setFocus] = useState(false)
     const [inputs, setInputs] = useState({ searchMovie: ''})

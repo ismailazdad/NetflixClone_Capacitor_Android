@@ -69,7 +69,7 @@ const MovieButton = styled.button`
 `
 
 function Credits({id,language}) {
-    const [isLoading, data, error] = useFetch(urls.findCreditsById.replace('{id}', id), false)
+    const [isLoading, data] = useFetch(urls.findCreditsById.replace('{id}', id), false)
     let crew = data?.crew?.filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i)
     crew = crew?.filter((v,i)=>
         v?.known_for_department !=='Acting' &&

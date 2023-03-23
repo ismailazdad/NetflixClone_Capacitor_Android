@@ -6,7 +6,7 @@ import {LoaderWrapper} from "../RowBanner";
 import StarRating from "../StarRating";
 
 function MovieDetails({id, language,updateImdbId}) {
-    const [isLoading, data, error] = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
+    const [isLoading, data] = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
     useEffect(() => {
         updateImdbId(data?.imdb_id)
     }, [data?.imdb_id,updateImdbId])

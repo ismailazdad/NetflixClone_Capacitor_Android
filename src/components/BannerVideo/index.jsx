@@ -199,7 +199,7 @@ class BannerVideo extends Component {
     }
 
     render() {
-        const {imageUrl, title, adults, popularity, year, genres, productions, languages, overview, isMainMenu, id, type} = this.props
+        const {imageUrl, title, adults, popularity, year, genres, productions, languages, overview, isMainMenu} = this.props
         return (
             <div>
                 <Header/>

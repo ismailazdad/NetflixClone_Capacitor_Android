@@ -14,10 +14,9 @@ function ActorBio({id, name, place_of_birth, biography, birthday, gender, profes
     return (
         <div>
             <div>
-
                 <div style={{lineHeight: '1.4rem', marginTop: '1vh', margin: '1vh'}}>
                     <div style={{float: 'right', border: 'solid 1px gray'}}>
-                        <img width='100vh' height='100vh' src={imageUrl} onError={e => e.target.display = 'none'}/>
+                        <img alt={`${name}`} width='100vh' height='100vh' src={imageUrl} onError={e => e.target.display = 'none'}/>
                     </div>
                     {/*<div><span style={{color: 'gray'}}>Id</span> : {data?.id}</div>*/}
                     {name ?

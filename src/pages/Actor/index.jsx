@@ -49,8 +49,8 @@ const showConfirm = async () => {
 
 //second version of movies page , showing poster and trailer in header
 function Actor() {
-    const {id: id,language:language} = useParams()
-    const [isLoadingActor, actor, actorError] = useFetch(urls.findActorById.replace("{id}",id)+language,false)
+    const {id,language} = useParams()
+    const [isLoadingActor, actor] = useFetch(urls.findActorById.replace("{id}",id)+language,false)
     const [isLoading, data, error] = useFetch(urls.findMoviesByActorId.replace("{id}",id)+language,true)
     const {currentMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(data?.genre_ids)?.slice(0,3).join(', '): getGenres(currentMovie?.genre_ids)?.slice(0,3)?.join(', ')
