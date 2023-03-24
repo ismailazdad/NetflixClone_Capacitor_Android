@@ -30,7 +30,7 @@
     }
     .video-background-banner iframe {
         width: 100vh;
-        height: 40vh;
+        height: 30vh;
     }
     .modal-backdrop.show {
         opacity: 0 !important;

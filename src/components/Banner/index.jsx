@@ -566,11 +566,13 @@ class Banner extends Component {
                                                          icon={faArrowLeftLong}/>
                                     </div>
                                 }
-                                <div>
-                                <Link  to={`/movieDetails/${id}/${type}`} >
-                                    <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
-                                </Link>
+                                {this.state.trailerURL !=="" ?
+                                    <div>
+                                    <Link  to={`/movieDetails/${id}/${type}`} >
+                                        <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
+                                    </Link>
                                 </div>
+                                        :""}
 
                                 {this.context.moviesContext[this.context.currentIndex + 1] ?
                                     <div onClick={() => {
