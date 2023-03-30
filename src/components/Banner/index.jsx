@@ -10,7 +10,6 @@ import {faArrowLeftLong, faArrowRightLong, faExpand, faVolumeHigh, faVolumeXmark
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import ReactTextCollapse from "react-text-collapse"
 import PlayButton from "../../assets/play2.png";
 import Backup from "../../assets/backup.png";
 import InfoSvg from "../../assets/info.svg";
@@ -475,6 +474,8 @@ class Banner extends Component {
                                      }}
                                      onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
                                      onReady={e=>{e.target.playVideo();this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
+                                     onPause={e=>this.state.playerObj.playVideo()}
+                                     onStateChange={e=>console.log("state change",e.target)}
                                      onEnd={ e=> {this.setIsVideoPlaying(false)}}
                                      videoId={this.state.trailerURL}
                                      opts={playerOptions}
@@ -512,19 +513,6 @@ class Banner extends Component {
                             >
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
-                                    {overview ?
-                                        <div className="row align-self-center">
-                                            <span style={{color: 'gray'}}>Synopsis:</span>
-                                            <div key={id + '_container'} style={{display:"inline-block"}}>
-                                            {overview.length > 400 ?
-                                                <ReactTextCollapse options={TEXT_COLLAPSE_OPTIONS}>
-                                                    <div style={{textTransform: 'inherit', position:'relative'}}>{overview}</div>
-                                                </ReactTextCollapse>
-                                                :
-                                                <div style={{textTransform: 'inherit', position:'relative'}}>{overview}</div>
-                                            }
-                                            </div>
-                                        </div>:''}
                                     <MovieDetails id={id} language={language} updateImdbId={this.updateImdbId}/>
                                     <MovieProvider id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
                                 </Tab>
@@ -545,7 +533,7 @@ class Banner extends Component {
                                     </Tab> : ''}
 
                                 <Tab eventKey={5} title="Review">
-                                    <MovieReviews title={title} language={language} id={id}  imdbId={this.state.imdbId}/>
+                                    <MovieReviews title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
                                 </Tab>
                             </Tabs>
                         </Modal.Body>
@@ -568,7 +556,7 @@ class Banner extends Component {
                                 }
                                 {this.state.trailerURL !=="" ?
                                     <div>
-                                    <Link  to={`/movieDetails/${id}/${type}`} >
+                                    <Link  to={`/movieDetails/${id}/${this.state.trailerURL}/${this.state.sound}/${this.props.title}/${this.state.imdbId}/${language}`} >
                                         <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
                                     </Link>
                                 </div>

@@ -10,7 +10,7 @@ import rotten from "../../assets/rotten.svg";
 import metaCritic from "../../assets/metacritic.png";
 
 
-function MovieReviews({id, language,imdbId}) {
+function MovieReviews({id, language,imdbId,showComment}) {
     const {isLoading, data,error} = useFetchListWithFallBack(urls.findReviewsById.replace('{id}', id) + language.split("").slice(0,2).join(""), urls.findReviewsById.replace('{id}', id).replace("&language=", ""))
     const [isLoadingOmdbApi, dataOmdbApi] = useFetch(urls.findReviewByImbId.replace('{tmdb_id}',imdbId), false)
     return (
@@ -55,7 +55,7 @@ function MovieReviews({id, language,imdbId}) {
                 }
 
             </div>
-
+            {showComment ?
             <div>
                 {error ? <span style={{color: 'white'}}>Oups something went wrong</span> : ''}
                 {data?.length === 0 ? ' no reviews...' : ''}
@@ -92,7 +92,7 @@ function MovieReviews({id, language,imdbId}) {
                     )
                     }
                 </div>
-            </div>
+            </div>:''}
         </div>
     )
 }

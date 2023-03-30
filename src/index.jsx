@@ -20,7 +20,7 @@ root.render(
                 </Route>
                 <Route exact path="/actor/:id/:language" element={<Actor/>}>
                 </Route>
-                <Route exact path="/movieDetails/:id/:type" element={<Movie/>}>
+                <Route exact path="/movieDetails/:id/:videoId/:sound/:title/:imdbId/:language" element={<Movie/>}>
                 </Route>
             </Routes>
             <Footer/>

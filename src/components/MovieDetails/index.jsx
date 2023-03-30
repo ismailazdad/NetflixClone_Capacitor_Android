@@ -1,15 +1,17 @@
 import urls from "../../utils/urls";
-import {useFetch} from "../../utils/hooks";
+import {TEXT_COLLAPSE_OPTIONS, useFetch} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import React, {useEffect} from "react";
 import {LoaderWrapper} from "../RowBanner";
 import StarRating from "../StarRating";
+import ReactTextCollapse from "react-text-collapse";
 
-function MovieDetails({id, language,updateImdbId}) {
+function MovieDetails({id, language, updateImdbId}) {
     const [isLoading, data] = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
     useEffect(() => {
-        updateImdbId(data?.imdb_id)
-    }, [data?.imdb_id,updateImdbId])
+        if (updateImdbId)
+            updateImdbId(data?.imdb_id)
+    }, [data?.imdb_id, updateImdbId])
 
     return (
         <div>
@@ -18,9 +20,30 @@ function MovieDetails({id, language,updateImdbId}) {
                     <Loader/>
                 </LoaderWrapper>
             ) : (
-                <div >
-                    <div style={{ lineHeight: '1.4rem', marginTop: '1vh'}}>
+                <div>
+                    <div style={{lineHeight: '1.4rem', marginTop: '1vh'}}>
                         {/*<div><span style={{color: 'gray'}}>Id</span> : {data?.id}</div>*/}
+                        <div>
+                            {data?.overview ?
+                                <div className="row align-self-center">
+                                    <span style={{color: 'gray'}}>Synopsis:</span>
+                                    <div key={id + '_container'} style={{display: "inline-block"}}>
+                                        {data?.overview.length > 400 ?
+                                            <ReactTextCollapse options={TEXT_COLLAPSE_OPTIONS}>
+                                                <div style={{
+                                                    textTransform: 'inherit',
+                                                    position: 'relative'
+                                                }}>{data?.overview}</div>
+                                            </ReactTextCollapse>
+                                            :
+                                            <div style={{
+                                                textTransform: 'inherit',
+                                                position: 'relative'
+                                            }}>{data?.overview}</div>
+                                        }
+                                    </div>
+                                </div> : ''}
+                        </div>
                         <div>
                             {data?.vote_count > 0 ?
                                 <div>
@@ -28,7 +51,7 @@ function MovieDetails({id, language,updateImdbId}) {
                                     <StarRating value={Math.floor(data?.vote_average / 2)}/>
                                     {'  '}(note : {data?.vote_average} over {data?.vote_count} rates)
                                 </div>
-                                :''}
+                                : ''}
                         </div>
                         {data?.production_countries && data?.production_countries.length > 0 ?
                             <div><span
