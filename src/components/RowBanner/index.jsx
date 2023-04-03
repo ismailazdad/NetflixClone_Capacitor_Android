@@ -9,7 +9,7 @@ import styled from "styled-components";
 import BackupSmall from "../../assets/backup2.png";
 import BackupLarge from "../../assets/backup3.png";
 import './style.css'
-import { MoviesContext} from "../../utils/context";
+import {MoviesContext} from "../../utils/context";
 
 export const RowContainer = styled.div`
     color: white;
@@ -94,8 +94,33 @@ export const StyledImage = styled.div`
     background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'}, ${({backup}) => 'url(' + backup + ')'};           
     `
 
-
-function RowBanner({title, url, isLargeRow,useRank,sort,myList}) {
+const Discover = styled.button`
+    cursor: pointer;
+    color: #fff;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    border-radius: 0.2vw;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: rgba(51, 51, 51, 0.5);
+    width: 15vh;
+    @media  only screen and (max-width:768px ){
+        margin-top:1vh;
+        margin-left:0.3vh;
+        margin-right:1vh;
+        height:5vh;        
+    }    
+    &:hover{
+        color: #000;
+        background-color: #e6e6e6;
+        transition: all 0.2s;
+    }
+`
+function RowBanner({title, url, isLargeRow,useRank,sort,myList,confirm}) {
     const myRef = useRef(null);
     const {isLoading, data, error} = useFetchList(url,useRank);
     const [scrollRight,setScrollRight]= useState(false);
@@ -145,20 +170,39 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList}) {
                     <Chevron className="chevron" style={{left: '0'}} icon={ChevronLeft} onClick={scrollToRight} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
                     <RowPoster id="RowPoster" ref={myRef}  scrollRight={scrollRight} scrollLeft={scrollLeft}>
                         {movies && movies.map((movie, index) => (
-                                <div key={index +'_container'} style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    {useRank ? <TrendNumber>{index + 1}</TrendNumber> :''}
+                            (!confirm ?
+                                <div key={index + '_container'}
+                                     style={{display: 'flex', justifyContent: 'space-between'}}>
+                                    {useRank ? <TrendNumber>{index + 1}</TrendNumber> : ''}
+                                    <StyledImage
+                                        key={movie.id}
+                                        imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                        backup={isLargeRow ? BackupLarge : BackupSmall}
+                                        alt={movie.name}
+                                        isLargeRow={isLargeRow}
+                                        isActive={currentIndex === movie}
+                                        onTouchEnd={() => updateMovies(movie, index)}
+                                        useRank={useRank}
+                                        onError={e => e.target.parentNode.style.display = 'none'}
+                                    />
+                                </div>
+                                :
+                                <div key={index + '_containerConf'}
+                                     style={{display: 'flex', justifyContent: 'space-between'}}
+                                >
+                                    <div>
                                         <StyledImage
                                             key={movie.id}
                                             imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                                            backup={ isLargeRow ? BackupLarge:BackupSmall}
+                                            backup={isLargeRow ? BackupLarge : BackupSmall}
                                             alt={movie.name}
                                             isLargeRow={isLargeRow}
-                                            isActive={currentIndex === movie}
-                                            onTouchEnd={() => updateMovies(movie,index)}
-                                            useRank={useRank}
-                                            onError = {e => e.target.parentNode.style.display = 'none'}
-                                    />
+                                            onError={e => e.target.parentNode.style.display = 'none'}
+                                        />
+                                        <Discover onClick={e=>updateMovies(movie, index)}>discover</Discover>
+                                    </div>
                                 </div>
+                            )
                         ))
                         }
                     </RowPoster>

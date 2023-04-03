@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
 import urls from "../../utils/urls"
-import {getGenres, getInfo, useFetch} from "../../utils/hooks";
+import {getGenres, getInfo, moviesGenresList, useFetch} from "../../utils/hooks";
 import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
 import {useMediaQuery} from "react-responsive";
@@ -12,6 +12,7 @@ import {App} from '@capacitor/app';
 import {Dialog} from '@capacitor/dialog';
 import "bootstrap/dist/css/bootstrap.css"
 import {MoviesContext} from "../../utils/context";
+import RenderIfVisible from "react-render-if-visible"
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -47,9 +48,7 @@ App.addListener('backButton', ({canGoBack}) => {
         window.screen.orientation.lock('portrait');
         document.exitFullscreen();
     } else {
-        if (!canGoBack) {
             showConfirm()
-        }
     }
 });
 
@@ -67,7 +66,7 @@ const showConfirm = async () => {
 function MoviesBanner() {
     let language =  navigator?.language || navigator?.userLanguage;
     const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
-    const {currentMovie} = useContext(MoviesContext)
+    const {currentMovie,saveMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
     const {adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
@@ -78,8 +77,12 @@ function MoviesBanner() {
     const savedCart = localStorage.getItem('myList')
     const [myList, updateMyList] = useState(savedCart ? JSON.parse(savedCart) : [])
     useEffect(() => {
+        if(data &&  Object.keys(data).length > 0 && !currentMovie ){
+            saveMovie(data)
+        }
         localStorage.setItem('myList', JSON.stringify(myList))
-    }, [myList])
+    }, [myList,data,saveMovie,currentMovie])
+
 
 
     const handleChange = (event) => {
@@ -109,9 +112,19 @@ function MoviesBanner() {
         return <span>Oups something went wrong</span>
     }
 
-    //include this line to prevent portrait mode for web mobile
+    //include this line to prevent portrait mode for web mobile except for full screen video
     // if (!isMobile) {
-    //     return <div style={{height:'60vh',marginTop:'30vh',position:'relative'}}>No supported device desktop mode, switch to mobile mode...</div>
+    //     if (!!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement)) {
+    //         const playerElement = document.getElementById('vidPlayer')
+    //         const requestFullScreen = playerElement && (playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen);
+    //         if (requestFullScreen) {
+    //             requestFullScreen.bind(playerElement)()
+    //             window.screen.orientation.lock('landscape')
+    //         }
+    //     } else {
+    //         return <div style={{height: '60vh', marginTop: '30vh', position: 'relative'}}>No supported device desktop
+    //             mode, switch to mobile mode...</div>
+    //     }
     // }
 
     return (
@@ -146,7 +159,10 @@ function MoviesBanner() {
             )}
             <RowBannerContainer onTouchStart={handleTouchEvent} >
                 {inputs.searchMovie.length > 0 && !focus?
-                    <RowBanner title='Search Results' url={urls.searchMovie.replace('{query}', inputs.searchMovie)+ language}  isLargeRow/>:''
+                    <RenderIfVisible>
+                        <RowBanner key={'search_container'} title='Search Results'
+                                   url={urls.searchMovie.replace('{query}', inputs.searchMovie) + language} isLargeRow/>
+                    </RenderIfVisible>:''
                 }
                 {!isLoading ?
                     <div style={{width: '100%', display: 'flex', margin: '1vh'}}>
@@ -170,32 +186,22 @@ function MoviesBanner() {
                 </div>
                 :''}
                 {myList.length > 0 ?
-                    <RowBanner myList={myList} updateMyList={updateMyList}  title='My List'  isLargeRow/> : ''
+                    <RenderIfVisible stayRendered={true}>
+                        <RowBanner key={'myList_container'} myList={myList} updateMyList={updateMyList}  title='My List'  isLargeRow/>
+                    </RenderIfVisible>: ''
                 }
-                <RowBanner title='Popular Movies' url={urls.findPopular+language} isLargeRow/>
-                <RowBanner title='Now Playing' url={urls.findNowPlaying+language} />
-                <RowBanner title='Top Trending movie' url={urls.findActionMovies+language} useRank isLargeRow/>
-                <RowBanner title='UpComing' url={urls.findUpcoming.toString().replaceAll("{lang}",language?.split("").slice(0,2).join(""))} isLargeRow/>
-                <RowBanner title='NETFLIX ORIGINALS' url={urls.findNetflixOriginals+language} />
-                <RowBanner title='Western Movies' url={urls.findWesternMovies+language} isLargeRow/>
-                <RowBanner title='War Movies' url={urls.findWarMovies+language}/>
-                <RowBanner title='Thriller Movies' url={urls.findThrillerMovies+language} isLargeRow/>
-                <RowBanner title='SF Movies' url={urls.findSFMovies+language} />
-                <RowBanner title='Mystery Movies' url={urls.findMysteryMovies+language} isLargeRow/>
-                <RowBanner title='Music Movies' url={urls.findMusicMovies+language} />
-                <RowBanner title='History Movies' url={urls.findHistoryMovies+language}/>
-                <RowBanner title='Fantasy Movies' url={urls.findFantasyMovies+language}/>
-                <RowBanner title='Top Rated' url={urls.findTopRated+language} useRank/>
-                <RowBanner title='Family Movies' url={urls.findFamilyMovies+language} isLargeRow/>
-                <RowBanner title='Drama Movies' url={urls.findDramaMovies+language}/>
-                <RowBanner title='Trending Movies' url={urls.findTrending+language}/>
-                <RowBanner title='Crime Movies' url={urls.findCrimeMovies+language} isLargeRow/>
-                <RowBanner title='Animation Movies' url={urls.findAnimationMovies+language}/>
-                <RowBanner title='Adventure Movies' url={urls.findAdventureMovies+language} isLargeRow/>
-                <RowBanner title='Comedy Movies' url={urls.findComedyMovies+language} useRank/>
-                <RowBanner title='Horror Movies' url={urls.findHorrorMovies+language}/>
-                <RowBanner title='Romance Movies' url={urls.findRomanceMovies+language}/>
-                <RowBanner title='Documentaries' url={urls.findDocumentaries+language}  isLargeRow/>
+                {moviesGenresList && moviesGenresList.map((movie, index) =>
+                    <RenderIfVisible key={index}>
+                            {movie.replace ?
+                                <RowBanner key={index +movie.title}  title={movie.title} url={movie.url.replaceAll("{lang}",language?.split("").slice(0,2).join("")) } isLargeRow={movie.isLargeRow}
+                                           useRank={movie.useRank}/>
+                                :
+                                <RowBanner key={index +movie.title}  title={movie.title} url={movie.url + language} isLargeRow={movie.isLargeRow}
+                                           useRank={movie.useRank}/>
+                            }
+                    </RenderIfVisible>
+                )}
+
             </RowBannerContainer>
         </div>
     )

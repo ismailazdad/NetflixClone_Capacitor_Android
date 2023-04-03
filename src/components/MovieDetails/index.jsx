@@ -21,7 +21,7 @@ function MovieDetails({id, language, updateImdbId}) {
                 </LoaderWrapper>
             ) : (
                 <div>
-                    <div style={{lineHeight: '1.4rem', marginTop: '1vh'}}>
+                    <div style={{lineHeight: '1.4rem', marginTop: '1vh',userSelect: 'none'}}>
                         {/*<div><span style={{color: 'gray'}}>Id</span> : {data?.id}</div>*/}
                         <div>
                             {data?.overview ?
@@ -84,7 +84,6 @@ function MovieDetails({id, language, updateImdbId}) {
 
                     </div>
                 </div>
-
             )
             }
         </div>

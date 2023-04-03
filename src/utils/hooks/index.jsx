@@ -11,6 +11,31 @@ export const playerOptions = {
         mute: 1
     }
 }
+export const moviesGenresList=[
+    {title: "Popular Movies", url: urls.findPopular, isLargeRow: true, useRank: false,replace:false},
+    {title: "Now Playing", url: urls.findNowPlaying, isLargeRow: false, useRank: false,replace:false},
+    {title: "Top Trending movie", url: urls.findActionMovies, isLargeRow: true, useRank: true,replace:false},
+    {title: "NETFLIX ORIGINALS", url: urls.findNetflixOriginals, isLargeRow: true, useRank: false,replace:false},
+    {title: "Family Movies", url: urls.findFamilyMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "UpComing", url: urls.findUpcoming, isLargeRow: true, useRank: false,replace:true},
+    {title: "Western Movies", url: urls.findWesternMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "War Movies", url: urls.findWarMovies, isLargeRow: false, useRank: false,replace:false},
+    {title: "Thriller Movies", url: urls.findThrillerMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "SF Movies", url: urls.findSFMovies, isLargeRow: false, useRank: false,replace:false},
+    {title: "Mystery Movies", url: urls.findMysteryMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "Music Movies", url: urls.findMusicMovies, isLargeRow: false, useRank: false,replace:false},
+    {title: "History Movies", url: urls.findHistoryMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "Fantasy Movies", url: urls.findFantasyMovies, isLargeRow: false, useRank: false,replace:false},
+    {title: "Top Rated", url: urls.findTopRated, isLargeRow: true, useRank: true,replace:false},
+    {title: "Drama Movies", url: urls.findDramaMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "Trending Movies", url: urls.findTrending, isLargeRow: true, useRank: false,replace:false},
+    {title: "Crime Movies", url: urls.findCrimeMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "Animation Movies", url: urls.findAnimationMovies, isLargeRow: true, useRank: false,replace:false},
+    {title: "Comedy Movies", url: urls.findComedyMovies, isLargeRow: true, useRank: true,replace:false},
+    {title: "Horror Movies", url: urls.findHorrorMovies, isLargeRow: false, useRank: false,replace:false},
+    {title: "Romance Movie", url: urls.findRomanceMovies, isLargeRow: false, useRank: false,replace:false},
+    {title: "Documentaries", url: urls.findDocumentaries, isLargeRow: true, useRank: false,replace:false},
+]
 export function getInfo(data,url){
     const genres = typeof data?.genres ==='string' ? data.genres : data.genres?.map((e) => e?.name).join(', ');
     const productions = data?.production_companies?.map((e) => e?.name).join(', ');

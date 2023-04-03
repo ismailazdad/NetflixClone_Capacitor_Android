@@ -10,6 +10,7 @@ import {faArrowLeftLong, faArrowRightLong, faExpand, faVolumeHigh, faVolumeXmark
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Tooltip from 'react-bootstrap/Tooltip'
 import PlayButton from "../../assets/play2.png";
 import Backup from "../../assets/backup.png";
 import InfoSvg from "../../assets/info.svg";
@@ -24,6 +25,9 @@ import MovieProvider from "../Provider";
 import imageMyList from "../../assets/list.png";
 import imageRemoveMyList from "../../assets/listremove.png";
 import {MoviesContext} from "../../utils/context";
+import {App} from "@capacitor/app";
+import RenderIfVisible from "react-render-if-visible"
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 export const PlayModalMenuButton = styled.button`       
     cursor: pointer;
@@ -70,7 +74,7 @@ const MovieHeaderContent = styled.div`
     margin-left: 30px;
     padding-top: 140px;
     z-index: 10000;
-    position: ${({isMainMenu}) =>  isMainMenu   ? 'absolute' : 'absolute'}; 
+    position:absolute;
     @media  only screen and (max-width:768px ){
         padding-top: 0px;
         margin-left: 0px;
@@ -171,11 +175,7 @@ const LoaderContainer = styled.div`
     z-index:100;
 `
 const VideoContainer = styled.div`
-    display: ${({isVideoLoading}) =>  !isVideoLoading  ? 'block' : 'none'};   
-    opacity : ${({videoPlaying}) =>  !videoPlaying  ? '0' : '1'};
-    @media  only screen and (max-width:768px ){
-        height:5vh;
-    }
+    opacity : ${({isVideoLoading,isVideoError,isVideoPlaying}) =>  isVideoLoading || isVideoError || !isVideoPlaying ? '0' : '1'};
 `
 const SoundContainer = styled.div`
     position:absolute;
@@ -218,6 +218,7 @@ class Banner extends Component {
         super(props)
         this.state = {
             trailerURL: "",
+            currentTrailerUrl:"",
             isVideoLoading: false,
             isVideoPlaying: false,
             vidError: false,
@@ -233,7 +234,7 @@ class Banner extends Component {
 
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
     playerOptions.playerVars.mute = 1;
-    playerOptions.playerVars.fs=1;
+    playerOptions.playerVars.fs = 1;
     playerOptions.playerVars.controls=0;
     playerOptions.playerVars.showinfo=0;
     playerOptions.playerVars.start=3;
@@ -289,6 +290,10 @@ class Banner extends Component {
 
     setTrailerURL(title) {
         this.setState({trailerURL: title})
+    }
+
+    setCurrentTrailerURL(id){
+        this.setState({currentTrailerUrl: id})
     }
 
     setIsVideoLoading(flag) {
@@ -348,39 +353,56 @@ class Banner extends Component {
 
     handleClick = (id) => {
         clearTimeout(this.timer);
-        this.setTrailerURL("");
         this.setVidError(false);
         this.setIsVideoLoading(true);
-        this.setIsVideoPlaying(false);
-        this.setPlayerObj({});
+        const playerPresent = Object.keys(this.state.playerObj).length >0;
+        if(playerPresent){
+            this.state.playerObj?.pauseVideo();
+        }
         //test movietrailer with specified language
         movieTrailer(null, {tmdbId: id, language: this.props.language})
             .then((url) => {
                 const urlParams = new URLSearchParams(new URL(url).search);
-                this.setTrailerURL(urlParams.get("v"));
+                if(playerPresent){
+                    this.state.playerObj.loadVideoById(urlParams.get("v"), 0, "default");
+                    this.setCurrentTrailerURL(urlParams.get("v"));
+                }else{
+                    this.setTrailerURL(urlParams.get("v"));
+                    this.setCurrentTrailerURL(urlParams.get("v"));
+                }
                 this.setVidError(false);
             })
             .catch((e) => {
                 //if no trailer in specified language, call movietrailer withtout specified language
-                this.setTrailerURL("");
-                this.setVidError(false);
                 movieTrailer(null, {tmdbId: id})
                     .then((url) => {
                         const urlParams = new URLSearchParams(new URL(url).search);
-                        this.setTrailerURL(urlParams.get("v"));
+                        if(playerPresent){
+                            this.state.playerObj.loadVideoById(urlParams.get("v"), 0, "default");
+                            this.setCurrentTrailerURL(urlParams.get("v"));
+                        }else{
+                            this.setTrailerURL(urlParams.get("v"));
+                            this.setCurrentTrailerURL(urlParams.get("v"));
+                        }
+                        this.setVidError(false);
                     })
                     .catch((e) => {
-                        this.setTrailerURL("");
+                        console.log("passage 4 error")
                         this.setVidError(true);
                     })
             })
     };
 
     updateTrailer = (key) =>{
-        clearTimeout(this.timer)
-        playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
-        this.setVidError(false)
-        this.setTrailerURL( key)
+        if(key !== this.state.currentTrailerUrl){
+            clearTimeout(this.timer)
+            playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
+            this.setVidError(false);
+            if(Object.keys(this.state.playerObj).length >0){
+                this.state.playerObj.loadVideoById(key)
+                this.setCurrentTrailerURL(key);
+            }
+        }
     }
 
     enableSound = () => {
@@ -404,16 +426,28 @@ class Banner extends Component {
         }
     }
 
+    enablePause=()=>{
+        if(this.state.playerObj.getPlayerState()!==1){
+            this.state.playerObj.playVideo();
+        } else {
+            this.state.playerObj.pauseVideo();
+        }
+    }
+
+    getTooltip = (message)=> {
+        return <Tooltip id="tooltip">{message}</Tooltip>;
+    }
+
     handleSelect = (key) =>{
            this.setState({key: key})
     }
 
     render(){
-        const {imageUrl,imageUrlPoster,title,adults,popularity,year,overview,isMainMenu,id,type,language,character,showSimilar} = this.props;
+        const {imageUrl,imageUrlPoster,title,adults,popularity,year,isMainMenu,id,language,character,showSimilar} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
-                    {!this.state.isMainMenu && this.state.isVideoPlaying?
+                     {this.state.isVideoPlaying?
                         <div>
                             <SoundContainer onClick={this.enableSound}>
                                 {this.state.sound ?
@@ -431,11 +465,11 @@ class Banner extends Component {
                         <img style={{width:'3.5vh'}} alt='' src={InfoSvg}/>
                     </Details>
                     {!this.state.isVideoPlaying || !this.state.showModal ?
-                        <MovieTitle> {title}</MovieTitle>
-                        : <MovieTitle/>
+                        <MovieTitle onClick={this.enablePause}> {title}</MovieTitle>
+                        : <MovieTitle onClick={this.enablePause} />
                     }
 
-                    <DescriptionContainer>
+                    <DescriptionContainer >
                         {!this.state.isVideoPlaying || !this.state.showModal ?
                             <div style={{width: '70vh', height: '5vh'}}>
                                 {!showSimilar ?
@@ -454,37 +488,46 @@ class Banner extends Component {
                     </DescriptionContainer>
 
                 </MovieHeaderContent>
-                {!this.state.isMainMenu && this.state.trailerURL?
                     <LoaderContainer >
                         {this.state.vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
-                        {(this.state.isVideoLoading )?
+                        {(this.state.isVideoLoading && !this.state.vidError )?
                             <LoaderWrapper data-testid='loader'>
                                 <Loader style={{marginTop:'0vh'}} id='myloader'/>
                             </LoaderWrapper>
                             :''}
-                        <VideoContainer isVideoLoading={this.state.isVideoLoading} videoPlaying={this.state.isVideoPlaying}>
-                            <YouTube id='vidPlayer' className='video-background-banner'
+                        <VideoContainer isVideoLoading={this.state.isVideoLoading} isVideoPlaying={this.state.isVideoPlaying} isVideoError={this.state.vidError}>
+                            <YouTube key='testVideo' id='vidPlayer' className='video-background-banner'
                                      onPlay={e => {
-                                         this.setPlayerObj(e.target);
                                          this.setIsVideoLoading(false);
                                          this.setIsVideoPlaying(true);
                                          clearTimeout(this.timer);
-                                         this.showModalDelay()
-                                         this.setFirst(false)
+                                         this.showModalDelay();
+                                         this.setFirst(false);
+                                         App.addListener('appStateChange', (state) => {
+                                             if (state.isActive) {
+                                                 this.state.playerObj.playVideo();
+                                             } else {
+                                                 this.state.playerObj.pauseVideo();
+                                             }
+                                         });
                                      }}
-                                     onError={e => {this.setVidError(true);this.setIsVideoPlaying(false)}}
-                                     onReady={e=>{e.target.playVideo();this.setIsVideoPlaying(false);this.setIsVideoLoading(true);}}
-                                     onPause={e=>this.state.playerObj.playVideo()}
+                                     onError={e => {this.setVidError(true);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
+                                     onReady={e=>{
+                                         e.target.playVideo();
+                                         this.setPlayerObj(e.target);
+                                         this.setIsVideoPlaying(false);
+                                         this.setIsVideoLoading(true);
+                                         this.setVidError(false);
+                                     }}
                                      onStateChange={e=>console.log("state change",e.target)}
-                                     onEnd={ e=> {this.setIsVideoPlaying(false)}}
+                                     onEnd={ e=> {this.setVidError(false);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
                                      videoId={this.state.trailerURL}
                                      opts={playerOptions}
                             />
                         </VideoContainer>
                     </LoaderContainer>
-                    :''}
                 <MovieFadeBottom />
-                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'gray'}} >
+                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'#594757'}} >
                     <Modal.Dialog style={{backgroundPosition:'top', backgroundSize: 'cover',backgroundImage: `url(${imageUrlPoster})`}}>
                         <Modal.Header onClick={() => {
                             this.setState({showModal: false});
@@ -500,10 +543,15 @@ class Banner extends Component {
                         <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
                             {
                                 this.props?.myList.map(e=>e.id).includes(id) ?
-                                    <img alt={`add${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.removeOneItem(id)} src={imageRemoveMyList} />
+                                    <OverlayTrigger delay={{ "show": 250, "hide": 100 }} placement="left" overlay={this.getTooltip("added to my list")} >
+                                        <img alt={`add${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>{this.removeOneItem(id);}} src={imageRemoveMyList} />
+                                    </OverlayTrigger>
                                     :
-                                    <img alt={`rem${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.addOneItem(id)} src={imageMyList} />
+                                    <OverlayTrigger delay={{ "show": 250, "hide": 100 }}  placement="left" overlay={this.getTooltip("removed to my list")} >
+                                        <img alt={`rem${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.addOneItem(id)} src={imageMyList} />
+                                    </OverlayTrigger>
                             }
+
                             <Tabs
                                 className="mb-3"
                                 transition={Fade}
@@ -513,27 +561,41 @@ class Banner extends Component {
                             >
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
-                                    <MovieDetails id={id} language={language} updateImdbId={this.updateImdbId}/>
-                                    <MovieProvider id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
+                                    <RenderIfVisible stayRendered={true}>
+                                        <MovieDetails id={id} language={language} updateImdbId={this.updateImdbId}/>
+                                    </RenderIfVisible>
+                                    <RenderIfVisible stayRendered={true}>
+                                        <MovieProvider id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
+                                    </RenderIfVisible>
                                 </Tab>
                                 <Tab eventKey={2} title="trailers">
-                                    <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.trailerURL} updateMenuStatue={this.updateMenuStatue} />
+                                    <RenderIfVisible stayRendered={true}>
+                                        <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
+                                    </RenderIfVisible>
                                 </Tab>
                                 <Tab eventKey={3} title="Casting">
-                                    <Credits id={id} language={language}/>
+                                    <RenderIfVisible stayRendered={true}>
+                                        <Credits id={id} language={language}/>
+                                    </RenderIfVisible>
                                 </Tab>
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
-                                    <RowBanner style={{position: 'relative'}} title='Similar Movie'
-                                               url={urls.findRecommendedById.replace("{id}", id) + language}
-                                               isLargeRow={true}/>
-                                    <RowBanner style={{position: 'relative'}} title='Recommended Movie'
-                                               url={urls.findSimilarById.replace("{id}", id) + language}
-                                               isLargeRow={true}/>
+                                    <RenderIfVisible stayRendered={true}>
+                                        <RowBanner confirm={true} style={{position: 'relative'}} title='Similar Movie'
+                                                   url={urls.findRecommendedById.replace("{id}", id) + language}
+                                                   isLargeRow={true}/>
+                                        </RenderIfVisible>
+                                    <RenderIfVisible stayRendered={true}>
+                                        <RowBanner confirm={true}  style={{position: 'relative'}} title='Recommended Movie'
+                                                   url={urls.findSimilarById.replace("{id}", id) + language}
+                                                   isLargeRow={true}/>
+                                    </RenderIfVisible>
                                     </Tab> : ''}
 
                                 <Tab eventKey={5} title="Review">
-                                    <MovieReviews title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
+                                    <RenderIfVisible stayRendered={true}>
+                                        <MovieReviews title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
+                                    </RenderIfVisible>
                                 </Tab>
                             </Tabs>
                         </Modal.Body>
@@ -554,12 +616,13 @@ class Banner extends Component {
                                                          icon={faArrowLeftLong}/>
                                     </div>
                                 }
-                                {this.state.trailerURL !=="" ?
+                                {this.state.currentTrailerUrl !=="" ?
                                     <div>
-                                    <Link  to={`/movieDetails/${id}/${this.state.trailerURL}/${this.state.sound}/${this.props.title}/${this.state.imdbId}/${language}`} >
-                                        <PlayModalMenuButton ><img alt='' src={PlayButton}/></PlayModalMenuButton>
-                                    </Link>
-                                </div>
+                                        <Link
+                                            to={`/movieDetails/${this.state.currentTrailerUrl}/${this.state.sound}/${this.state.imdbId}/${language}`}>
+                                            <PlayModalMenuButton><img alt='' src={PlayButton}/></PlayModalMenuButton>
+                                        </Link>
+                                    </div>
                                         :""}
 
                                 {this.context.moviesContext[this.context.currentIndex + 1] ?

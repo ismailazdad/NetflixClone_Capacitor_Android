@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import styled from "styled-components";
 import {playerOptions} from "../../utils/hooks";
 import {useParams} from "react-router";
@@ -9,7 +9,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExpand, faVolumeHigh, faVolumeXmark} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import MovieReviews from "../../components/MovieReviews";
+import {Loader} from "../../utils/style/Atoms";
+import {LoaderWrapper} from "../../components/Banner";
 import {App} from "@capacitor/app";
+import { MoviesContext} from "../../utils/context";
+import urls from "../../utils/urls";
 
 const Expand = styled.div`
     position:absolute;
@@ -64,15 +68,25 @@ const MovieButton = styled.button`
 
 
 function Movie() {
-    const {id, videoId, sound, title, imdbId,language} = useParams()
+    const { videoId, sound, imdbId,language} = useParams()
     const [isVideoPlaying, setIsVideoPlaying] = useState(false)
     const [isVideoError, setIisVideoError] = useState(false)
     const [isVideoLoading, setIsVideoLoading] = useState(false)
     const [isEnableSound, setIsEnableSound] = useState(sound === "true")
     const [playerObject, setPlayerObject] = useState(false)
-    const [isAppActive, setAppActive]= useState(true)
+    const {currentMovie} = useContext(MoviesContext)
+    const id = currentMovie?.id;
+    const title = currentMovie?.title;
+    const image = urls.findImagesUrl +currentMovie?.poster_path;
+    App.addListener('appStateChange', (state) => {
+        if (state.isActive) {
+            playerObject.playVideo();
+        } else {
+            playerObject.pauseVideo();
+        }
+    });
 
-    playerOptions.playerVars.mute = 1;
+    playerOptions.playerVars.mute = !isEnableSound;
     playerOptions.playerVars.fs = 1;
     playerOptions.playerVars.controls = 0;
     playerOptions.playerVars.showinfo = 0;
@@ -95,12 +109,23 @@ function Movie() {
         const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen;
         if (requestFullScreen) {
             requestFullScreen.bind(playerElement)()
+            window.screen.orientation.lock('landscape')
         }
+    }
+   const enablePause=()=>{
+        if(playerObject.getPlayerState()!==1){
+            playerObject.playVideo();
+        } else {
+            playerObject.pauseVideo();
+        }
+    }
+
+    if (isVideoError) {
+        return <span>Oups something went wrong</span>
     }
     return (
 
-        <div key={`${id}--bannerVideo`}
-             style={{background: 'black', color: 'white', height: '100vh', overflowX: 'hidden', position: 'fixed'}}>
+        <div key={`${id}--bannerVideo`} style={{background:`url(${image})`,backgroundPosition:"center",backgroundColor:"black",backgroundSize: "contain",backgroundRepeat:"no-repeat", color: 'white', height: '100vh', overflowX: 'hidden', position: 'fixed'}}>
             <div style={{
                 position: 'absolute',
                 zIndex: '1',
@@ -108,8 +133,13 @@ function Movie() {
                 marginLeft: '1vh',
                 marginRight: '1vh',
             }}>
-                <div style={{height: '10vh'}}>
-                    <h3>{title}</h3>
+                 {isVideoLoading ?
+                         <LoaderWrapper >
+                             <Loader />
+                         </LoaderWrapper>
+                      : ''}
+                <div style={{height: '10vh',userSelect: 'none'}}>
+                    <h3 onClick={enablePause}>{title}</h3>
                     <Link to={`/`}>
                         <MovieButton>Back</MovieButton>
                     </Link>
@@ -140,15 +170,21 @@ function Movie() {
                          setIisVideoError(false);
 
                      }}
-                     onError={e => {setIisVideoError(true);setIsVideoPlaying(false)}}
-                     onReady={e=>{setPlayerObject(e.target);e.target.playVideo();;setIsVideoPlaying(false);setIsVideoLoading(true);}}
-                     onPause={e=>playerObject.playVideo()}
+                     onError={e => {
+                        setIisVideoError(true);
+                        setIsVideoPlaying(false);
+                     }}
+                     onReady={e=>{
+                         setPlayerObject(e.target);
+                         e.target.playVideo();
+                         setIsVideoPlaying(false);
+                         setIsVideoLoading(true);
+                     }}
                      onStateChange={e=>console.log("state change",e.target)}
                      onEnd={ e=> {setIsVideoPlaying(false)}}
                      videoId={videoId}
                      opts={playerOptions}
             />
-
         </div>
     );
 }
