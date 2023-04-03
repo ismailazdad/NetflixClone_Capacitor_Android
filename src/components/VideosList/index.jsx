@@ -153,7 +153,7 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
                                     onError={e => e.target.parentNode.style.display = 'none'}
                                     onTouchEnd={() => {
                                         setTrailerURL(movie?.key)
-                                        updateMenuStatue( false)
+                                        // updateMenuStatue( false)
                                     }}
                                 >
                                 {isVideoPlaying && movie?.key === trailerURL ?

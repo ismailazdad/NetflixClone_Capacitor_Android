@@ -398,7 +398,7 @@ class Banner extends Component {
             clearTimeout(this.timer)
             playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
             this.setVidError(false);
-            if(Object.keys(this.state.playerObj).length >0){
+            if(Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h?.src){
                 this.state.playerObj.loadVideoById(key)
                 this.setCurrentTrailerURL(key);
             }
