@@ -355,7 +355,7 @@ class Banner extends Component {
         clearTimeout(this.timer);
         this.setVidError(false);
         this.setIsVideoLoading(true);
-        const playerPresent = Object.keys(this.state.playerObj).length >0;
+        const playerPresent = Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h?.src;
         if(playerPresent){
             this.state.playerObj?.pauseVideo();
         }
