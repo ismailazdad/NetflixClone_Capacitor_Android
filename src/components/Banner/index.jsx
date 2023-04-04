@@ -176,6 +176,10 @@ const LoaderContainer = styled.div`
 `
 const VideoContainer = styled.div`
     opacity : ${({isVideoLoading,isVideoError,isVideoPlaying}) =>  isVideoLoading || isVideoError || !isVideoPlaying ? '0' : '1'};
+    :fullscreen {
+      position: fixed;
+      top: 0;
+    }
 `
 const SoundContainer = styled.div`
     position:absolute;
@@ -420,9 +424,9 @@ class Banner extends Component {
         const playerElement = document.getElementById('vidPlayer')
         const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
         if (requestFullScreen) {
-            requestFullScreen.bind(playerElement)()
             clearTimeout(this.timer);
             window.screen.orientation.lock('landscape')
+            requestFullScreen.bind(playerElement)()
         }
     }
 
