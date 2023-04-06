@@ -6,7 +6,7 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowLeftLong, faArrowRightLong, faExpand, faVolumeHigh, faVolumeXmark} from '@fortawesome/free-solid-svg-icons'
+import {faExpand, faVolumeHigh, faVolumeXmark,faForwardStep,faBackwardStep} from '@fortawesome/free-solid-svg-icons'
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -613,12 +613,12 @@ class Banner extends Component {
                                     }}>
                                         <FontAwesomeIcon size="xl"
                                                          style={{color: 'white', paddingLeft: '0px !important'}}
-                                                         icon={faArrowLeftLong}/>
+                                                         icon={faBackwardStep}/>
                                     </div>
                                     : <div>
                                         <FontAwesomeIcon size="xl"
                                                          style={{color: 'transparent', paddingLeft: '0px !important'}}
-                                                         icon={faArrowLeftLong}/>
+                                                         icon={faBackwardStep}/>
                                     </div>
                                 }
                                 {this.state.currentTrailerUrl !=="" && !this.state.vidError ?
@@ -637,13 +637,13 @@ class Banner extends Component {
                                     }}>
                                         <FontAwesomeIcon size="xl"
                                                          style={{color: 'white', paddingLeft: '0px !important'}}
-                                                         icon={faArrowRightLong}/>
+                                                         icon={faForwardStep}/>
                                     </div>
                                     :
                                     <div>
                                         <FontAwesomeIcon size="xl"
                                                          style={{color: 'transparent', paddingLeft: '0px !important'}}
-                                                         icon={faArrowRightLong}/>
+                                                         icon={faForwardStep}/>
                                     </div>
                                 }
                             </div>
