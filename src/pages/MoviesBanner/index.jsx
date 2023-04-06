@@ -160,7 +160,7 @@ function MoviesBanner() {
             <RowBannerContainer onTouchStart={handleTouchEvent} >
                 {inputs.searchMovie.length > 0 && !focus?
                     <RenderIfVisible>
-                        <RowBanner key={'search_container'} title='Search Results'
+                        <RowBanner sort={true} key={'search_container'} title='Search Results'
                                    url={urls.searchMovie.replace('{query}', inputs.searchMovie) + language} isLargeRow/>
                     </RenderIfVisible>:''
                 }
@@ -193,10 +193,10 @@ function MoviesBanner() {
                 {moviesGenresList && moviesGenresList.map((movie, index) =>
                     <RenderIfVisible key={index}>
                             {movie.replace ?
-                                <RowBanner key={index +movie.title}  title={movie.title} url={movie.url.replaceAll("{lang}",language?.split("").slice(0,2).join("")) } isLargeRow={movie.isLargeRow}
+                                <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url.replaceAll("{lang}",language?.split("").slice(0,2).join("")) } isLargeRow={movie.isLargeRow}
                                            useRank={movie.useRank}/>
                                 :
-                                <RowBanner key={index +movie.title}  title={movie.title} url={movie.url + language} isLargeRow={movie.isLargeRow}
+                                <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url + language} isLargeRow={movie.isLargeRow}
                                            useRank={movie.useRank}/>
                             }
                     </RenderIfVisible>

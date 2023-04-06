@@ -12,29 +12,29 @@ export const playerOptions = {
     }
 }
 export const moviesGenresList=[
-    {title: "Popular Movies", url: urls.findPopular, isLargeRow: true, useRank: false,replace:false},
-    {title: "Now Playing", url: urls.findNowPlaying, isLargeRow: false, useRank: false,replace:false},
-    {title: "Top Trending movie", url: urls.findActionMovies, isLargeRow: true, useRank: true,replace:false},
-    {title: "NETFLIX ORIGINALS", url: urls.findNetflixOriginals, isLargeRow: true, useRank: false,replace:false},
-    {title: "Family Movies", url: urls.findFamilyMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "UpComing", url: urls.findUpcoming, isLargeRow: true, useRank: false,replace:true},
-    {title: "Western Movies", url: urls.findWesternMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "War Movies", url: urls.findWarMovies, isLargeRow: false, useRank: false,replace:false},
-    {title: "Thriller Movies", url: urls.findThrillerMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "SF Movies", url: urls.findSFMovies, isLargeRow: false, useRank: false,replace:false},
-    {title: "Mystery Movies", url: urls.findMysteryMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "Music Movies", url: urls.findMusicMovies, isLargeRow: false, useRank: false,replace:false},
-    {title: "History Movies", url: urls.findHistoryMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "Fantasy Movies", url: urls.findFantasyMovies, isLargeRow: false, useRank: false,replace:false},
-    {title: "Top Rated", url: urls.findTopRated, isLargeRow: true, useRank: true,replace:false},
-    {title: "Drama Movies", url: urls.findDramaMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "Trending Movies", url: urls.findTrending, isLargeRow: true, useRank: false,replace:false},
-    {title: "Crime Movies", url: urls.findCrimeMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "Animation Movies", url: urls.findAnimationMovies, isLargeRow: true, useRank: false,replace:false},
-    {title: "Comedy Movies", url: urls.findComedyMovies, isLargeRow: true, useRank: true,replace:false},
-    {title: "Horror Movies", url: urls.findHorrorMovies, isLargeRow: false, useRank: false,replace:false},
-    {title: "Romance Movie", url: urls.findRomanceMovies, isLargeRow: false, useRank: false,replace:false},
-    {title: "Documentaries", url: urls.findDocumentaries, isLargeRow: true, useRank: false,replace:false},
+    {title: "Popular Movies", url: urls.findPopular, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Now Playing", url: urls.findNowPlaying, isLargeRow: false, useRank: false,replace:false,sort:true},
+    {title: "Top Trending movie", url: urls.findActionMovies, isLargeRow: true, useRank: true,replace:false,sort:false},
+    {title: "NETFLIX ORIGINALS", url: urls.findNetflixOriginals, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Family Movies", url: urls.findFamilyMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "UpComing", url: urls.findUpcoming, isLargeRow: true, useRank: false,replace:true,sort:true},
+    {title: "Western Movies", url: urls.findWesternMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "War Movies", url: urls.findWarMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Thriller Movies", url: urls.findThrillerMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "SF Movies", url: urls.findSFMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Mystery Movies", url: urls.findMysteryMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Music Movies", url: urls.findMusicMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "History Movies", url: urls.findHistoryMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Fantasy Movies", url: urls.findFantasyMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Top Rated", url: urls.findTopRated, isLargeRow: true, useRank: true,replace:false,sort:false},
+    {title: "Drama Movies", url: urls.findDramaMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Trending Movies", url: urls.findTrending, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Crime Movies", url: urls.findCrimeMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Animation Movies", url: urls.findAnimationMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Comedy Movies", url: urls.findComedyMovies, isLargeRow: true, useRank: true,replace:false,sort:false},
+    {title: "Horror Movies", url: urls.findHorrorMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Romance Movie", url: urls.findRomanceMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Documentaries", url: urls.findDocumentaries, isLargeRow: true, useRank: false,replace:false,sort:false},
 ]
 export function getInfo(data,url){
     const genres = typeof data?.genres ==='string' ? data.genres : data.genres?.map((e) => e?.name).join(', ');
@@ -42,7 +42,8 @@ export function getInfo(data,url){
     const languages = data?.spoken_languages?.map((e) => Object.values(e)).flat().join(', ');
     const adults = data?.adults ? data.adults : data?.adult ? data.adult : false;
     const year = data?.release_date ? data?.release_date?.toString().substring(0, 4) : data?.first_air_date?.toString().substring(0, 4);
-    const popularity = !data?.vote_average  ?  data.popularity : Math.ceil(data?.vote_average * 10).toFixed(0);
+    let popularity = !data?.vote_average  ?  data.popularity : Math.ceil(data?.vote_average * 10).toFixed(0);
+    popularity = Math.round(popularity) > 100 ? 100 : Math.round(popularity);
     const imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
     const imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
     const title = data?.title || data?.name || data?.original_name;

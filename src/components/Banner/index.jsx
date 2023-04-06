@@ -493,7 +493,7 @@ class Banner extends Component {
 
                 </MovieHeaderContent>
                     <LoaderContainer >
-                        {this.state.vidError ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
+                        {this.state.vidError ? <span style={{color:'white'}}>no trailer...</span>:''}
                         {(this.state.isVideoLoading && !this.state.vidError )?
                             <LoaderWrapper data-testid='loader'>
                                 <Loader style={{marginTop:'0vh'}} id='myloader'/>
@@ -507,6 +507,7 @@ class Banner extends Component {
                                          clearTimeout(this.timer);
                                          this.showModalDelay();
                                          this.setFirst(false);
+                                         this.setVidError(false);
                                          App.addListener('appStateChange', (state) => {
                                              if (state.isActive) {
                                                  this.state.playerObj.playVideo();
@@ -585,12 +586,12 @@ class Banner extends Component {
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
                                     <RenderIfVisible stayRendered={true}>
-                                        <RowBanner confirm={true} style={{position: 'relative'}} title='Similar Movie'
+                                        <RowBanner sort={true}  confirm={true} style={{position: 'relative'}} title='Similar Movie'
                                                    url={urls.findRecommendedById.replace("{id}", id) + language}
                                                    isLargeRow={true}/>
                                         </RenderIfVisible>
                                     <RenderIfVisible stayRendered={true}>
-                                        <RowBanner confirm={true}  style={{position: 'relative'}} title='Recommended Movie'
+                                        <RowBanner sort={true}  confirm={true}  style={{position: 'relative'}} title='Recommended Movie'
                                                    url={urls.findSimilarById.replace("{id}", id) + language}
                                                    isLargeRow={true}/>
                                     </RenderIfVisible>
@@ -620,7 +621,7 @@ class Banner extends Component {
                                                          icon={faArrowLeftLong}/>
                                     </div>
                                 }
-                                {this.state.currentTrailerUrl !=="" ?
+                                {this.state.currentTrailerUrl !=="" && !this.state.vidError ?
                                     <div>
                                         <Link
                                             to={`/movieDetails/${this.state.currentTrailerUrl}/${this.state.sound}/${this.state.imdbId}/${language}`}>
