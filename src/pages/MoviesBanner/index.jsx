@@ -69,7 +69,7 @@ function MoviesBanner() {
     const {currentMovie,saveMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
     const {adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
-    const isMobile = useMediaQuery({query: '(max-width: 768px)'})
+    const isMobile = useMediaQuery({query: '(orientation: portrait) and (max-width: 768px), (orientation: landscape)  and (max-width: 1000px)'})
     const [focus,setFocus] = useState(false)
     const [inputs, setInputs] = useState({ searchMovie: ''})
     const [showSearch,setShowSearch] = useState(false)
@@ -82,7 +82,6 @@ function MoviesBanner() {
         }
         localStorage.setItem('myList', JSON.stringify(myList))
     }, [myList,data,saveMovie,currentMovie])
-
 
 
     const handleChange = (event) => {
@@ -112,20 +111,10 @@ function MoviesBanner() {
         return <span>Oups something went wrong</span>
     }
 
-    //include this line to prevent portrait mode for web mobile except for full screen video
-    // if (!isMobile) {
-    //     if (!!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement)) {
-    //         const playerElement = document.getElementById('vidPlayer')
-    //         const requestFullScreen = playerElement && (playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen);
-    //         if (requestFullScreen) {
-    //             requestFullScreen.bind(playerElement)()
-    //             window.screen.orientation.lock('landscape')
-    //         }
-    //     } else {
-    //         return <div style={{height: '60vh', marginTop: '30vh', position: 'relative'}}>No supported device desktop
-    //             mode, switch to mobile mode...</div>
-    //     }
-    // }
+    if (!isMobile) {
+        return <div style={{height: '60vh', marginTop: '30vh', position: 'relative'}}>No supported device desktop
+            mode, switch to mobile mode...</div>
+    }
 
     return (
         <div style={{background: 'black',color:'white'}}>

@@ -25,6 +25,7 @@
 }
 
 @media  only screen and (max-width:768px ) {
+
     .video-background-banner {
         height: 30vh;
     }
@@ -43,6 +44,31 @@
     }
     .modal-content{
         height: 70vh;
+    }
+}
+@media  (orientation: landscape){
+    .video-background-banner {
+        height: 100vh;
+    }
+    .video-background-banner iframe{
+        /*border:solid 3px red;*/
+        width: 100vw;
+        position: absolute;
+        height: 100vh;
+    }
+    .modal-backdrop{
+        display: none;
+        opacity:0 !important;
+        z-index:-1;
+    }
+    #mymodal{
+        display: none;
+    }
+    .my-modal{
+        display: none !important;
+    }
+    #header{
+        display:none;
     }
 }
 .nav-link[aria-selected="false"]{

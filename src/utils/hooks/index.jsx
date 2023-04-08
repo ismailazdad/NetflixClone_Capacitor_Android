@@ -8,7 +8,16 @@ export const playerOptions = {
     width: "100%",
     playerVars: {
         autoplay: 1,
-        mute: 1
+        mute: 1,
+        rel:0,
+        showinfo:0,
+        fs :1,
+        controls:0,
+        // controls:2,
+        start:3,
+        color:'white',
+        enablejsapi:1,
+        modestbranding:1
     }
 }
 export const moviesGenresList=[

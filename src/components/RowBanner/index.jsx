@@ -16,6 +16,7 @@ export const RowContainer = styled.div`
     margin-left: 20px;
     overflow-y: hidden;
     overflow-x: hidden;   
+    user-select: none;
 `
 export const RowPoster = styled.div`
     display: flex;

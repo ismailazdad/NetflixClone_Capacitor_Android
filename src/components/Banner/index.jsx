@@ -69,6 +69,19 @@ const MovieHeader = styled.div`
         background-position: 30%; 
         background-size:cover;
     }
+     @media  only screen and (orientation: landscape){
+        color: white;
+        object-fit: contain;
+        // height: 448px;
+        height: 100vh;
+        background-size: cover;   
+        background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'},  ${({backup}) => 'url(' + backup + ')'};       
+        background-position: center;   
+        user-select: none;
+        background-position: 30%; 
+        background-size:cover;
+    }   
+    
 `
 const MovieHeaderContent = styled.div`
     margin-left: 30px;
@@ -164,6 +177,9 @@ const MovieFadeBottom = styled.div`
     @media  only screen and (max-width:768px ){
         display : none ;
     }
+    @media  only screen and (orientation: landscape){
+        display : none ;
+    }  
 `
 
 
@@ -176,6 +192,7 @@ const LoaderContainer = styled.div`
 `
 const VideoContainer = styled.div`
     opacity : ${({isVideoLoading,isVideoError,isVideoPlaying}) =>  isVideoLoading || isVideoError || !isVideoPlaying ? '0' : '1'};
+    background-color: black;
     :fullscreen {
       position: fixed;
       top: 0;
@@ -225,6 +242,7 @@ class Banner extends Component {
             currentTrailerUrl:"",
             isVideoLoading: false,
             isVideoPlaying: false,
+            showPlayButton:false,
             vidError: false,
             startVideo: false,
             playerObj : {},
@@ -237,13 +255,6 @@ class Banner extends Component {
         }
 
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
-    playerOptions.playerVars.mute = 1;
-    playerOptions.playerVars.fs = 1;
-    playerOptions.playerVars.controls=0;
-    playerOptions.playerVars.showinfo=0;
-    playerOptions.playerVars.start=3;
-    playerOptions.playerVars.color='white';
-    playerOptions.playerVars.enablejsapi=1;
     TEXT_COLLAPSE_OPTIONS.minHeight = 150;
     TEXT_COLLAPSE_OPTIONS.maxHeight = 250;
     }
@@ -304,6 +315,10 @@ class Banner extends Component {
         this.setState({isVideoLoading: flag})
     }
 
+    setPlayButton(flag) {
+        this.setState({showPlayButton: flag})
+    }
+
     setVidError(flag) {
         this.setState({vidError: flag})
     }
@@ -348,6 +363,7 @@ class Banner extends Component {
             this.handleClick(nextProps.id)
             this.setState({key: 1})
         }
+        this.setPlayButton(false);
     }
 
     componentWillUnmount() {
@@ -450,7 +466,13 @@ class Banner extends Component {
         const {imageUrl,imageUrlPoster,title,adults,popularity,year,isMainMenu,id,language,character,showSimilar} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
-                <MovieHeaderContent id='test' isMainMenu={isMainMenu} >
+                <MovieHeaderContent id='header' isMainMenu={isMainMenu} >
+                    {this.state.showPlayButton?
+                        <div style={{textAlign: 'center', position: 'absolute', top: '13vh', left: '22vh'}}>
+                            <PlayModalMenuButton onClick={this.enablePause}><img alt='' src={PlayButton}/></PlayModalMenuButton>
+                        </div>
+                        : ''
+                    }
                      {this.state.isVideoPlaying?
                         <div>
                             <SoundContainer onClick={this.enableSound}>
@@ -524,7 +546,16 @@ class Banner extends Component {
                                          this.setIsVideoLoading(true);
                                          this.setVidError(false);
                                      }}
-                                     onStateChange={e=>console.log("state change",e.target)}
+                                     onStateChange={e=> {
+                                            const t =  [-1,0,3,5]
+                                            if(!t.includes(e.target.getPlayerState())  && !this.state.isVideoLoading){
+                                                if(e.target.getPlayerState() ===2)this.setPlayButton(true)
+                                                if(e.target.getPlayerState() ===1)this.setPlayButton(false)
+                                            }else{
+                                                this.setPlayButton(false)
+                                            }
+                                     }
+                                     }
                                      onEnd={ e=> {this.setVidError(false);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
                                      videoId={this.state.trailerURL}
                                      opts={playerOptions}
@@ -532,7 +563,7 @@ class Banner extends Component {
                         </VideoContainer>
                     </LoaderContainer>
                 <MovieFadeBottom />
-                <Modal key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'#594757'}} >
+                <Modal id="mymodal"  key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'#594757'}} >
                     <Modal.Dialog style={{backgroundPosition:'top', backgroundSize: 'cover',backgroundImage: `url(${imageUrlPoster})`}}>
                         <Modal.Header onClick={() => {
                             this.setState({showModal: false});
