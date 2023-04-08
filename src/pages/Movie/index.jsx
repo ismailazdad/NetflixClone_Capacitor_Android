@@ -12,7 +12,7 @@ import MovieReviews from "../../components/MovieReviews";
 import {Loader} from "../../utils/style/Atoms";
 import {LoaderWrapper} from "../../components/Banner";
 import {App} from "@capacitor/app";
-import { MoviesContext} from "../../utils/context";
+import {MoviesContext} from "../../utils/context";
 import urls from "../../utils/urls";
 
 const Expand = styled.div`
@@ -163,6 +163,7 @@ function Movie() {
             </div>
 
             <YouTube id='vidPlayer' className='video-background'
+                     style={{opacity: isVideoPlaying ? 1 : 0}}
                      onPlay={e => {
                          setPlayerObject(e.target);
                          setIsVideoPlaying(true);
