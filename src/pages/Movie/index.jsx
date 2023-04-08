@@ -15,6 +15,11 @@ import {App} from "@capacitor/app";
 import {MoviesContext} from "../../utils/context";
 import urls from "../../utils/urls";
 
+const Container = styled.div`
+    @media  only screen and (orientation: landscape){
+        display : none ;
+    }
+`
 const Expand = styled.div`
     position:absolute;
     right:2vh;
@@ -126,7 +131,7 @@ function Movie() {
     return (
 
         <div key={`${id}--bannerVideo`} style={{background:`url(${image})`,backgroundPosition:"center",backgroundColor:"black",backgroundSize: "contain",backgroundRepeat:"no-repeat", color: 'white', height: '100vh', overflowX: 'hidden', position: 'fixed'}}>
-            <div style={{
+            <Container style={{
                 position: 'absolute',
                 zIndex: '1',
                 marginTop: '15vh',
@@ -160,7 +165,7 @@ function Movie() {
                 </div>
                 <MovieReviews title={title} language={language} id={id} imdbId={imdbId} showComment={false}/>
                 <MovieDetails id={id} language={language}/>
-            </div>
+            </Container>
 
             <YouTube id='vidPlayer' className='video-background'
                      style={{opacity: isVideoPlaying ? 1 : 0}}
