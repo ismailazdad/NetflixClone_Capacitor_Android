@@ -9,7 +9,7 @@ import {Route, Routes} from "react-router";
 import Movie from "./pages/Movie";
 import Actor from "./pages/Actor";
 import {MoviesProvider} from "./utils/context"
-
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
@@ -28,3 +28,4 @@ root.render(
     </Router>
 );
 
+serviceWorkerRegistration.register();

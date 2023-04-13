@@ -41,9 +41,16 @@
     }
     .modal-dialog{
         margin: 0 !important;
+        max-width: 100% !important;
+    }
+    .my-modal{
+        padding-right: 0px !important;
     }
     .modal-content{
         height: 70vh;
+    }
+    .fixed-top{
+        padding-right: 0px !important;
     }
 }
 @media  (orientation: landscape){

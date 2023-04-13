@@ -182,7 +182,8 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList,confirm}) {
                                         alt={movie.name}
                                         isLargeRow={isLargeRow}
                                         isActive={currentIndex === movie}
-                                        onTouchEnd={() => updateMovies(movie, index)}
+                                        onTouchEnd={(e) => {updateMovies(movie, index);e.preventDefault();}}
+                                        onClick={() => {updateMovies(movie, index);}}
                                         useRank={useRank}
                                         onError={e => e.target.parentNode.style.display = 'none'}
                                     />

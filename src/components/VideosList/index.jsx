@@ -151,10 +151,8 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
                                     imageUrl = {'https://img.youtube.com/vi/'+movie?.key+'/0.jpg'}
                                     alt={movie.name}
                                     onError={e => e.target.parentNode.style.display = 'none'}
-                                    onTouchEnd={() => {
-                                        setTrailerURL(movie?.key)
-                                        // updateMenuStatue( false)
-                                    }}
+                                    onTouchEnd={(e) => {setTrailerURL(movie?.key);e.preventDefault()}}
+                                    onClick={() => {setTrailerURL(movie?.key)}}
                                 >
                                 {isVideoPlaying && movie?.key === trailerURL ?
                                     <WaitAnimated>

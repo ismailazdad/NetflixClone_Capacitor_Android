@@ -440,11 +440,16 @@ class Banner extends Component {
         const playerElement = document.getElementById('vidPlayer')
         const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
         if (requestFullScreen) {
-            clearTimeout(this.timer);
+            //android
+            // clearTimeout(this.timer);
             window.screen.orientation.lock('landscape')
             requestFullScreen.bind(playerElement)()
+            //wpa
+            // requestFullScreen.bind(playerElement)()
+            // window.screen.orientation.lock('landscape')
         }
     }
+
 
     enablePause=()=>{
         if(this.state.playerObj.getPlayerState()!==1){
@@ -576,7 +581,7 @@ class Banner extends Component {
                                 <span>&times;</span>
                             </button>
                         </Modal.Header>
-                        <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'scroll'}}>
+                        <Modal.Body className="container" style={{overflowX: 'hidden', overflowY: 'auto'}}>
                             {
                                 this.props?.myList.map(e=>e.id).includes(id) ?
                                     <OverlayTrigger delay={{ "show": 250, "hide": 100 }} placement="left" overlay={this.getTooltip("added to my list")} >

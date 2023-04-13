@@ -37,7 +37,18 @@ Make your own movie favorite list quickly
 [Web mobile demo](https://android_netflix.surge.sh/)
 
      
-[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)     
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)
+
+### Tools used
+ - Add capacitor for Android conversion 
+ - Add WPA Web progressive app for faster rendering
+ - All modern browsers (including mobile) with css media query
+ - Route maping for rendering mutliples pages with react router  with parameters(dynamic route generation)
+ - Bootstrap modal
+ - GlobalStyle, and style.jsx and styled component
+ - Hooks and UseContext to synchronize data context
+ - TMDB Api 
+ - Handle environment variable with .env    
 
 if someone can do the same for ios and push the app to the apple store, it will be awesome :boom: :neckbeard: :monkey_face:
 
