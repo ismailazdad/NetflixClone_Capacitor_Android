@@ -133,8 +133,8 @@ Go to Android Studio to fix all images declination for devices
  
 ### Preview
 
-<img src="./src/assets/1676974841472.jpg" width=30% height=30%>
-<img src="./src/assets/1676974841486.jpg" width=30% height=30%>
-<img src="./src/assets/1676974841494.jpg" width=30% height=30%>
-<img src="./src/assets/1676974841505.jpg" width=30% height=30%>
+<img src="./src/assets/Capture-20230415135049-391x845.png" width=30% height=30%>
+<img src="./src/assets/Capture-20230415135200-390x844.png" width=30% height=30%>
+<img src="./src/assets/Capture-20230415140025-392x846.png" width=30% height=30%>
+<img src="./src/assets/Capture-20230415140213-390x848.png" width=30% height=30%>
 
