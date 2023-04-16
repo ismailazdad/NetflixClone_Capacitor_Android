@@ -17,7 +17,7 @@ Search for a movie , show movie details like casting or production focus on user
 MoviesTrailer app allows you to see trailers of all popular movies, primarily in your native language. Search for an actor or director..., get the filmography  and the resume of an actor.Search any movie, find information about it and see the list of trailers for the same movie very easily.
 Make your own movie favorite list quickly 
 
-• Make you own movies 
+• Make you own movies list 
 
 • Show actor or director filmography
 
