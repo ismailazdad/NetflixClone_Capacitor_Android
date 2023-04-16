@@ -9,7 +9,7 @@ This repository was based on a idea, Make my own Netflix clone.
 For this challenge i wanted to see all informations
  about a movie and in same time see all trailers available.
 
-## Developed functionality 
+## Description 
 
 Watch the lastest trailers quickly and easily like a famous streaming app.
 Search for a movie , show movie details like casting or production focus on user experience
