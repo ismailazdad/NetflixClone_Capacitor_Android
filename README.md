@@ -36,7 +36,7 @@ Make your own movie favorite list quickly
 
 ### Download and install movies trailer app
 
-[Web mobile app WPA](https://android_netflix.surge.sh/)
+[Web mobile app WPA](https://netflix_wpa.surge.sh/)
    
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width=30% height=30%>](https://play.google.com/store/apps/details?id=com.moviestrailer.app)
 
