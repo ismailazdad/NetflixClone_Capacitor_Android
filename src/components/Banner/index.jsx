@@ -375,7 +375,7 @@ class Banner extends Component {
         clearTimeout(this.timer);
         this.setVidError(false);
         this.setIsVideoLoading(true);
-        const playerPresent = Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h?.src;
+        const playerPresent = Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h;
         if(playerPresent){
             this.state.playerObj?.pauseVideo();
         }
@@ -384,7 +384,7 @@ class Banner extends Component {
             .then((url) => {
                 const urlParams = new URLSearchParams(new URL(url).search);
                 if(playerPresent){
-                    this.state.playerObj.loadVideoById(urlParams.get("v"), 0, "default");
+                    this.state.playerObj.loadVideoById(urlParams.get("v"));
                     this.setCurrentTrailerURL(urlParams.get("v"));
                 }else{
                     this.setTrailerURL(urlParams.get("v"));
@@ -398,7 +398,7 @@ class Banner extends Component {
                     .then((url) => {
                         const urlParams = new URLSearchParams(new URL(url).search);
                         if(playerPresent){
-                            this.state.playerObj.loadVideoById(urlParams.get("v"), 0, "default");
+                            this.state.playerObj.loadVideoById(urlParams.get("v"));
                             this.setCurrentTrailerURL(urlParams.get("v"));
                         }else{
                             this.setTrailerURL(urlParams.get("v"));
@@ -418,7 +418,7 @@ class Banner extends Component {
             clearTimeout(this.timer)
             playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
             this.setVidError(false);
-            if(Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h?.src){
+            if(Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h){
                 this.state.playerObj.loadVideoById(key)
                 this.setCurrentTrailerURL(key);
             }
