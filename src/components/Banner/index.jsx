@@ -57,7 +57,9 @@ export const LoaderWrapper = styled.div`
     justify-content: center;
 `
 const MovieHeader = styled.div` 
+    width:100%;
     @media  only screen and (max-width:768px ){
+        width:initial;
         color: white;
         object-fit: contain;
         height: 448px;
@@ -72,7 +74,6 @@ const MovieHeader = styled.div`
      @media  only screen and (orientation: landscape){
         color: white;
         object-fit: contain;
-        // height: 448px;
         height: 100vh;
         background-size: cover;   
         background-image: ${({imageUrl}) => 'url(' + imageUrl + ')'},  ${({backup}) => 'url(' + backup + ')'};       

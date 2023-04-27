@@ -17,6 +17,9 @@ export const RowContainer = styled.div`
     overflow-y: hidden;
     overflow-x: hidden;   
     user-select: none;
+    @media  only screen and (orientation: landscape){
+        opacity :0;
+    }
 `
 export const RowPoster = styled.div`
     display: flex;
