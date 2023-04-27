@@ -11,6 +11,12 @@
       "purpose": "maskable"
     },
     {
+      "src": "drawable-xxhdpi-icon.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "icon_512.png",
       "sizes": "512x512",
       "type": "image/x-icon"
@@ -22,7 +28,7 @@
     },
     {
       "src": "drawable-xxhdpi-icon.png",
-      "sizes": "144x144 72x72 96x96 128x128 256x256",
+      "sizes": "72x72 96x96 128x128 256x256",
       "type": "image/x-icon"
     },
     {
