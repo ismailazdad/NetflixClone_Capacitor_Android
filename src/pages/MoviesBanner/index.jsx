@@ -47,9 +47,10 @@ App.addListener('backButton', ({canGoBack}) => {
     if (!!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement)) {
         window.screen.orientation.lock('portrait');
         document.exitFullscreen();
-    } else {
-            showConfirm()
+    } else{
+        showConfirm()
     }
+    window.screen.orientation.unlock()
 });
 
 const showConfirm = async () => {

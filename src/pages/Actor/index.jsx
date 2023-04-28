@@ -26,26 +26,6 @@ const RowBannerContainer = styled.div`
     }  
 `
 
-App.addListener('backButton', ({canGoBack}) => {
-    if (!!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement)) {
-        window.screen.orientation.lock('portrait');
-        document.exitFullscreen();
-    } else {
-        if (!canGoBack) {
-            showConfirm()
-        }
-    }
-});
-
-const showConfirm = async () => {
-    const {value} = await Dialog.confirm({
-        title: 'Confirm',
-        message: `Are you sure you'd like to quit?`,
-    });
-    if (value) {
-        App.exitApp();
-    }
-};
 
 //second version of movies page , showing poster and trailer in header
 function Actor() {
