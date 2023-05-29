@@ -624,12 +624,12 @@ class Banner extends Component {
                                     <Tab eventKey={4} title="Similar">
                                     <RenderIfVisible stayRendered={true}>
                                         <RowBanner sort={true}  confirm={true} style={{position: 'relative'}} title='Similar Movie'
-                                                   url={urls.findRecommendedById.replace("{id}", id) + language}
+                                                   url={urls.findRecommendedById.replace("{id}", id).replace('original','w185') + language}
                                                    isLargeRow={true}/>
                                         </RenderIfVisible>
                                     <RenderIfVisible stayRendered={true}>
                                         <RowBanner sort={true}  confirm={true}  style={{position: 'relative'}} title='Recommended Movie'
-                                                   url={urls.findSimilarById.replace("{id}", id) + language}
+                                                   url={urls.findSimilarById.replace("{id}", id).replace('original','w185') + language}
                                                    isLargeRow={true}/>
                                     </RenderIfVisible>
                                     </Tab> : ''}

@@ -117,7 +117,7 @@ function Credits({id,language}) {
                                 </div>
                                 <StyledImage
                                     key={casting.id}
-                                    imageUrl = {`${urls.findImagesUrl}${casting.profile_path}`}
+                                    imageUrl = {`${urls.findImagesUrl.replace('original','w185')}${casting.profile_path}`}
                                     backup={Backup}
                                     alt={casting.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}
@@ -159,7 +159,7 @@ function Credits({id,language}) {
                                 </div>
                                 <StyledImage
                                     key={crew.id}
-                                    imageUrl = {`${urls.findImagesUrl}${crew.profile_path}`}
+                                    imageUrl = {`${urls.findImagesUrl.replace('original','w185')}${crew.profile_path}`}
                                     backup={Backup}
                                     alt={crew.name}
                                     onError = {e => e.target.parentNode.style.display = 'none'}

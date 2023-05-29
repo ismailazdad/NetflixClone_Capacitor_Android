@@ -180,7 +180,7 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList,confirm}) {
                                     {useRank ? <TrendNumber>{index + 1}</TrendNumber> : ''}
                                     <StyledImage
                                         key={movie.id}
-                                        imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                        imageUrl={`${isLargeRow ? urls.findImagesUrl.replace('original','w185')+movie.poster_path : urls.findImagesUrl.replace('original','w300')+movie.backdrop_path}`}
                                         backup={isLargeRow ? BackupLarge : BackupSmall}
                                         alt={movie.name}
                                         isLargeRow={isLargeRow}
@@ -198,7 +198,7 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList,confirm}) {
                                     <div>
                                         <StyledImage
                                             key={movie.id}
-                                            imageUrl={`${urls.findImagesUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+                                            imageUrl={`${isLargeRow ?  urls.findImagesUrl.replace('original','w185')+movie.poster_path : urls.findImagesUrl.replace('original','w300')+movie.backdrop_path}`}
                                             backup={isLargeRow ? BackupLarge : BackupSmall}
                                             alt={movie.name}
                                             isLargeRow={isLargeRow}

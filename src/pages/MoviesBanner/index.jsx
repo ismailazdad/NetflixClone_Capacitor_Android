@@ -126,8 +126,8 @@ function MoviesBanner() {
             ) : (
              <div className="fixed-top" >
                  <Banner
-                     imageUrl={imageUrl}
-                     imageUrlPoster={imageUrlPoster}
+                     imageUrl={imageUrl.replace('original','w500')}
+                     imageUrlPoster={imageUrlPoster.replace('original','w780')}
                      title={title}
                      adults={adults}
                      popularity={popularity}
@@ -183,10 +183,10 @@ function MoviesBanner() {
                 {moviesGenresList && moviesGenresList.map((movie, index) =>
                     <RenderIfVisible key={index}>
                             {movie.replace ?
-                                <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url.replaceAll("{lang}",language?.split("").slice(0,2).join("")) } isLargeRow={movie.isLargeRow}
+                                <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url.replaceAll("{lang}",language?.split("").slice(0,2).join("")).replace('original','w185') } isLargeRow={movie.isLargeRow}
                                            useRank={movie.useRank}/>
                                 :
-                                <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url + language} isLargeRow={movie.isLargeRow}
+                                <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url.replace('original','w185') + language} isLargeRow={movie.isLargeRow}
                                            useRank={movie.useRank}/>
                             }
                     </RenderIfVisible>

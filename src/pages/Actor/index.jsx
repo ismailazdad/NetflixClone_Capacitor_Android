@@ -85,7 +85,7 @@ function Actor() {
                 :
                     <ActorBio id={id}  imageUrl={urls.findImagesUrl + actor?.profile_path} name={actor?.name}  place_of_birth={actor?.place_of_birth} biography={actor?.biography} birthday={actor?.birthday} gender={actor?.gender} profession={actor?.known_for_department}  />
                 }
-                <RowBanner sort={true} title={actor?.name+' Filmography'} url={urls.findMoviesByActorId.replace("{id}",id)+language} isLargeRow/>
+                <RowBanner sort={true} title={actor?.name+' Filmography'} url={urls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language} isLargeRow/>
             </RowBannerContainer>
         </div>
     )
