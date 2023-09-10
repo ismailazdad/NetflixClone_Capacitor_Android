@@ -1,18 +1,18 @@
 import React, {useContext, useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
-import urls from "../../utils/urls"
-import {getGenres, getInfo, moviesGenresList, useFetch} from "../../utils/hooks";
+import {getGenres, getInfo,  tvsGenresList, useFetch} from "../../utils/hooks";
 import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
 import {useMediaQuery} from "react-responsive";
-import {faMagnifyingGlass, faTv} from '@fortawesome/free-solid-svg-icons'
+import {faMagnifyingGlass, faFilm} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {App} from '@capacitor/app';
 import {Dialog} from '@capacitor/dialog';
 import "bootstrap/dist/css/bootstrap.css"
 import {MoviesContext} from "../../utils/context";
 import RenderIfVisible from "react-render-if-visible"
+import tvUrls from "../../utils/urls/tv";
 import {Link} from "react-router-dom";
 
 const LoaderWrapper = styled.div`
@@ -65,12 +65,12 @@ const showConfirm = async () => {
 };
 
 //second version of movies page , showing poster and trailer in header
-function MoviesBanner() {
+function TvsBanner() {
     let language =  navigator?.language || navigator?.userLanguage;
-    const [isLoading, data, error] = useFetch(urls.findNetflixOriginals+language,true);
+    const [isLoading, data, error] = useFetch(tvUrls.findNetflixOriginals+language,true);
     const {currentMovie,saveMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(currentMovie?.genre_ids)?.slice(0,3).join(', '): getGenres(data?.genre_ids)?.slice(0,3)?.join(', ')
-    const {adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,urls.findNetflixOriginals)
+    const {adults,year,popularity,imageUrl,title,overview,myId,type,imageUrlPoster} = currentMovie ? getInfo(currentMovie,""):  getInfo(data,tvUrls.findNetflixOriginals)
     const isMobile = useMediaQuery({query: '(orientation: portrait) and (max-width: 768px), (orientation: landscape)  and (max-width: 1000px)'})
     const [focus,setFocus] = useState(false)
     const [inputs, setInputs] = useState({ searchMovie: ''})
@@ -144,18 +144,20 @@ function MoviesBanner() {
                      showSimilar={true}
                      myList={myList}
                      updateMyList={updateMyList}
-                     showType="movie"
+                     showType="tv"
                  />
              </div>
 
             )}
             <RowBannerContainer onTouchStart={handleTouchEvent} >
+
                 {inputs.searchMovie.length > 0 && !focus?
                     <RenderIfVisible>
                         <RowBanner sort={true} key={'search_container'} title='Search Results'
-                                   url={urls.searchMovie.replace('{query}', inputs.searchMovie) + language} isLargeRow/>
+                                   url={tvUrls.searchMovie.replace('{query}', inputs.searchMovie) + language} isLargeRow/>
                     </RenderIfVisible>:''
                 }
+
                 {!isLoading ?
                     <div style={{width: '100%', display: 'flex', margin: '1vh'}}>
                     <div onClick={e => setShowSearch(!showSearch)}>
@@ -177,19 +179,19 @@ function MoviesBanner() {
                         : ''}
                 </div>
                 :''}
-                <Link to={`/tv`}>
+                <Link to={`/`}>
                     <MovieButton style={{"right":"0","position":"absolute"}}>
-
-                        <FontAwesomeIcon style={{width:'3vh',height:'2vh'}} icon={faTv}/>  TV page</MovieButton>
+                        <FontAwesomeIcon style={{width:'3vh',height:'2vh'}} icon={faFilm}/> Movie page
+                        </MovieButton>
                 </Link>
-                {myList.filter(a=>a.showType === "movie").length > 0 ?
+                {myList.filter(a=>a.showType === "tv").length > 0 ?
                     <RenderIfVisible stayRendered={true}>
-                        <RowBanner key={'myList_container'} myList={myList.filter(a=>a.showType === "movie")} updateMyList={updateMyList}  title='My List'  isLargeRow/>
+                        <RowBanner key={'myList_container'} myList={myList.filter(a=>a.showType === "tv")} updateMyList={updateMyList}  title='My List'  isLargeRow/>
                     </RenderIfVisible>: ''
                 }
 
+                {tvsGenresList && tvsGenresList.map((movie, index) =>
 
-                {moviesGenresList && moviesGenresList.map((movie, index) =>
                     <RenderIfVisible key={index}>
                             {movie.replace ?
                                 <RowBanner sort={movie.sort} key={index +movie.title}  title={movie.title} url={movie.url.replaceAll("{lang}",language?.split("").slice(0,2).join("")).replace('original','w185') } isLargeRow={movie.isLargeRow}
@@ -205,4 +207,4 @@ function MoviesBanner() {
         </div>
     )
 }
-export default MoviesBanner
+export default TvsBanner

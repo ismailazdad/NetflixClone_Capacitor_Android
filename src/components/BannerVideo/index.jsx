@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import movieTrailer from "movie-trailer";
+import movieTrailer from "movie-tv-trailer";
 import {playerOptions} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import YouTube from "react-youtube";

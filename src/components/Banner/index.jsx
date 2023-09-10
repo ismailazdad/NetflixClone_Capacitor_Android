@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import movieTrailer from "movie-trailer";
+import movieTrailer from "movie-tv-trailer";
 import {playerOptions, TEXT_COLLAPSE_OPTIONS} from "../../utils/hooks";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
@@ -20,6 +20,7 @@ import MovieDetails from "../MovieDetails";
 import {Loader} from "../../utils/style/Atoms";
 import MovieReviews from "../MovieReviews";
 import urls from "../../utils/urls";
+import tvUrls from "../../utils/urls/tv";
 import RowBanner from "../RowBanner";
 import MovieProvider from "../Provider";
 import imageMyList from "../../assets/list.png";
@@ -252,7 +253,8 @@ class Banner extends Component {
             focus : this.props.focus,
             first : true,
             key : 1,
-            isMainMenu : this.props.isMainMenu
+            isMainMenu : this.props.isMainMenu,
+            showType : this.props.showType
         }
 
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
@@ -274,6 +276,7 @@ class Banner extends Component {
                 popularity: this.props.popularity,
                 release_date: this.props.year,
                 adults: this.props.adults,
+                showType : this.props.showType,
                 imdbId:""
             })
         this.props.updateMyList(result)
@@ -381,8 +384,9 @@ class Banner extends Component {
             this.state.playerObj?.pauseVideo();
         }
         //test movietrailer with specified language
-        movieTrailer(null, {tmdbId: id, language: this.props.language})
+        movieTrailer(null, {tmdbId: id, language: this.props.language, videoType:this.props.showType})
             .then((url) => {
+                console.log("result url:",url)
                 const urlParams = new URLSearchParams(new URL(url).search);
                 if(playerPresent){
                     this.state.playerObj.loadVideoById(urlParams.get("v"));
@@ -394,9 +398,9 @@ class Banner extends Component {
                 this.setVidError(false);
             })
             .catch((e) => {
-                //if no trailer in specified language, call movietrailer withtout specified language
-                movieTrailer(null, {tmdbId: id})
+                movieTrailer(null, {tmdbId: id, videoType:this.props.showType})
                     .then((url) => {
+                        console.log("result url:",url)
                         const urlParams = new URLSearchParams(new URL(url).search);
                         if(playerPresent){
                             this.state.playerObj.loadVideoById(urlParams.get("v"));
@@ -407,9 +411,25 @@ class Banner extends Component {
                         }
                         this.setVidError(false);
                     })
+
                     .catch((e) => {
-                        console.log("passage 4 error")
+                        //if no trailer in specified language, call movietrailer withtout specified language
+                        movieTrailer(null, {tmdbId: id})
+                            .then((url) => {
+                                const urlParams = new URLSearchParams(new URL(url).search);
+                                if(playerPresent){
+                                    this.state.playerObj.loadVideoById(urlParams.get("v"));
+                                    this.setCurrentTrailerURL(urlParams.get("v"));
+                                }else{
+                                    this.setTrailerURL(urlParams.get("v"));
+                                    this.setCurrentTrailerURL(urlParams.get("v"));
+                                }
+                                this.setVidError(false);
+                            })
+                            .catch((e) => {
+                        console.log("passage error",e)
                         this.setVidError(true);
+                            })
                     })
             })
     };
@@ -469,7 +489,7 @@ class Banner extends Component {
     }
 
     render(){
-        const {imageUrl,imageUrlPoster,title,adults,popularity,year,isMainMenu,id,language,character,showSimilar} = this.props;
+        const {imageUrl,imageUrlPoster,title,adults,popularity,year,isMainMenu,id,language,character,showSimilar, showType} = this.props;
         return (
             <MovieHeader imageUrl={imageUrl} backup={Backup}>
                 <MovieHeaderContent id='header' isMainMenu={isMainMenu} >
@@ -604,39 +624,45 @@ class Banner extends Component {
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
                                     <RenderIfVisible stayRendered={true}>
-                                        <MovieDetails id={id} language={language} updateImdbId={this.updateImdbId}/>
+                                        <MovieDetails showType={showType} id={id} language={language} updateImdbId={this.updateImdbId}/>
                                     </RenderIfVisible>
                                     <RenderIfVisible stayRendered={true}>
-                                        <MovieProvider id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
+                                        <MovieProvider showType={showType}  id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
                                     </RenderIfVisible>
                                 </Tab>
                                 <Tab eventKey={2} title="trailers">
                                     <RenderIfVisible stayRendered={true}>
-                                        <VideoList id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
+                                        <VideoList showType={showType} id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
                                     </RenderIfVisible>
                                 </Tab>
                                 <Tab eventKey={3} title="Casting">
                                     <RenderIfVisible stayRendered={true}>
-                                        <Credits id={id} language={language}/>
+                                        <Credits showType={showType} id={id} language={language}/>
                                     </RenderIfVisible>
                                 </Tab>
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
                                     <RenderIfVisible stayRendered={true}>
-                                        <RowBanner sort={true}  confirm={true} style={{position: 'relative'}} title='Similar Movie'
-                                                   url={urls.findRecommendedById.replace("{id}", id).replace('original','w185') + language}
+                                        <RowBanner sort={true} confirm={true} style={{position: 'relative'}}
+                                                   title={showType && showType === "tv" ?'Similar Tv show':'Similar movie'}
+                                                   url={showType && showType === "tv" ?
+                                                       tvUrls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language :
+                                                       urls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language}
                                                    isLargeRow={true}/>
                                         </RenderIfVisible>
                                     <RenderIfVisible stayRendered={true}>
-                                        <RowBanner sort={true}  confirm={true}  style={{position: 'relative'}} title='Recommended Movie'
-                                                   url={urls.findSimilarById.replace("{id}", id).replace('original','w185') + language}
+                                        <RowBanner sort={true}  confirm={true}  style={{position: 'relative'}}
+                                                   title={showType && showType === "tv" ?'Recommended Tv show':'Recommended Movie'}
+                                                   url={showType && showType === "tv" ?
+                                                       tvUrls.findSimilarById.replace("{id}", id).replace('original','w185') + language:
+                                                       urls.findSimilarById.replace("{id}", id).replace('original','w185') + language}
                                                    isLargeRow={true}/>
                                     </RenderIfVisible>
                                     </Tab> : ''}
 
                                 <Tab eventKey={5} title="Review">
                                     <RenderIfVisible stayRendered={true}>
-                                        <MovieReviews title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
+                                        <MovieReviews showType={showType} title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
                                     </RenderIfVisible>
                                 </Tab>
                             </Tabs>

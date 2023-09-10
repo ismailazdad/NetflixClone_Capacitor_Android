@@ -5,7 +5,7 @@ const OMDBAPI_URL = process.env.REACT_APP_OMDBAPI_URL
 
 const urls = {
     findTrending: API_URL+`/trending/movie/week?api_key=`+API_KEY+`&language=`,
-    findTrendingTv: API_URL+`/trending/tv/week?api_key=`+API_KEY+`&language=`,
+    findTrendingTv: API_URL+`/trending/movie/week?api_key=`+API_KEY+`&language=`,
     findNetflixOriginals: API_URL+`/discover/movie?api_key=`+API_KEY+`&with_networks=213&language=`,
     findPopular: API_URL+`/movie/popular?api_key=`+API_KEY+`&language=`,
     findNowPlaying: API_URL+`/movie/now_playing?api_key=`+API_KEY+`&language=`,

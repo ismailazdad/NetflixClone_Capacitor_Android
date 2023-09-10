@@ -3,10 +3,12 @@ import {useFetch} from "../../utils/hooks";
 import {Loader} from "../../utils/style/Atoms";
 import React from "react";
 import {LoaderWrapper} from "../RowBanner";
+import tvUrls from "../../utils/urls/tv";
 
-function MovieProvider({id, language}) {
+function MovieProvider({id, language, showType}) {
     language =language.length > 2 ? language?.split("-")[1] : language.toUpperCase()
-    const [isLoading, data] = useFetch(urls.findMoviesProviderById.replace('{id}', id) , false)
+    const url = (showType && showType === "tv" ? tvUrls.findMoviesProviderById.replace('{id}', id)  : urls.findMoviesProviderById.replace('{id}', id) )
+    const [isLoading, data] = useFetch(url , false)
     const results = data?.results || []
     let buy = []
     let link=""

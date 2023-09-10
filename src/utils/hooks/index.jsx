@@ -1,5 +1,6 @@
 import  {useEffect, useState} from 'react'
 import urls from "../urls";
+import tvUrls from "../urls/tv";
 
 const MovieGenres = [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}]
 const TvGenres = [{"id":10759,"name":"Action & Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":10762,"name":"Kids"},{"id":9648,"name":"Mystery"},{"id":10763,"name":"News"},{"id":10764,"name":"Reality"},{"id":10765,"name":"Sci-Fi & Fantasy"},{"id":10766,"name":"Soap"},{"id":10767,"name":"Talk"},{"id":10768,"name":"War & Politics"},{"id":37,"name":"Western"}]
@@ -45,6 +46,28 @@ export const moviesGenresList=[
     {title: "Romance Movie", url: urls.findRomanceMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
     {title: "Documentaries", url: urls.findDocumentaries, isLargeRow: true, useRank: false,replace:false,sort:false},
 ]
+
+export const tvsGenresList=[
+    {title: "Trending Tv", url: tvUrls.findTrending, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Popular Tv show", url: tvUrls.findPopular, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Top Rated", url: tvUrls.findTopRated, isLargeRow: true, useRank: true,replace:false,sort:false},
+    {title: "Now Playing", url: tvUrls.findNowPlaying, isLargeRow: false, useRank: false,replace:false,sort:true},
+    {title: "NETFLIX ORIGINALS", url: tvUrls.findNetflixOriginals, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Family Tv", url: tvUrls.findFamilyMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "UpComing", url: tvUrls.findUpcoming, isLargeRow: true, useRank: false,replace:true,sort:true},
+    {title: "War & Politics Tv", url: tvUrls.findWarMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Western Tv", url: tvUrls.findWesternMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Soap Tv", url: tvUrls.findSoapMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "History Tv", url: tvUrls.findHistoryMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Fantasy Tv", url: tvUrls.findFantasyMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Drama Tv", url: tvUrls.findDramaMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Crime Tv", url: tvUrls.findCrimeMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Animation Tv", url: tvUrls.findAnimationMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Comedy Tv", url: tvUrls.findComedyMovies, isLargeRow: true, useRank: true,replace:false,sort:false},
+    {title: "Romance Tv", url: tvUrls.findRomanceMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
+    {title: "Documentaries", url: tvUrls.findDocumentaries, isLargeRow: true, useRank: false,replace:false,sort:false},
+]
+
 export function getInfo(data,url){
     const genres = typeof data?.genres ==='string' ? data.genres : data.genres?.map((e) => e?.name).join(', ');
     const productions = data?.production_companies?.map((e) => e?.name).join(', ');

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@capacitor/android": "^4.6.3",
-    "@capacitor/core": "^4.6.3",
+    "@capacitor/core": "^4.8.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -12,7 +12,7 @@
     "cordova-plugin-screen-orientation": "^3.0.3",
     "cordova-res": "^0.15.4",
     "es6-promise-plugin": "^4.2.2",
-    "movie-trailer": "^3.0.0",
+    "movie-tv-trailer": "file:movie-tv-trailer-1.0.1.tgz",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@capacitor/app": "^4.1.1",
-    "@capacitor/cli": "^4.6.3",
+    "@capacitor/cli": "^4.8.1",
     "@capacitor/dialog": "^4.1.0",
     "http-server": "^14.1.1",
     "react-responsive": "^9.0.2"

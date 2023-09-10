@@ -5,9 +5,11 @@ import React, {useEffect} from "react";
 import {LoaderWrapper} from "../RowBanner";
 import StarRating from "../StarRating";
 import ReactTextCollapse from "react-text-collapse";
+import tvUrls from "../../utils/urls/tv";
 
-function MovieDetails({id, language, updateImdbId}) {
-    const [isLoading, data] = useFetch(urls.findVideoByIdDetails.replace('{id}', id) + language, false)
+function MovieDetails({id, language, updateImdbId, showType}) {
+    const url = (showType && showType === "tv" ? tvUrls.findVideoByIdDetails.replace('{id}', id) : urls.findVideoByIdDetails.replace('{id}', id)) + language
+    const [isLoading, data] = useFetch(url, false)
     useEffect(() => {
         if (updateImdbId)
             updateImdbId(data?.imdb_id)
@@ -71,16 +73,32 @@ function MovieDetails({id, language, updateImdbId}) {
                             })}</div>
                             : ''}
                         <div><span style={{color: 'gray'}}>Original language</span> : {data?.original_language}</div>
+
+
+                        {data?.number_of_episodes ?
+                            <div><span style={{color: 'gray'}}>Number of episode</span> : {data?.number_of_episodes}</div>
+                            :""}
+
+
+                        {data?.number_of_seasons ?
+                            <div><span style={{color: 'gray'}}>Number of seasons</span> : {data?.number_of_seasons}</div>
+                            :""}
+                        {data?.original_title ?
                         <div><span style={{color: 'gray'}}>Original title</span> : {data?.original_title}</div>
+                        :""}
+                        {data?.release_date ?
                         <div><span style={{color: 'gray'}}>Release</span> : {data?.release_date}</div>
+                            :""}
                         {data?.production_companies && data?.production_companies.length > 0 ?
                             <div>
                                 <span style={{color: 'gray'}}>Company</span> :<span> {data?.production_companies?.map(e => e?.name).slice(0, 3).join(', ')}</span>
                             </div>
                             : ''}
+                        {data?.runtime ?
                         <div>
                             <span style={{color: 'gray'}}>Duration</span> : {Math.floor(data?.runtime / 60).toString() + 'h' + data?.runtime % 60 + 'm'}
                         </div>
+                            : ''}
 
                     </div>
                 </div>

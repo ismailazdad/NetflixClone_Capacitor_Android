@@ -10,6 +10,7 @@ import Movie from "./pages/Movie";
 import Actor from "./pages/Actor";
 import {MoviesProvider} from "./utils/context"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import TvsBanner from "./pages/TvsBanner";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
@@ -18,7 +19,9 @@ root.render(
             <Routes>
                 <Route exact path="/" element={<MoviesBanner/>}>
                 </Route>
-                <Route exact path="/actor/:id/:language" element={<Actor/>}>
+                <Route exact path="/tv" element={<TvsBanner/>}>
+                </Route>
+                <Route exact path="/actor/:id/:language/:showType" element={<Actor/>}>
                 </Route>
                 <Route exact path="/movieDetails/:videoId/:sound/:imdbId/:language" element={<Movie/>}>
                 </Route>

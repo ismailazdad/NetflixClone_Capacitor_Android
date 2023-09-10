@@ -6,6 +6,7 @@ import {LoaderWrapper} from "../RowBanner";
 import styled from "styled-components";
 import Backup from "../../assets/backup.png";
 import PlayTrailer from "../../assets/play_trailer.png";
+import tvUrls from "../../utils/urls/tv";
 
 export const StyledImage = styled.div`
     max-height: 200px;    
@@ -104,8 +105,10 @@ export const WaitSpanAnimated = styled.span`
 `
 
 
-function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,updateMenuStatue}) {
-    const {isLoading, data,error} = useFetchListWithFallBack(urls.findVideosById.replace('{id}', id) + language, urls.findVideosById.replace('{id}', id).replace("&language=", ""))
+function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,updateMenuStatue, showType}) {
+    const url = (showType && showType === "tv" ? tvUrls.findVideosById.replace('{id}', id) : urls.findVideosById.replace('{id}', id))
+    const fallBackUrl = (showType && showType === "tv" ? tvUrls.findVideosById.replace('{id}', id).replace("&language=", "") : tvUrls.findVideosById.replace('{id}', id).replace("&language=", ""))
+    const {isLoading, data,error} = useFetchListWithFallBack(url + language, fallBackUrl.replace("&language=", ""))
     return (
         <div>
             {isLoading ? (
@@ -133,7 +136,7 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
                                         overflow: 'hidden',
                                         fontWeight: 500,
                                         fontSize: 'x-small'
-                                    }}>{movie.name}</h5>
+                                    }}>{movie?.name}</h5>
                                 </div>
                                 <div style={{
                                     whiteSpace: 'nowrap',
@@ -146,10 +149,10 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
                                     <span>language {movie?.iso_639_1}</span>
                                 </div>
                                 <StyledImage
-                                    key={movie.id}
+                                    key={movie?.id}
                                     backup={Backup}
                                     imageUrl = {'https://img.youtube.com/vi/'+movie?.key+'/0.jpg'}
-                                    alt={movie.name}
+                                    alt={movie?.name}
                                     onError={e => e.target.parentNode.style.display = 'none'}
                                     onTouchEnd={(e) => {setTrailerURL(movie?.key);e.preventDefault()}}
                                     onClick={() => {setTrailerURL(movie?.key)}}

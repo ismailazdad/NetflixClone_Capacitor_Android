@@ -6,11 +6,10 @@ import { getActorMovieInfo, getGenres, useFetch} from "../../utils/hooks";
 import styled from "styled-components";
 import {Loader} from "../../utils/style/Atoms";
 import {useMediaQuery} from "react-responsive";
-import {App} from '@capacitor/app';
-import {Dialog} from '@capacitor/dialog';
 import {useParams} from "react-router";
 import ActorBio from "../../components/ActorBio";
 import {MoviesContext} from "../../utils/context";
+import tvUrls from "../../utils/urls/tv";
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -29,9 +28,11 @@ const RowBannerContainer = styled.div`
 
 //second version of movies page , showing poster and trailer in header
 function Actor() {
-    const {id,language} = useParams()
-    const [isLoadingActor, actor] = useFetch(urls.findActorById.replace("{id}",id)+language,false)
-    const [isLoading, data, error] = useFetch(urls.findMoviesByActorId.replace("{id}",id)+language,true)
+    const {id,language,showType} = useParams()
+    const url = (showType && showType === "tv" ? tvUrls.findActorById.replace("{id}",id) : urls.findActorById.replace("{id}",id))+language
+    const [isLoadingActor, actor] = useFetch(url,false)
+    const url2 = (showType && showType === "tv" ? tvUrls.findMoviesByActorId.replace("{id}",id) : urls.findMoviesByActorId.replace("{id}",id))+language
+    const [isLoading, data, error] = useFetch(url2,true)
     const {currentMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(data?.genre_ids)?.slice(0,3).join(', '): getGenres(currentMovie?.genre_ids)?.slice(0,3)?.join(', ')
     const {adults,year,popularity,imageUrl,title,overview,myId,character,imageUrlPoster} =  currentMovie ? getActorMovieInfo(currentMovie) :  getActorMovieInfo(data)
@@ -73,6 +74,7 @@ function Actor() {
                         showSimilar={false}
                         myList={myList}
                         updateMyList={updateMyList}
+                        showType={showType}
                     />
                 </div>
 
@@ -85,7 +87,10 @@ function Actor() {
                 :
                     <ActorBio id={id}  imageUrl={urls.findImagesUrl + actor?.profile_path} name={actor?.name}  place_of_birth={actor?.place_of_birth} biography={actor?.biography} birthday={actor?.birthday} gender={actor?.gender} profession={actor?.known_for_department}  />
                 }
-                <RowBanner sort={true} title={actor?.name+' Filmography'} url={urls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language} isLargeRow/>
+                <RowBanner sort={true} title={actor?.name+' Filmography'} url={showType && showType === "tv" ?
+                    tvUrls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language:
+                    urls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language
+                } isLargeRow/>
             </RowBannerContainer>
         </div>
     )

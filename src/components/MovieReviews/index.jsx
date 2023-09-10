@@ -8,11 +8,14 @@ import StarRating from "../StarRating";
 import imdbImage from "../../assets/imdb.png";
 import rotten from "../../assets/rotten.svg";
 import metaCritic from "../../assets/metacritic.png";
+import tvUrls from "../../utils/urls/tv";
 
 
-function MovieReviews({id, language,imdbId,showComment}) {
-    const {isLoading, data,error} = useFetchListWithFallBack(urls.findReviewsById.replace('{id}', id) + language.split("").slice(0,2).join(""), urls.findReviewsById.replace('{id}', id).replace("&language=", ""))
-    const [isLoadingOmdbApi, dataOmdbApi] = useFetch(urls.findReviewByImbId.replace('{tmdb_id}',imdbId), false)
+function MovieReviews({id, language,imdbId,showComment, showType}) {
+    const url = (showType && showType === "tv" ? tvUrls.findReviewsById.replace('{id}', id) + language.split("").slice(0,2).join("") : urls.findReviewsById.replace('{id}', id) + language.split("").slice(0,2).join(""))
+    const fallBackUrl = (showType && showType === "tv" ? tvUrls.findReviewsById.replace('{id}', id).replace("&language=", ""): urls.findReviewsById.replace('{id}', id).replace("&language=", ""))
+    const {isLoading, data,error} = useFetchListWithFallBack(url, fallBackUrl)
+    const [isLoadingOmdbApi, dataOmdbApi] = useFetch( showType && showType === "tv" ? tvUrls.findReviewByImbId.replace('{tmdb_id}',imdbId) :urls.findReviewByImbId.replace('{tmdb_id}',imdbId), false)
     return (
         <div>
             <div>

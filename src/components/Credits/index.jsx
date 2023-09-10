@@ -6,6 +6,7 @@ import {LoaderWrapper} from "../RowBanner";
 import styled from "styled-components";
 import Backup from "../../assets/backup3.png";
 import {Link} from "react-router-dom";
+import tvUrls from "../../utils/urls/tv";
 
 export const StyledImage = styled.div`
     object-fit: contain;
@@ -68,8 +69,9 @@ const MovieButton = styled.button`
     }
 `
 
-function Credits({id,language}) {
-    const [isLoading, data] = useFetch(urls.findCreditsById.replace('{id}', id), false)
+function Credits({id,language,showType}) {
+    const url = showType && showType === "tv" ? tvUrls.findCreditsById.replace('{id}', id) : urls.findCreditsById.replace('{id}', id)
+    const [isLoading, data] = useFetch(url, false)
     let crew = data?.crew?.filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i)
     crew = crew?.filter((v,i)=>
         v?.known_for_department !=='Acting' &&
@@ -123,7 +125,7 @@ function Credits({id,language}) {
                                     onError = {e => e.target.parentNode.style.display = 'none'}
                                     // style={{border:'solid 1px gray'}}
                                 />
-                                <Link to={`/actor/${casting?.id}/${language}`}>
+                                <Link to={`/actor/${casting?.id}/${language}/${showType}`}>
                                     <MovieButton>discover</MovieButton>
                                 </Link>
                             </div>
@@ -166,7 +168,7 @@ function Credits({id,language}) {
                                     // style={{border:'solid 1px gray'}}
                                 />
                                 {crew?.known_for_department ==="Directing"?
-                                    <Link to={`/actor/${crew?.id}/${language}`}>
+                                    <Link to={`/actor/${crew?.id}/${language}/${showType}`}>
                                         <MovieButton>discover</MovieButton>
                                     </Link>:''
                                 }
