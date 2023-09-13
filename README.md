@@ -7,7 +7,7 @@
 
 This repository was based on a idea, Make my own Netflix clone.
 For this challenge i wanted to see all informations
- about a movie and in same time see all trailers available.
+ about a movie/tv and in same time see all trailers available.
 
 
 ### Download and install movies trailer app
@@ -108,7 +108,7 @@ Go to Android Studio to fix all images declination for devices
 ## Description 
 
 Watch the lastest trailers quickly and easily like a famous streaming app.
-Search for a movie , show movie details like casting or production focus on user experience
+Search for a movie/tv , show movie details like casting or production focus on user experience
 
 MoviesTrailer app allows you to see trailers of all popular movies, primarily in your native language. Search for an actor or director..., get the filmography  and the resume of an actor.Search any movie, find information about it and see the list of trailers for the same movie very easily.
 Make your own movie favorite list quickly 
