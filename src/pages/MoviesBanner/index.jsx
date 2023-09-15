@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import Banner from "../../components/Banner";
 import RowBanner from "../../components/RowBanner";
+import RowList from "../../components/RowList";
 import urls from "../../utils/urls"
 import {getGenres, getInfo, moviesGenresList, useFetch} from "../../utils/hooks";
 import styled from "styled-components";
@@ -152,7 +153,7 @@ function MoviesBanner() {
             <RowBannerContainer onTouchStart={handleTouchEvent} >
                 {inputs.searchMovie.length > 0 && !focus?
                     <RenderIfVisible>
-                        <RowBanner sort={true} key={'search_container'} title='Search Results'
+                        <RowList sort={true} key={'search_container'} title='Search Results'
                                    url={urls.searchMovie.replace('{query}', inputs.searchMovie) + language} isLargeRow/>
                     </RenderIfVisible>:''
                 }
@@ -184,7 +185,7 @@ function MoviesBanner() {
                 </Link>
                 {myList.filter(a=>a.showType === "movie").length > 0 ?
                     <RenderIfVisible stayRendered={true}>
-                        <RowBanner key={'myList_container'} myList={myList.filter(a=>a.showType === "movie")} updateMyList={updateMyList}  title='My List'  isLargeRow/>
+                        <RowList key={'myList_container'} myList={myList.filter(a=>a.showType === "movie")} updateMyList={updateMyList}  title='My List'  isLargeRow/>
                     </RenderIfVisible>: ''
                 }
 

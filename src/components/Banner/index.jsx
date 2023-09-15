@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import movieTrailer from "movie-tv-trailer";
+import movieTrailer from "movie-trailer";
 import {playerOptions, TEXT_COLLAPSE_OPTIONS} from "../../utils/hooks";
 import YouTube from "react-youtube";
 import {Link} from "react-router-dom";

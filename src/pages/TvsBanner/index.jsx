@@ -14,6 +14,7 @@ import {MoviesContext} from "../../utils/context";
 import RenderIfVisible from "react-render-if-visible"
 import tvUrls from "../../utils/urls/tv";
 import {Link} from "react-router-dom";
+import RowList from "../../components/RowList";
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -153,7 +154,7 @@ function TvsBanner() {
 
                 {inputs.searchMovie.length > 0 && !focus?
                     <RenderIfVisible>
-                        <RowBanner sort={true} key={'search_container'} title='Search Results'
+                        <RowList sort={true} key={'search_container'} title='Search Results'
                                    url={tvUrls.searchMovie.replace('{query}', inputs.searchMovie) + language} isLargeRow/>
                     </RenderIfVisible>:''
                 }
@@ -186,7 +187,7 @@ function TvsBanner() {
                 </Link>
                 {myList.filter(a=>a.showType === "tv").length > 0 ?
                     <RenderIfVisible stayRendered={true}>
-                        <RowBanner key={'myList_container'} myList={myList.filter(a=>a.showType === "tv")} updateMyList={updateMyList}  title='My List'  isLargeRow/>
+                        <RowList key={'myList_container'} myList={myList.filter(a=>a.showType === "tv")} updateMyList={updateMyList}  title='My List'  isLargeRow/>
                     </RenderIfVisible>: ''
                 }
 

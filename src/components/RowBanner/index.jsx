@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from "react";
+import React, {useContext, useRef, useState, useEffect} from "react";
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
@@ -124,26 +124,51 @@ const Discover = styled.button`
         transition: all 0.2s;
     }
 `
-function RowBanner({title, url, isLargeRow,useRank,sort,myList,confirm}) {
-    const myRef = useRef(null);
-    const {isLoading, data, error} = useFetchList(url,useRank);
-    const [scrollRight,setScrollRight]= useState(false);
-    const [scrollLeft,setScrollLeft]= useState(false);
-    const {moviesContext,saveMoviesContext,currentIndex, saveCurrentIndex,saveMovie} = useContext(MoviesContext)
-    const movies = myList?.length > 0 ? myList.map((movie)=>{return { ...movie, id : movie.id}}): data.map((movie)=>{return { ...movie, id : movie.id}});
-    if(sort)
-        movies.sort((a,b)=>b?.release_date?.split('-').join('')-a?.release_date?.split('-').join(''))
-    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
+function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
+    const myRef = useRef(null)
+    const [page, setPage] = useState(1)
+    const [movies, setMovies] = useState([])
+    const [scrollRight, setScrollRight] = useState(false)
+    const [scrollLeft, setScrollLeft] = useState(false)
+    const { moviesContext, saveMoviesContext, currentIndex, saveCurrentIndex, saveMovie } = useContext(MoviesContext)
+    const [isLoading, setIsLoading] = useState(true)
+    const { data, error } = useFetchList(url, useRank)
+    const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
 
-    if (error && myList?.length ===0) {
-        return <span>Oups something went wrong</span>
-    }
+    useEffect(() => {
+        setIsLoading(true)
 
-    const scrollToLeft = function () {
+        if (error && myList?.length === 0) {
+            setIsLoading(false)
+            return
+        }
+
+        if (data && data.length > 0) {
+            setMovies((prevMovies) => [...prevMovies, ...data])
+        }
+
+        setIsLoading(false)
+    }, [data, error, myList])
+
+    const scrollToLeft = async function () {
+        const container = myRef.current;
+        const maxScrollLeft = container.scrollWidth - container.clientWidth;
         let screenWidth = window.innerWidth;
         screenWidth = isMobile ? screenWidth : isLargeRow ? screenWidth / 1.5 : screenWidth / 2;
-        myRef.current.scrollLeft += screenWidth ;
-    };
+        container.scrollLeft += screenWidth;
+
+        if (container.scrollLeft >= maxScrollLeft-300) {
+            setPage((prevPage) => prevPage + 1);
+            const newUrl = url.replace("&page=1", `&page=${page + 1}`);
+            try {
+                const response = await fetch(newUrl);
+                const newData = await response.json();
+                setMovies((prevMovies) => [...prevMovies, ...newData.results]);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+    };;
 
     const scrollToRight = function () {
         let screenWidth = window.innerWidth;
@@ -151,69 +176,89 @@ function RowBanner({title, url, isLargeRow,useRank,sort,myList,confirm}) {
         myRef.current.scrollLeft -= screenWidth;
     };
 
-    const updateMovies = (movie,currentIndex)=>{
-        const currentMoviesId = JSON.stringify(movies.map(current=>current?.id))
-        const moviesContextIds= JSON.stringify(moviesContext?.map(current=>current?.id))
-        if(currentMoviesId !== moviesContextIds){
-            saveMoviesContext(movies)
+    const updateMovies = (movie, currentIndex) => {
+        const currentMoviesId = JSON.stringify(movies.map((current) => current?.id));
+        const moviesContextIds = JSON.stringify(moviesContext?.map((current) => current?.id));
+        if (currentMoviesId !== moviesContextIds) {
+            saveMoviesContext(movies);
         }
-        saveCurrentIndex(currentIndex)
-        saveMovie(movie)
-    }
+        saveCurrentIndex(currentIndex);
+        saveMovie(movie);
+    };
 
     return (
-        (isLoading ? (
-                <LoaderWrapper data-testid='loader'>
-                    <Loader/>
-                </LoaderWrapper>
-            ) : ( movies.length > 0 ?
-                (
+        isLoading ? (
+            <LoaderWrapper data-testid="loader">
+                <Loader />
+            </LoaderWrapper>
+        ) : (
+            movies.length > 0 ? (
                 <RowContainer id="RowContainer">
                     <h2>{title}</h2>
-                    <Chevron className="chevron" style={{right: '0'}} icon={ChevronRight} onClick={scrollToLeft}  onMouseOver={()=>setScrollRight(true)} onMouseLeave={()=>setScrollRight(false)}  isLargeRow={isLargeRow}/>
-                    <Chevron className="chevron" style={{left: '0'}} icon={ChevronLeft} onClick={scrollToRight} onMouseOver={()=>setScrollLeft(true)} onMouseLeave={()=>setScrollLeft(false)}  isLargeRow={isLargeRow}/>
-                    <RowPoster id="RowPoster" ref={myRef}  scrollRight={scrollRight} scrollLeft={scrollLeft}>
-                        {movies && movies.map((movie, index) => (
-                            (!confirm ?
-                                <div key={index + '_container'}
-                                     style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    {useRank ? <TrendNumber>{index + 1}</TrendNumber> : ''}
+                    <Chevron
+                        className="chevron"
+                        style={{ right: "0" }}
+                        icon={ChevronRight}
+                        onClick={scrollToLeft}
+                        onMouseOver={() => setScrollRight(true)}
+                        onMouseLeave={() => setScrollRight(false)}
+                        isLargeRow={isLargeRow}
+                    />
+                    <Chevron
+                        className="chevron"
+                        style={{ left: "0" }}
+                        icon={ChevronLeft}
+                        onClick={scrollToRight}
+                        onMouseOver={() => setScrollLeft(true)}
+                        onMouseLeave={() => setScrollLeft(false)}
+                        isLargeRow={isLargeRow}
+                    />
+                    <RowPoster id="RowPoster" ref={myRef} scrollRight={scrollRight} scrollLeft={scrollLeft}>
+                        {movies.map((movie, index) => (
+                            (!confirm ? (
+                                <div key={index + "_container"} style={{ display: "flex", justifyContent: "space-between" }}>
+                                    {useRank ? <TrendNumber>{index + 1}</TrendNumber> : ""}
                                     <StyledImage
                                         key={movie.id}
-                                        imageUrl={`${isLargeRow ? urls.findImagesUrl.replace('original','w185')+movie.poster_path : urls.findImagesUrl.replace('original','w300')+movie.backdrop_path}`}
+                                        imageUrl={`${isLargeRow ? urls.findImagesUrl.replace("original", "w185") + movie.poster_path : urls.findImagesUrl.replace("original", "w300") + movie.backdrop_path}`}
                                         backup={isLargeRow ? BackupLarge : BackupSmall}
                                         alt={movie.name}
                                         isLargeRow={isLargeRow}
                                         isActive={currentIndex === movie}
-                                        onTouchEnd={(e) => {updateMovies(movie, index);e.preventDefault();}}
-                                        onClick={() => {updateMovies(movie, index);}}
+                                        onTouchEnd={(e) => {
+                                            updateMovies(movie, index);
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            updateMovies(movie, index);
+                                        }}
                                         useRank={useRank}
-                                        onError={e => e.target.parentNode.style.display = 'none'}
+                                        onError={(e) => e.target.parentNode.style.display = "none"}
                                     />
                                 </div>
-                                :
-                                <div key={index + '_containerConf'}
-                                     style={{display: 'flex', justifyContent: 'space-between'}}
-                                >
+                            ) : (
+                                <div key={index + "_containerConf"} style={{ display: "flex", justifyContent: "space-between" }}>
                                     <div>
                                         <StyledImage
                                             key={movie.id}
-                                            imageUrl={`${isLargeRow ?  urls.findImagesUrl.replace('original','w185')+movie.poster_path : urls.findImagesUrl.replace('original','w300')+movie.backdrop_path}`}
+                                            imageUrl={`${isLargeRow ? urls.findImagesUrl.replace("original", "w185") + movie.poster_path : urls.findImagesUrl.replace("original", "w300") + movie.backdrop_path}`}
                                             backup={isLargeRow ? BackupLarge : BackupSmall}
                                             alt={movie.name}
                                             isLargeRow={isLargeRow}
-                                            onError={e => e.target.parentNode.style.display = 'none'}
+                                            onError={(e) => e.target.parentNode.style.display = "none"}
                                         />
-                                        <Discover onClick={e=>updateMovies(movie, index)}>discover</Discover>
+                                        <Discover onClick={e => updateMovies(movie, index)}>discover</Discover>
                                     </div>
                                 </div>
-                            )
-                        ))
-                        }
+                            ))
+                        ))}
                     </RowPoster>
-                </RowContainer>):
-                    <div>No Results for {title}...</div>
+                </RowContainer>
+            ) : (
+                <div>No Results for {title}...</div>
+            )
         )
-        ))
+    );
 }
+
 export default RowBanner;
