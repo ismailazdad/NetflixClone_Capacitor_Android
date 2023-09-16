@@ -54,7 +54,7 @@ function ActorBio({id, name, place_of_birth, biography, birthday, gender, profes
                         <div className="row justify-content-center align-self-center">
                             <span style={{color: 'gray'}}>Bipgraphy:</span>
                             <div key={id + '_container'} style={{display: "inline-block"}}>
-                                {biography.length > 400 ?
+                                {biography.length > 250 ?
                                     <ReactTextCollapse options={TEXT_COLLAPSE_OPTIONS}>
                                         <div style={{textTransform: 'inherit', position: 'relative'}}>{biography}</div>
                                     </ReactTextCollapse>

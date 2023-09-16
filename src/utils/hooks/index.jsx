@@ -94,7 +94,7 @@ export function getActorMovieInfo(data){
     const popularity = Math.ceil(data?.vote_average * 10).toFixed(0);
     const imageUrl = data?.backdrop_path ? urls.findImagesUrl + data.backdrop_path : '';
     const imageUrlPoster = data?.poster_path ? urls.findImagesUrl + data.poster_path : '';
-    const title = data?.title || data?.original_title;
+    const title = data?.title || data?.name || data?.original_title;
     const character = data?.character ;
     const overview = data?.overview;
     const myId = data?.id;

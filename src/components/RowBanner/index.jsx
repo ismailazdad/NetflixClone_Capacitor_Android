@@ -255,7 +255,7 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
                     </RowPoster>
                 </RowContainer>
             ) : (
-                <div>No Results for {title}...</div>
+                <></>
             )
         )
     );

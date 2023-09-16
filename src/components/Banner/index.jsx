@@ -143,7 +143,7 @@ const Recommended = styled.div`
     color: lightgreen;
     font-weight: 800;
     @media  only screen and (max-width:768px ){
-       width: 20vh;        
+       width: 25vh;        
     }     
 `
 const RecommendedLine = styled.div`
