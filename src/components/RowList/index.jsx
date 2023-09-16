@@ -133,6 +133,7 @@ function RowList({title, url, isLargeRow,useRank,sort,myList,confirm}) {
     const movies = myList?.length > 0 ? myList.map((movie)=>{return { ...movie, id : movie.id}}): data.map((movie)=>{return { ...movie, id : movie.id}});
     if(sort)
         movies.sort((a,b)=>b?.release_date?.split('-').join('')-a?.release_date?.split('-').join(''))
+        movies.sort((a,b)=>b?.first_air_date?.split('-').join('')-a?.first_air_date?.split('-').join(''))
     const isMobile = useMediaQuery({query: '(max-width: 768px)'});
 
     if (error && myList?.length ===0) {

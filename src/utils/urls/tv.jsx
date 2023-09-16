@@ -33,8 +33,8 @@ const tvUrls = {
 
     findVideosById : API_URL+'/tv/{id}/videos?api_key='+API_KEY+'&language=',
     findReviewsById : API_URL+'/tv/{id}/reviews?api_key='+API_KEY+'&language=',
-    findSimilarById : API_URL+'/tv/{id}/similar?api_key='+API_KEY+'&language=',
-    findRecommendedById : API_URL+'/tv/{id}/recommendations?api_key='+API_KEY+'&language=',
+    findSimilarById : API_URL+'/tv/{id}/similar?api_key='+API_KEY+'&page=1&language=',
+    findRecommendedById : API_URL+'/tv/{id}/recommendations?api_key='+API_KEY+'&page=1&language=',
     findVideoByIdDetails : API_URL+'/tv/{id}?api_key='+API_KEY+'&language=',
     searchMovie : API_URL+'/search/tv?api_key='+API_KEY+'&query={query}&language=',
     findActorById : API_URL+'/person/{id}?api_key='+API_KEY+'&language=',

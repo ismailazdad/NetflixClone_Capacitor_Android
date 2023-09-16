@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
 import Banner from "../../components/Banner";
-import RowBanner from "../../components/RowBanner";
 import urls from "../../utils/urls"
 import { getActorMovieInfo, getGenres, useFetch} from "../../utils/hooks";
 import styled from "styled-components";
@@ -10,6 +9,7 @@ import {useParams} from "react-router";
 import ActorBio from "../../components/ActorBio";
 import {MoviesContext} from "../../utils/context";
 import tvUrls from "../../utils/urls/tv";
+import RowList from "../../components/RowList";
 
 const LoaderWrapper = styled.div`
     display: flex;
@@ -87,7 +87,7 @@ function Actor() {
                 :
                     <ActorBio id={id}  imageUrl={urls.findImagesUrl + actor?.profile_path} name={actor?.name}  place_of_birth={actor?.place_of_birth} biography={actor?.biography} birthday={actor?.birthday} gender={actor?.gender} profession={actor?.known_for_department}  />
                 }
-                <RowBanner sort={true} title={actor?.name+' Filmography'} url={showType && showType === "tv" ?
+                <RowList sort={true} title={actor?.name+' Filmography'} url={showType && showType === "tv" ?
                     tvUrls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language:
                     urls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language
                 } isLargeRow/>
