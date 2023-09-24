@@ -21,17 +21,15 @@ const RowBannerContainer = styled.div`
     position: relative;
     @media  only screen and (max-width:768px ){
         padding-top: 30vh;
-        height:100vh;
+        height:auto;
     }  
 `
-
-
 //second version of movies page , showing poster and trailer in header
 function Actor() {
-    const {id,language,showType} = useParams()
-    const url = (showType && showType === "tv" ? tvUrls.findActorById.replace("{id}",id) : urls.findActorById.replace("{id}",id))+language
+    const {id,language,showType: urlShowType } = useParams()
+    const url = (urlShowType && urlShowType === "tv" ? tvUrls.findActorById.replace("{id}",id) : urls.findActorById.replace("{id}",id))+language
     const [isLoadingActor, actor] = useFetch(url,false)
-    const url2 = (showType && showType === "tv" ? tvUrls.findMoviesByActorId.replace("{id}",id) : urls.findMoviesByActorId.replace("{id}",id))+language
+    const url2 = (urlShowType && urlShowType === "tv" ? tvUrls.findMoviesByActorId.replace("{id}",id) : urls.findMoviesByActorId.replace("{id}",id))+language
     const [isLoading, data, error] = useFetch(url2,true)
     const {currentMovie} = useContext(MoviesContext)
     const myGenres = currentMovie ? getGenres(data?.genre_ids)?.slice(0,3).join(', '): getGenres(currentMovie?.genre_ids)?.slice(0,3)?.join(', ')
@@ -39,6 +37,7 @@ function Actor() {
     const isMobile = useMediaQuery({query: '(max-width: 768px)'})
     const savedCart = localStorage.getItem('myList')
     const [myList, updateMyList] = useState(savedCart ? JSON.parse(savedCart) : [])
+    const [showType, setShowType] = useState(urlShowType || "tv");
     useEffect(() => {
         localStorage.setItem('myList', JSON.stringify(myList))
     }, [myList])
@@ -46,6 +45,11 @@ function Actor() {
     if (error && myList.length ===0) {
         return <span>Oups something went wrong</span>
     }
+
+    const handleShowTypeChange = (newShowType) => {
+        setShowType(newShowType);
+    };
+
     return (
         <div style={{background: 'black',color:'white'}}>
             {isLoading ? (
@@ -87,10 +91,12 @@ function Actor() {
                 :
                     <ActorBio id={id}  imageUrl={urls.findImagesUrl + actor?.profile_path} name={actor?.name}  place_of_birth={actor?.place_of_birth} biography={actor?.biography} birthday={actor?.birthday} gender={actor?.gender} profession={actor?.known_for_department}  />
                 }
-                <RowList sort={true} title={actor?.name+' Filmography'} url={showType && showType === "tv" ?
-                    tvUrls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language:
+                <RowList sort={true} title={actor?.name+' Filmography'} url={
                     urls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language
-                } isLargeRow/>
+                } onClick={()=>handleShowTypeChange("movie")} isLargeRow/>
+                <RowList sort={true} title={actor?.name+' Tv Filmography'} url={
+                    tvUrls.findMoviesByActorId.replace("{id}",id).replace('original','w185')+language
+                } onClick={()=>handleShowTypeChange("tv")} isLargeRow/>
             </RowBannerContainer>
         </div>
     )

@@ -73,7 +73,7 @@ const MovieButton = styled.button`
 
 
 function Movie() {
-    const { videoId, sound, imdbId,language} = useParams()
+    const { videoId, sound, imdbId,language, showType} = useParams()
     const [isVideoPlaying, setIsVideoPlaying] = useState(false)
     const [isVideoError, setIisVideoError] = useState(false)
     const [isVideoLoading, setIsVideoLoading] = useState(false)
@@ -81,7 +81,7 @@ function Movie() {
     const [playerObject, setPlayerObject] = useState(false)
     const {currentMovie} = useContext(MoviesContext)
     const id = currentMovie?.id;
-    const title = currentMovie?.title;
+    const title = currentMovie?.title || currentMovie?.name;
     const image = urls.findImagesUrl +currentMovie?.poster_path;
     App.addListener('appStateChange', (state) => {
         if (state.isActive) {
@@ -145,7 +145,7 @@ function Movie() {
                       : ''}
                 <div style={{height: '10vh',userSelect: 'none'}}>
                     <h3 onClick={enablePause}>{title}</h3>
-                    <Link to={`/`}>
+                    <Link to={showType ==="movie" ? `/` : `/tv`}>
                         <MovieButton>Back</MovieButton>
                     </Link>
                     {isVideoPlaying ?
@@ -164,7 +164,7 @@ function Movie() {
                         : ''}
                 </div>
                 <MovieReviews title={title} language={language} id={id} imdbId={imdbId} showComment={false}/>
-                <MovieDetails id={id} language={language}/>
+                <MovieDetails showType={showType} id={id} language={language} />
             </Container>
 
             <YouTube id='vidPlayer' className='video-background'

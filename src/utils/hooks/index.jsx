@@ -48,11 +48,13 @@ export const moviesGenresList=[
 ]
 
 export const tvsGenresList=[
-    {title: "Trending Tv", url: tvUrls.findTrending, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Trending Tv", url: tvUrls.findTrending, isLargeRow: true, useRank: true,replace:false,sort:false},
     {title: "Popular Tv show", url: tvUrls.findPopular, isLargeRow: true, useRank: false,replace:false,sort:false},
     {title: "Top Rated", url: tvUrls.findTopRated, isLargeRow: true, useRank: true,replace:false,sort:false},
-    {title: "Now Playing", url: tvUrls.findNowPlaying, isLargeRow: false, useRank: false,replace:false,sort:true},
     {title: "NETFLIX ORIGINALS", url: tvUrls.findNetflixOriginals, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Amazon ORIGINALS", url: tvUrls.findAmazonOriginals, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Disney+", url: tvUrls.findDisneyOriginals, isLargeRow: true, useRank: false,replace:false,sort:false},
+    {title: "Now Playing", url: tvUrls.findNowPlaying, isLargeRow: false, useRank: false,replace:false,sort:true},
     {title: "Family Tv", url: tvUrls.findFamilyMovies, isLargeRow: true, useRank: false,replace:false,sort:false},
     {title: "UpComing", url: tvUrls.findUpcoming, isLargeRow: true, useRank: false,replace:true,sort:true},
     {title: "War & Politics Tv", url: tvUrls.findWarMovies, isLargeRow: false, useRank: false,replace:false,sort:false},
@@ -150,7 +152,7 @@ export function useFetchList(url,useRank = false) {
             .then((response) => response.json())
             .then((jsonResponse) => {
                 if(useRank){
-                    setData(jsonResponse?.results.slice(0,9));
+                    setData(jsonResponse?.results);
                 }else{
                     setData((jsonResponse?.results || jsonResponse?.cast)
                         .map((item) => ({ sort: Math.random(), value: item }))

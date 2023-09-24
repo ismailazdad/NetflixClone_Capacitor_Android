@@ -150,6 +150,35 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
         setIsLoading(false)
     }, [data, error, myList])
 
+    const loadMoreData = async () => {
+        setPage((prevPage) => prevPage + 1);
+        const newUrl = url.replace("&page=1", `&page=${page + 1}`);
+        try {
+            const response = await fetch(newUrl);
+            const newData = await response.json();
+            setMovies((prevMovies) => [...prevMovies, ...newData.results]);
+        } catch (error) {
+            console.error("Error fetching more data:", error);
+        }
+    };
+
+    useEffect(() => {
+        const container = myRef.current;
+        if(container){
+            const handleScroll = () => {
+                const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                if (container.scrollLeft >= maxScrollLeft - 300) {
+                    loadMoreData();
+                }
+            };
+            container.addEventListener("scroll", handleScroll);
+            return () => {
+                container.removeEventListener("scroll", handleScroll);
+            };
+        }
+    }, [myRef, loadMoreData]);
+
+
     const scrollToLeft = async function () {
         const container = myRef.current;
         const maxScrollLeft = container.scrollWidth - container.clientWidth;

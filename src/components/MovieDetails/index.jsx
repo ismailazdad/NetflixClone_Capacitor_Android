@@ -12,9 +12,8 @@ function MovieDetails({id, language, updateImdbId, showType}) {
     const [isLoading, data] = useFetch(url, false)
     useEffect(() => {
         if (updateImdbId)
-            updateImdbId(data?.imdb_id)
-    }, [data?.imdb_id, updateImdbId])
-
+            updateImdbId(data?.imdb_id || data?.external_ids?.imdb_id)
+    }, [data?.imdb_id, data?.external_ids?.imdb_id, updateImdbId])
     return (
         <div>
             {isLoading ? (

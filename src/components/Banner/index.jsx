@@ -21,7 +21,7 @@ import {Loader} from "../../utils/style/Atoms";
 import MovieReviews from "../MovieReviews";
 import urls from "../../utils/urls";
 import tvUrls from "../../utils/urls/tv";
-import RowBanner from "../RowBanner";
+import RowList from "../RowList";
 import MovieProvider from "../Provider";
 import imageMyList from "../../assets/list.png";
 import imageRemoveMyList from "../../assets/listremove.png";
@@ -143,7 +143,9 @@ const Recommended = styled.div`
     color: lightgreen;
     font-weight: 800;
     @media  only screen and (max-width:768px ){
-       width: 25vh;        
+      font-weight: 500;
+      text-align: left;
+      width: 23vh;
     }     
 `
 const RecommendedLine = styled.div`
@@ -643,7 +645,7 @@ class Banner extends Component {
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
                                     <RenderIfVisible stayRendered={true}>
-                                        <RowBanner sort={true} confirm={true} style={{position: 'relative'}}
+                                        <RowList sort={true} confirm={true} style={{position: 'relative'}}
                                                    title={showType && showType === "tv" ?'Similar Tv show':'Similar movie'}
                                                    url={showType && showType === "tv" ?
                                                        tvUrls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language :
@@ -651,7 +653,7 @@ class Banner extends Component {
                                                    isLargeRow={true}/>
                                         </RenderIfVisible>
                                     <RenderIfVisible stayRendered={true}>
-                                        <RowBanner sort={true}  confirm={true}  style={{position: 'relative'}}
+                                        <RowList sort={true}  confirm={true}  style={{position: 'relative'}}
                                                    title={showType && showType === "tv" ?'Recommended Tv show':'Recommended Movie'}
                                                    url={showType && showType === "tv" ?
                                                        tvUrls.findSimilarById.replace("{id}", id).replace('original','w185') + language:
@@ -687,7 +689,7 @@ class Banner extends Component {
                                 {this.state.currentTrailerUrl !=="" && !this.state.vidError ?
                                     <div>
                                         <Link
-                                            to={`/movieDetails/${this.state.currentTrailerUrl}/${this.state.sound}/${this.state.imdbId}/${language}`}>
+                                            to={`/movieDetails/${this.state.currentTrailerUrl}/${this.state.sound}/${this.state.imdbId}/${language}/${showType}`}>
                                             <PlayModalMenuButton><img alt='' src={PlayButton}/></PlayModalMenuButton>
                                         </Link>
                                     </div>
