@@ -615,7 +615,7 @@ class Banner extends Component {
                                         <img alt={`rem${id}`} style={{height: '4vh',width: '4vh',float: 'right'}} onClick={e=>this.addOneItem(id)} src={imageMyList} />
                                     </OverlayTrigger>
                             }
-
+                            <RenderIfVisible>
                             <Tabs
                                 className="mb-3"
                                 transition={Fade}
@@ -625,49 +625,36 @@ class Banner extends Component {
                             >
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
-                                    <RenderIfVisible stayRendered={true}>
                                         <MovieDetails showType={showType} id={id} language={language} updateImdbId={this.updateImdbId}/>
-                                    </RenderIfVisible>
-                                    <RenderIfVisible stayRendered={true}>
                                         <MovieProvider showType={showType}  id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
-                                    </RenderIfVisible>
                                 </Tab>
                                 <Tab eventKey={2} title="trailers">
-                                    <RenderIfVisible stayRendered={true}>
                                         <VideoList showType={showType} id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
-                                    </RenderIfVisible>
                                 </Tab>
                                 <Tab eventKey={3} title="Casting">
-                                    <RenderIfVisible stayRendered={true}>
                                         <Credits showType={showType} id={id} language={language}/>
-                                    </RenderIfVisible>
                                 </Tab>
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
-                                    <RenderIfVisible stayRendered={true}>
                                         <RowList sort={true} confirm={true} style={{position: 'relative'}}
                                                    title={showType && showType === "tv" ?'Similar Tv show':'Similar movie'}
                                                    url={showType && showType === "tv" ?
                                                        tvUrls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language :
                                                        urls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language}
                                                    isLargeRow={true}/>
-                                        </RenderIfVisible>
-                                    <RenderIfVisible stayRendered={true}>
                                         <RowList sort={true}  confirm={true}  style={{position: 'relative'}}
                                                    title={showType && showType === "tv" ?'Recommended Tv show':'Recommended Movie'}
                                                    url={showType && showType === "tv" ?
                                                        tvUrls.findSimilarById.replace("{id}", id).replace('original','w185') + language:
                                                        urls.findSimilarById.replace("{id}", id).replace('original','w185') + language}
                                                    isLargeRow={true}/>
-                                    </RenderIfVisible>
                                     </Tab> : ''}
 
                                 <Tab eventKey={5} title="Review">
-                                    <RenderIfVisible stayRendered={true}>
                                         <MovieReviews showType={showType} title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
-                                    </RenderIfVisible>
                                 </Tab>
                             </Tabs>
+                            </RenderIfVisible>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
                             <div className="d-flex justify-content-between" >
@@ -686,14 +673,12 @@ class Banner extends Component {
                                                          icon={faBackwardStep}/>
                                     </div>
                                 }
-                                {this.state.currentTrailerUrl !=="" && !this.state.vidError ?
                                     <div>
                                         <Link
-                                            to={`/movieDetails/${this.state.currentTrailerUrl}/${this.state.sound}/${this.state.imdbId}/${language}/${showType}`}>
+                                            to={`/movieDetails/${this.state.currentTrailerUrl !== "" ? this.state.currentTrailerUrl : undefined}/${this.state.sound}/${this.state.imdbId}/${language}/${showType}`}>
                                             <PlayModalMenuButton><img alt='' src={PlayButton}/></PlayModalMenuButton>
                                         </Link>
                                     </div>
-                                        :""}
 
                                 {this.context.moviesContext[this.context.currentIndex + 1] ?
                                     <div onClick={() => {

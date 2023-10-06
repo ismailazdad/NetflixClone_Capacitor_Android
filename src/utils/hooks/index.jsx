@@ -183,7 +183,7 @@ export function useFetchListWithFallBack(url,url2) {
         const urls = [url, url2];
         Promise.all(urls.map(url => fetch(url).then(r => r.json())))
             .then(([res, res2]) => {
-                setData(res?.results.concat(res2?.results))
+                setData((res?.results ?? []).concat(res2?.results ?? []));
             })
             .catch(error => setError(true))
             .finally(e =>{ setIsLoading(false)})

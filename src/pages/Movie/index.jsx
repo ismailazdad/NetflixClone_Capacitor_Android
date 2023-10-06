@@ -6,11 +6,9 @@ import MovieDetails from "../../components/MovieDetails";
 import YouTube from "react-youtube";
 import './style.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExpand, faVolumeHigh, faVolumeXmark} from "@fortawesome/free-solid-svg-icons";
+import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import MovieReviews from "../../components/MovieReviews";
-import {Loader} from "../../utils/style/Atoms";
-import {LoaderWrapper} from "../../components/Banner";
 import {App} from "@capacitor/app";
 import {MoviesContext} from "../../utils/context";
 import urls from "../../utils/urls";
@@ -44,7 +42,7 @@ const SoundContainer = styled.div`
     }
 `
 const MovieButton = styled.button`
-    position:absolute;
+    //position:absolute;
     margin-top: 1vh;
     z-index:1;
     cursor: pointer;
@@ -61,7 +59,7 @@ const MovieButton = styled.button`
     background-color: rgba(51, 51, 51, 0.5);
     @media  only screen and (max-width:768px ){
         margin-left:1vh;
-        width: 20vh;
+        //width: 15vh;
         height:5vh;        
     }     
     &:hover{
@@ -125,29 +123,32 @@ function Movie() {
         }
     }
 
-    if (isVideoError) {
-        return <span>Oups something went wrong</span>
-    }
     return (
 
         <div key={`${id}--bannerVideo`} style={{background:`url(${image})`,backgroundPosition:"center",backgroundColor:"black",backgroundSize: "contain",backgroundRepeat:"no-repeat", color: 'white', height: '100vh', overflowX: 'hidden', position: 'fixed'}}>
             <Container style={{
                 position: 'absolute',
                 zIndex: '1',
-                marginTop: '15vh',
+                marginTop: '3vh',
                 marginLeft: '1vh',
                 marginRight: '1vh',
             }}>
-                 {isVideoLoading ?
-                         <LoaderWrapper >
-                             <Loader />
-                         </LoaderWrapper>
-                      : ''}
-                <div style={{height: '10vh',userSelect: 'none'}}>
-                    <h3 onClick={enablePause}>{title}</h3>
+
+                <div style={{display: "flex", flexDirection : "inherit", alignItems: "center",}}>
+                    { showType === "movie" && (
+                        <a href={`https://moviestrailerwatch.surge.sh/?tmdb_id=`+id} target="_blank">
+                            <MovieButton>
+                                Watch{" "}
+                                <FontAwesomeIcon icon={faPlayCircle}/>
+                            </MovieButton>
+                        </a>
+                    )}
                     <Link to={showType ==="movie" ? `/` : `/tv`}>
                         <MovieButton>Back</MovieButton>
                     </Link>
+                </div>
+                <div style={{textAlign: "center",userSelect: 'none'}}>
+                    <h3 onClick={enablePause}>{title}</h3>
                     {isVideoPlaying ?
                         <div>
                             <SoundContainer onClick={enableSound}>
@@ -167,30 +168,35 @@ function Movie() {
                 <MovieDetails showType={showType} id={id} language={language} />
             </Container>
 
-            <YouTube id='vidPlayer' className='video-background'
-                     style={{opacity: isVideoPlaying ? 1 : 0}}
-                     onPlay={e => {
-                         setPlayerObject(e.target);
-                         setIsVideoPlaying(true);
-                         setIsVideoLoading(false);
-                         setIisVideoError(false);
+            {videoId !== undefined ? (
+                <YouTube id='vidPlayer' className='video-background'
+                         style={{opacity: isVideoPlaying ? 1 : 0}}
+                         onPlay={e => {
+                             setPlayerObject(e.target);
+                             setIsVideoPlaying(true);
+                             setIsVideoLoading(false);
+                             setIisVideoError(false);
 
-                     }}
-                     onError={e => {
-                        setIisVideoError(true);
-                        setIsVideoPlaying(false);
-                     }}
-                     onReady={e=>{
-                         setPlayerObject(e.target);
-                         e.target.playVideo();
-                         setIsVideoPlaying(false);
-                         setIsVideoLoading(true);
-                     }}
-                     onStateChange={e=>console.log("state change",e.target)}
-                     onEnd={ e=> {setIsVideoPlaying(false)}}
-                     videoId={videoId}
-                     opts={playerOptions}
-            />
+                         }}
+                         onError={e => {
+                             setIisVideoError(true);
+                             setIsVideoPlaying(false);
+                         }}
+                         onReady={e=>{
+                             setPlayerObject(e.target);
+                             e.target.playVideo();
+                             setIsVideoPlaying(false);
+                             setIsVideoLoading(true);
+                         }}
+                         onStateChange={e=>console.log("state change",e.target)}
+                         onEnd={ e=> {setIsVideoPlaying(false)}}
+                         videoId={videoId}
+                         opts={playerOptions}
+                />
+            ):(
+                <></>
+            )}
+
         </div>
     );
 }
