@@ -115,6 +115,8 @@ Make your own movie favorite list quickly
 
 • Make you own movies list 
 
+• Link to watch movie with webtorrent 
+
 • Show actor or director filmography
 
 • Casting of the movie
