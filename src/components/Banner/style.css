@@ -89,3 +89,30 @@
     align-items: center;
     justify-content: center;
 }
+
+@keyframes bounceIn {
+    from {
+        animation-timing-function: ease-in-out;
+        transform: scale(0.3);
+        opacity: 0;
+    }
+
+    /*60% {*/
+    /*    animation-timing-function: ease-out;*/
+    /*    transform: scale(0.7);*/
+    /*}*/
+
+    /*80% {*/
+    /*    animation-timing-function: ease-in;*/
+    /*    transform: scale(0.9);*/
+    /*}*/
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.bounce-in {
+    animation: bounceIn 0.3s;
+}

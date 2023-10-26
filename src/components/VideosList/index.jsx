@@ -119,7 +119,7 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
                 <div>
                     {error ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
                     {data && data?.length > 0 ?
-                        <h2 style={{marginTop: '1vh'}}> List of trailer(s)</h2> : 'No trailers...'
+                        <h3 style={{marginTop: '1vh'}}> List of trailer(s)</h3> : ''
                     }
                     <RowCasting>
                         {data && data?.length > 0 && data?.map((movie, index) =>

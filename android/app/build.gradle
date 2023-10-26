@@ -6,8 +6,8 @@ android {
         applicationId "com.moviestrailer.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdk 33
-        versionCode 42
-        versionName '3.0'
+        versionCode 47
+        versionName '3.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

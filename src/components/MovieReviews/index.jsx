@@ -61,7 +61,6 @@ function MovieReviews({id, language,imdbId,showComment, showType}) {
             {showComment ?
             <div>
                 {error ? <span style={{color: 'white'}}>Oups something went wrong</span> : ''}
-                {data?.length === 0 ? ' no reviews...' : ''}
                 {isLoading ? (
                     <LoaderWrapper data-testid='loader'>
                         <Loader style={{marginTop: '0vh'}}/>

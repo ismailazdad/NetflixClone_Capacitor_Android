@@ -237,7 +237,6 @@ const Details = styled.div`
 `
 
 class Banner extends Component {
-    timer;
     static contextType = MoviesContext;
     constructor(props) {
         super(props)
@@ -256,7 +255,8 @@ class Banner extends Component {
             first : true,
             key : 1,
             isMainMenu : this.props.isMainMenu,
-            showType : this.props.showType
+            showType : this.props.showType,
+            prevShowModal: false,
         }
 
     playerOptions.height = window.screen.height-(window.screen.height*0.35);
@@ -349,18 +349,13 @@ class Banner extends Component {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
     }
 
-    showModalDelay = () => {
-        this.timer = setTimeout(() => {
-            if (!this.props.focus && !this.props.touchState && !this.state.first) {
-                this.setShowModal(true)
-            }
-        }, 10000);
-    }
 
     componentDidMount() {
         if (!this.props.isMainMenu) {
             this.handleClick(this.props.id)
         }
+        this.setShowModal(false)
+        this.context.setModalVisibility(false)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -372,13 +367,15 @@ class Banner extends Component {
         this.setPlayButton(false);
     }
 
-    componentWillUnmount() {
-        clearTimeout(this.timer);
+    componentDidUpdate(prevProps, prevState, prevContext) {
+        if (this.context.showModal !== this.state.prevShowModal) {
+            this.setState({ prevShowModal: this.context.showModal });
+            this.setShowModal(this.context.showModal);
+        }
     }
 
 
     handleClick = (id) => {
-        clearTimeout(this.timer);
         this.setVidError(false);
         this.setIsVideoLoading(true);
         const playerPresent = Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h;
@@ -438,7 +435,6 @@ class Banner extends Component {
 
     updateTrailer = (key) =>{
         if(key !== this.state.currentTrailerUrl){
-            clearTimeout(this.timer)
             playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
             this.setVidError(false);
             if(Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h){
@@ -464,7 +460,6 @@ class Banner extends Component {
         const requestFullScreen = playerElement.requestFullScreen || playerElement.mozRequestFullScreen || playerElement.webkitRequestFullScreen ;
         if (requestFullScreen) {
             //android
-            // clearTimeout(this.timer);
             window.screen.orientation.lock('landscape')
             requestFullScreen.bind(playerElement)()
             //wpa
@@ -515,7 +510,7 @@ class Banner extends Component {
                             </Expand>
                         </div>
                         :''}
-                    <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true}); clearTimeout(this.timer);}} >
+                    <Details id='myModal' title='more details' onClick={e => {this.setState({showModal: true});}} >
                         <img style={{width:'3.5vh'}} alt='' src={InfoSvg}/>
                     </Details>
                     {!this.state.isVideoPlaying || !this.state.showModal ?
@@ -554,8 +549,6 @@ class Banner extends Component {
                                      onPlay={e => {
                                          this.setIsVideoLoading(false);
                                          this.setIsVideoPlaying(true);
-                                         clearTimeout(this.timer);
-                                         this.showModalDelay();
                                          this.setFirst(false);
                                          this.setVidError(false);
                                          App.addListener('appStateChange', (state) => {
@@ -591,11 +584,10 @@ class Banner extends Component {
                         </VideoContainer>
                     </LoaderContainer>
                 <MovieFadeBottom />
-                <Modal id="mymodal"  key={`--CardModal'`} show={this.state.showModal} className="my-modal" style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'#594757'}} >
+                <Modal id="mymodal" key={`--CardModal'`} show={this.state.showModal} className={`my-modal ${this.state.showModal ? 'bounce-in' : ''}`} style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'#594757'}} >
                     <Modal.Dialog style={{backgroundPosition:'top', backgroundSize: 'cover',backgroundImage: `url(${imageUrlPoster})`}}>
                         <Modal.Header onClick={() => {
                             this.setState({showModal: false});
-                            clearTimeout(this.timer);
                             if(!this.props.showSimilar)
                                 this.setState({isMainMenu: true})
                         }} style={{border: 'transparent',height:'9vh'}}  >
@@ -626,13 +618,10 @@ class Banner extends Component {
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
                                         <MovieDetails showType={showType} id={id} language={language} updateImdbId={this.updateImdbId}/>
-                                        <MovieProvider showType={showType}  id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
-                                </Tab>
-                                <Tab eventKey={2} title="trailers">
                                         <VideoList showType={showType} id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
-                                </Tab>
-                                <Tab eventKey={3} title="Casting">
                                         <Credits showType={showType} id={id} language={language}/>
+                                        <MovieProvider showType={showType}  id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
+                                        <MovieReviews showType={showType} title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
                                 </Tab>
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">
@@ -650,9 +639,6 @@ class Banner extends Component {
                                                    isLargeRow={true}/>
                                     </Tab> : ''}
 
-                                <Tab eventKey={5} title="Review">
-                                        <MovieReviews showType={showType} title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
-                                </Tab>
                             </Tabs>
                             </RenderIfVisible>
                         </Modal.Body>

@@ -129,8 +129,26 @@ function RowList({title, url, isLargeRow,useRank,sort,myList,confirm, onClick}) 
     const {isLoading, data, error} = useFetchList(url,useRank);
     const [scrollRight,setScrollRight]= useState(false);
     const [scrollLeft,setScrollLeft]= useState(false);
-    const {moviesContext,saveMoviesContext,currentIndex, saveCurrentIndex,saveMovie} = useContext(MoviesContext)
+    const { moviesContext, saveMoviesContext, currentIndex, saveCurrentIndex, saveMovie, setModalVisibility } = useContext(MoviesContext)
     const movies = myList?.length > 0 ? myList.map((movie)=>{return { ...movie, id : movie.id}}): data.map((movie)=>{return { ...movie, id : movie.id}});
+
+
+    const [clickCount, setClickCount] = useState(0);
+    const [lastClickedMovieId, setLastClickedMovieId] = useState(null);
+
+    const updateMoviesWithAlert = (movie, currentIndex) => {
+        if (clickCount === 1 && lastClickedMovieId === movie.id) {
+            setModalVisibility(true)
+            setClickCount(clickCount +1 )
+        } else {
+            setClickCount(1);
+            setLastClickedMovieId(movie.id);
+            setModalVisibility(false)
+        }
+        updateMovies(movie, currentIndex);
+        onClick && onClick();
+    };
+
     if(sort)
         movies.sort((a,b)=>b?.release_date?.split('-').join('')-a?.release_date?.split('-').join(''))
         movies.sort((a,b)=>b?.first_air_date?.split('-').join('')-a?.first_air_date?.split('-').join(''))
@@ -181,13 +199,19 @@ function RowList({title, url, isLargeRow,useRank,sort,myList,confirm, onClick}) 
                                                 {useRank ? <TrendNumber>{index + 1}</TrendNumber> : ''}
                                                 <StyledImage
                                                     key={movie.id}
+                                                    id={`styledImage_${movie.id}`}
                                                     imageUrl={`${isLargeRow ? urls.findImagesUrl.replace('original','w185')+movie.poster_path : urls.findImagesUrl.replace('original','w300')+movie.backdrop_path}`}
                                                     backup={isLargeRow ? BackupLarge : BackupSmall}
                                                     alt={movie.name}
                                                     isLargeRow={isLargeRow}
                                                     isActive={currentIndex === movie}
-                                                    onTouchEnd={(e) => {updateMovies(movie, index);onClick && onClick();e.preventDefault();}}
-                                                    onClick={() => {updateMovies(movie, index);onClick && onClick();}}
+                                                    onTouchEnd={(e) => {
+                                                        updateMoviesWithAlert(movie, index)
+                                                        e.preventDefault();
+                                                    }}
+                                                    onClick={() => {
+                                                        updateMoviesWithAlert(movie, index)
+                                                    }}
                                                     useRank={useRank}
                                                     onError={e => e.target.parentNode.style.display = 'none'}
                                                 />

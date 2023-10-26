@@ -130,10 +130,25 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
     const [movies, setMovies] = useState([])
     const [scrollRight, setScrollRight] = useState(false)
     const [scrollLeft, setScrollLeft] = useState(false)
-    const { moviesContext, saveMoviesContext, currentIndex, saveCurrentIndex, saveMovie } = useContext(MoviesContext)
+    const { moviesContext, saveMoviesContext, currentIndex, saveCurrentIndex, saveMovie, setModalVisibility } = useContext(MoviesContext)
     const [isLoading, setIsLoading] = useState(true)
     const { data, error } = useFetchList(url, useRank)
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
+    const [clickCount, setClickCount] = useState(0);
+    const [lastClickedMovieId, setLastClickedMovieId] = useState(null);
+
+    const updateMoviesWithAlert = (movie, currentIndex) => {
+        if (clickCount === 1 && lastClickedMovieId === movie.id) {
+            setModalVisibility(true)
+            setClickCount(clickCount +1 )
+        } else {
+            setClickCount(1);
+            setLastClickedMovieId(movie.id);
+            setModalVisibility(false)
+        }
+        updateMovies(movie, currentIndex);
+    };
+
 
     useEffect(() => {
         setIsLoading(true)
@@ -197,7 +212,7 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
                 console.error("Error fetching data:", error);
             }
         }
-    };;
+    };
 
     const scrollToRight = function () {
         let screenWidth = window.innerWidth;
@@ -249,17 +264,18 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
                                     {useRank ? <TrendNumber>{index + 1}</TrendNumber> : ""}
                                     <StyledImage
                                         key={movie.id}
+                                        id={`styledImage_${movie.id}`}
                                         imageUrl={`${isLargeRow ? urls.findImagesUrl.replace("original", "w185") + movie.poster_path : urls.findImagesUrl.replace("original", "w300") + movie.backdrop_path}`}
                                         backup={isLargeRow ? BackupLarge : BackupSmall}
                                         alt={movie.name}
                                         isLargeRow={isLargeRow}
                                         isActive={currentIndex === movie}
                                         onTouchEnd={(e) => {
-                                            updateMovies(movie, index);
+                                            updateMoviesWithAlert(movie, index)
                                             e.preventDefault();
                                         }}
                                         onClick={() => {
-                                            updateMovies(movie, index);
+                                            updateMoviesWithAlert(movie, index)
                                         }}
                                         useRank={useRank}
                                         onError={(e) => e.target.parentNode.style.display = "none"}
