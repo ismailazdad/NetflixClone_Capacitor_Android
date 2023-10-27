@@ -24,7 +24,7 @@ For this challenge i wanted to see all informations
  - Bootstrap modal
  - GlobalStyle, and style.jsx and styled component
  - Hooks and UseContext to synchronize data context
- - TMDB Api 
+ - TMDB Api , Omdb api
  - Handle environment variable with .env    
 
 if someone can do the same for ios and push the app to the apple store, it will be awesome :boom: :neckbeard: :monkey_face:
