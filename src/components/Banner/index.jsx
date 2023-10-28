@@ -647,6 +647,7 @@ class Banner extends Component {
                             <div className="d-flex justify-content-between" >
                                 {this.context.moviesContext[this.context.currentIndex - 1] ?
                                     <div onClick={() => {
+                                        document.querySelector(".modal-body").scrollTo({top: 0})
                                         this.context.saveCurrentIndex(this.context.currentIndex - 1)
                                         this.context.saveMovie(this.context.moviesContext[this.context.currentIndex - 1])
                                     }}>
@@ -669,6 +670,7 @@ class Banner extends Component {
 
                                 {this.context.moviesContext[this.context.currentIndex + 1] ?
                                     <div onClick={() => {
+                                        document.querySelector(".modal-body").scrollTo({top: 0})
                                         this.context.saveCurrentIndex(this.context.currentIndex + 1)
                                         this.context.saveMovie(this.context.moviesContext[this.context.currentIndex + 1])
                                     }}>
