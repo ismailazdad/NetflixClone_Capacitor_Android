@@ -67,6 +67,12 @@ function MovieReviews({id, language,imdbId,showComment, showType}) {
                     </LoaderWrapper>
                 ) : ''}
                 <div style={{lineHeight: '1.4rem'}}>
+                    {(data && data.length > 0) && (
+                        <>
+                            <br/>
+                            <h3 style={{marginTop: '1vh'}}> Review </h3>
+                        </>
+                    )}
                     {data && data?.length > 0 && data?.map((review, index) =>
                         <div key={index + '_container'} style={{display: "inline-block", marginTop: '2vh'}}>
                             <div>

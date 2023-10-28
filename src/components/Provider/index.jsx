@@ -28,7 +28,12 @@ function MovieProvider({id, language, showType}) {
                 </LoaderWrapper>
             ) : (
                 <div>
-                    {buy && buy.length > 0 ? <span style={{width:'6vh', float: 'left', marginTop: '1vh',color:'gray'}}>Buy : </span> : ''}
+                    {((buy && buy.length > 0) || (rent && rent.length > 0) || (flatrate && flatrate.length > 0)) && (
+                        <>
+                            <h3 style={{marginTop: '1vh'}}> Provider </h3>
+                        </>
+                    )}
+                    {buy && buy.length > 0 ? <span style={{width:'8vh', float: 'left', marginTop: '1vh',color:'gray'}}>Buy : </span> : ''}
                     <a href={`${link}`} target="_blank">
                         <div  className='row' style={{ marginTop: '1vh'}}>
                             {buy && buy?.length > 0 && buy?.map((provider, index) =>
@@ -43,7 +48,7 @@ function MovieProvider({id, language, showType}) {
                         </div>
                     </a>
 
-                    {rent && rent.length > 0 ? <span style={{width:'6vh', float: 'left', marginTop: '1vh',color:'gray'}}>Rent : </span> : ''}
+                    {rent && rent.length > 0 ? <span style={{width:'8vh', float: 'left', marginTop: '1vh',color:'gray'}}>Rent : </span> : ''}
                     <a href={`${link}`} target="_blank">
                         <div className='row' style={{ marginTop: '1vh'}}>
                         {rent && rent?.length > 0 && rent?.map((provider, index) =>
@@ -58,7 +63,7 @@ function MovieProvider({id, language, showType}) {
                         </div>
                     </a>
 
-                    {flatrate && flatrate.length > 0 ? <span style={{width:'6vh', float: 'left', marginTop: '1vh',color:'gray'}}>Rent : </span> : ''}
+                    {flatrate && flatrate.length > 0 ? <span style={{width:'8vh', float: 'left', marginTop: '1vh',color:'gray'}}>Rent : </span> : ''}
                     <a href={`${link}`} target="_blank">
                         <div className='row' style={{ marginTop: '1vh'}}>
                             {flatrate && flatrate?.length > 0 && flatrate?.map((provider, index) =>

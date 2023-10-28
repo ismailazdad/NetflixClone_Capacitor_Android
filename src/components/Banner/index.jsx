@@ -617,6 +617,7 @@ class Banner extends Component {
                             >
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
+                                        <MovieReviews title={title} language={language} id={id} imdbId={this.state.imdbId} showComment={false}/>
                                         <MovieDetails showType={showType} id={id} language={language} updateImdbId={this.updateImdbId}/>
                                         <VideoList showType={showType} id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
                                         <Credits showType={showType} id={id} language={language}/>
