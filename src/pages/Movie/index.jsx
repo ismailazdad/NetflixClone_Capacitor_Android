@@ -6,7 +6,7 @@ import MovieDetails from "../../components/MovieDetails";
 import YouTube from "react-youtube";
 import './style.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark} from "@fortawesome/free-solid-svg-icons";
+import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark, faWarning} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import MovieReviews from "../../components/MovieReviews";
 import {App} from "@capacitor/app";
@@ -79,6 +79,17 @@ function Movie() {
     const [playerObject, setPlayerObject] = useState(false)
     const {currentMovie} = useContext(MoviesContext)
     const id = currentMovie?.id;
+    const name =  showType === "tv" ?
+        currentMovie?.original_name.toLowerCase().replaceAll(":","").replaceAll(" ","-") :
+        currentMovie?.original_title ? currentMovie?.original_title.toLowerCase().replaceAll(":","").replaceAll(" ","-") :
+        currentMovie?.title ? currentMovie?.title.toLowerCase().replaceAll(":","").replaceAll(" ","-")  : undefined
+
+    ;
+    const ystUrl = name && currentMovie?.first_air_date && showType === "tv"?
+       "https://en.yts-official.org/series/"+ name.toLowerCase().replace(" ","-")+ "-" + currentMovie.first_air_date.split("-")[0] :
+        name && currentMovie?.release_date && showType === "movie"?
+            "https://en.yts-official.org/movies/"+ name+ "-" + currentMovie.release_date.split("-")[0]:
+            undefined
     const title = currentMovie?.title || currentMovie?.name;
     const image = urls.findImagesUrl +currentMovie?.poster_path;
     App.addListener('appStateChange', (state) => {
@@ -133,16 +144,38 @@ function Movie() {
                 marginLeft: '1vh',
                 marginRight: '1vh',
             }}>
+                <>
+                    <FontAwesomeIcon icon={faWarning}/> {" use Vpn"}
+                </>
+                <div style={{display: "flex", flexDirection : "inherit", alignItems: "center",fontSize:"10px"}}>
+                    <>
+                        { showType === "movie" && (
+                            <a href={`https://moviestrailerwatch.surge.sh/?tmdb_id=`+id} target="_blank">
+                                <MovieButton>
+                                    Watch{" "}
+                                    <FontAwesomeIcon icon={faPlayCircle}/>
+                                </MovieButton>
+                            </a>
+                        )}
 
-                <div style={{display: "flex", flexDirection : "inherit", alignItems: "center",}}>
-                    { showType === "movie" && (
-                        <a href={`https://moviestrailerwatch.surge.sh/?tmdb_id=`+id} target="_blank">
-                            <MovieButton>
-                                Watch{" "}
-                                <FontAwesomeIcon icon={faPlayCircle}/>
-                            </MovieButton>
-                        </a>
-                    )}
+                        { (showType === "movie" && ystUrl) && (
+                            <a href={ystUrl} target="_blank">
+                                <MovieButton>
+                                    Watch{" "}
+                                    <FontAwesomeIcon icon={faPlayCircle}/>
+                                </MovieButton>
+                            </a>
+                        )}
+
+                        { showType === "tv" && (
+                            <a href={ystUrl} target="_blank">
+                                <MovieButton>
+                                     Watch{" "}
+                                    <FontAwesomeIcon icon={faPlayCircle}/>
+                                </MovieButton>
+                            </a>
+                        )}
+                    </>
                     <Link to={showType ==="movie" ? `/` : `/tv`}>
                         <MovieButton>Back</MovieButton>
                     </Link>
