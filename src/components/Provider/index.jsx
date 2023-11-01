@@ -39,8 +39,8 @@ function MovieProvider({id, language, showType}) {
                             {buy && buy?.length > 0 && buy?.map((provider, index) =>
                                 (provider?.provider_name ?
                                     <div key={`buy---${index}`} style={{width:'auto', float: 'left',paddingLeft:'0',paddingTop:'1vh'}}>
-                                        <img title={provider?.provider_name} alt={provider?.provider_name} width='35vh'
-                                             height='35vh' src={urls.findImagesUrl + provider?.logo_path}
+                                        <img title={provider?.provider_name} alt={provider?.provider_name} width='20vh'
+                                             height='20vh' src={urls.findImagesUrl + provider?.logo_path}
                                              onError={e => e.target.display = 'none'}/>
                                     </div>
                                     : '')
@@ -54,8 +54,8 @@ function MovieProvider({id, language, showType}) {
                         {rent && rent?.length > 0 && rent?.map((provider, index) =>
                             (provider?.provider_name ?
                                 <div key={`rent---${index}`} style={{width:'auto', float: 'left',paddingLeft:'0',paddingTop:'1vh'}}>
-                                    <img title={provider?.provider_name} alt={provider?.provider_name} width='35vh'
-                                         height='35vh' src={urls.findImagesUrl + provider?.logo_path}
+                                    <img title={provider?.provider_name} alt={provider?.provider_name} width='20vh'
+                                         height='20vh' src={urls.findImagesUrl + provider?.logo_path}
                                          onError={e => e.target.display = 'none'}/>
                                 </div>
                                 : '')
@@ -69,8 +69,8 @@ function MovieProvider({id, language, showType}) {
                             {flatrate && flatrate?.length > 0 && flatrate?.map((provider, index) =>
                                 (provider?.provider_name ?
                                     <div key={`flat---${index}`} style={{width:'auto', float: 'left',paddingLeft:'0',paddingTop:'1vh'}}>
-                                        <img title={provider?.provider_name} alt={provider?.provider_name} width='35vh'
-                                             height='35vh' src={urls.findImagesUrl + provider?.logo_path}
+                                        <img title={provider?.provider_name} alt={provider?.provider_name} width='20vh'
+                                             height='20vh' src={urls.findImagesUrl + provider?.logo_path}
                                              onError={e => e.target.display = 'none'}/>
                                     </div>
                                     : '')

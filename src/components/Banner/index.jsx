@@ -29,6 +29,7 @@ import {MoviesContext} from "../../utils/context";
 import {App} from "@capacitor/app";
 import RenderIfVisible from "react-render-if-visible"
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import MovieReviewsStars from "../MovieReviewsStars";
 
 export const PlayModalMenuButton = styled.button`       
     cursor: pointer;
@@ -617,12 +618,12 @@ class Banner extends Component {
                             >
                                 <Tab eventKey={1} title="Movie" >
                                     {character ? character : ''}
-                                        <MovieReviews title={title} language={language} id={id} imdbId={this.state.imdbId} showComment={false}/>
+                                        <MovieReviewsStars title={title} imdbId={this.state.imdbId} />
                                         <MovieDetails showType={showType} id={id} language={language} updateImdbId={this.updateImdbId}/>
                                         <VideoList showType={showType} id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
                                         <Credits showType={showType} id={id} language={language}/>
                                         <MovieProvider showType={showType}  id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
-                                        <MovieReviews showType={showType} title={title} language={language} id={id}  imdbId={this.state.imdbId} showComment={true}/>
+                                        <MovieReviews showType={showType} title={title} language={language} id={id} />
                                 </Tab>
                                 {this.props.showSimilar ?
                                     <Tab eventKey={4} title="Similar">

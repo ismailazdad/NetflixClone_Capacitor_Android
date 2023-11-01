@@ -8,10 +8,10 @@ import './style.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark, faWarning} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
-import MovieReviews from "../../components/MovieReviews";
 import {App} from "@capacitor/app";
 import {MoviesContext} from "../../utils/context";
 import urls from "../../utils/urls";
+import MovieReviewsStars from "../../components/MovieReviewsStars";
 
 const Container = styled.div`
     @media  only screen and (orientation: landscape){
@@ -197,7 +197,7 @@ function Movie() {
                         </div>
                         : ''}
                 </div>
-                <MovieReviews title={title} language={language} id={id} imdbId={imdbId} showComment={false}/>
+                <MovieReviewsStars title={title} imdbId={imdbId} />
                 <MovieDetails showType={showType} id={id} language={language} />
             </Container>
 

@@ -109,17 +109,25 @@ function VideoList({id, language, setTrailerURL,isVideoPlaying,trailerURL,update
     const url = (showType && showType === "tv" ? tvUrls.findVideosById.replace('{id}', id) : urls.findVideosById.replace('{id}', id))
     const fallBackUrl = (showType && showType === "tv" ? tvUrls.findVideosById.replace('{id}', id).replace("&language=", "") : tvUrls.findVideosById.replace('{id}', id).replace("&language=", ""))
     const {isLoading, data,error} = useFetchListWithFallBack(url + language, fallBackUrl.replace("&language=", ""))
+    const scale = 0.7;
     return (
-        <div>
+        <div style={{ height: `${data && data?.length > 0 ? "21vh":"auto"}` }}>
             {isLoading ? (
                 <LoaderWrapper data-testid='loader'>
                     <Loader/>
                 </LoaderWrapper>
             ) : (
-                <div>
+                <div
+                    style={{
+                        transform: `scale(${scale - 0.05})`,
+                        transformOrigin: "top left",
+                        overflow: "auto",
+                        width: `calc(100vh * ${scale})`,
+                    }}
+                >
                     {error ? <span style={{color:'white'}}>Oups something went wrong</span>:''}
                     {data && data?.length > 0 ?
-                        <h3 style={{marginTop: '1vh'}}> List of trailer(s)</h3> : ''
+                        <h3 style={{marginTop: '1vh'}}>Trailer</h3> : ''
                     }
                     <RowCasting>
                         {data && data?.length > 0 && data?.map((movie, index) =>
