@@ -6,7 +6,7 @@ import MovieDetails from "../../components/MovieDetails";
 import YouTube from "react-youtube";
 import './style.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark, faWarning} from "@fortawesome/free-solid-svg-icons";
+import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark, faWarning, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import {App} from "@capacitor/app";
 import {MoviesContext} from "../../utils/context";
@@ -92,6 +92,8 @@ function Movie() {
             undefined
     const title = currentMovie?.title || currentMovie?.name;
     const image = urls.findImagesUrl +currentMovie?.poster_path;
+    const movieWebUrl = "https://movie-web.app/media/" + (showType === "movie" ? "tmdb-movie-":"tmdb-show-") + id
+
     App.addListener('appStateChange', (state) => {
         if (state.isActive) {
             playerObject.playVideo();
@@ -149,32 +151,37 @@ function Movie() {
                 </>
                 <div style={{display: "flex", flexDirection : "inherit", alignItems: "center",fontSize:"10px"}}>
                     <>
-                        { showType === "movie" && (
-                            <a href={`https://moviestrailerwatch.surge.sh/?tmdb_id=`+id} target="_blank">
-                                <MovieButton>
-                                    Watch{" "}
-                                    <FontAwesomeIcon icon={faPlayCircle}/>
-                                </MovieButton>
-                            </a>
-                        )}
+                        {/*{ showType === "movie" && (*/}
+                        {/*    <a href={`https://moviestrailerwatch.surge.sh/?tmdb_id=`+id} target="_blank">*/}
+                        {/*        <MovieButton>*/}
+                        {/*            Watch{" "}*/}
+                        {/*            <FontAwesomeIcon icon={faPlayCircle}/>*/}
+                        {/*        </MovieButton>*/}
+                        {/*    </a>*/}
+                        {/*)}*/}
 
-                        { (showType === "movie" && ystUrl) && (
-                            <a href={ystUrl} target="_blank">
-                                <MovieButton>
-                                    Watch{" "}
-                                    <FontAwesomeIcon icon={faPlayCircle}/>
-                                </MovieButton>
-                            </a>
-                        )}
+                        {/*{ (showType === "movie" && ystUrl) && (*/}
+                        {/*    <a href={ystUrl} target="_blank">*/}
+                        {/*        <MovieButton>*/}
+                        {/*            Watch{" "}*/}
+                        {/*            <FontAwesomeIcon icon={faPlayCircle}/>*/}
+                        {/*        </MovieButton>*/}
+                        {/*    </a>*/}
+                        {/*)}*/}
 
-                        { showType === "tv" && (
-                            <a href={ystUrl} target="_blank">
-                                <MovieButton>
-                                     Watch{" "}
-                                    <FontAwesomeIcon icon={faPlayCircle}/>
-                                </MovieButton>
-                            </a>
-                        )}
+
+                        <a href={ystUrl} target="_blank">
+                            <MovieButton>
+                                <FontAwesomeIcon icon={faDownload}/>
+                            </MovieButton>
+                        </a>
+
+                        <a href={movieWebUrl} target="_blank">
+                            <MovieButton>
+                                Watch{" "}
+                                <FontAwesomeIcon icon={faPlayCircle}/>
+                            </MovieButton>
+                        </a>
                     </>
                     <Link to={showType ==="movie" ? `/` : `/tv`}>
                         <MovieButton>Back</MovieButton>
