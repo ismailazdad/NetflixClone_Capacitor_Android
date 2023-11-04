@@ -6,7 +6,7 @@ import MovieDetails from "../../components/MovieDetails";
 import YouTube from "react-youtube";
 import './style.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark, faWarning, faDownload} from "@fortawesome/free-solid-svg-icons";
+import {faExpand, faPlayCircle, faVolumeHigh, faVolumeXmark, faWarning, faDownload, faArrowCircleLeft} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import {App} from "@capacitor/app";
 import {MoviesContext} from "../../utils/context";
@@ -80,9 +80,9 @@ function Movie() {
     const {currentMovie} = useContext(MoviesContext)
     const id = currentMovie?.id;
     const name =  showType === "tv" ?
-        currentMovie?.original_name.toLowerCase().replaceAll(":","").replaceAll(" ","-") :
-        currentMovie?.original_title ? currentMovie?.original_title.toLowerCase().replaceAll(":","").replaceAll(" ","-") :
-        currentMovie?.title ? currentMovie?.title.toLowerCase().replaceAll(":","").replaceAll(" ","-")  : undefined
+        currentMovie?.original_name?.toLowerCase().replaceAll(":","").replaceAll(" ","-") :
+        currentMovie?.original_title ? currentMovie?.original_title?.toLowerCase().replaceAll(":","").replaceAll(" ","-") :
+        currentMovie?.title ? currentMovie?.title?.toLowerCase().replaceAll(":","").replaceAll(" ","-")  : undefined
 
     ;
     const ystUrl = name && currentMovie?.first_air_date && showType === "tv"?
@@ -149,7 +149,7 @@ function Movie() {
                 <>
                     <FontAwesomeIcon icon={faWarning}/> {" use Vpn"}
                 </>
-                <div style={{display: "flex", flexDirection : "inherit", alignItems: "center",fontSize:"10px"}}>
+                <div style={{display: "flex", flexDirection : "inherit", alignItems: "center",fontSize:"15px"}}>
                     <>
                         {/*{ showType === "movie" && (*/}
                         {/*    <a href={`https://moviestrailerwatch.surge.sh/?tmdb_id=`+id} target="_blank">*/}
@@ -168,7 +168,9 @@ function Movie() {
                         {/*        </MovieButton>*/}
                         {/*    </a>*/}
                         {/*)}*/}
-
+                        <Link to={showType ==="movie" ? `/` : `/tv`}>
+                            <MovieButton><FontAwesomeIcon icon={faArrowCircleLeft}/></MovieButton>
+                        </Link>
 
                         <a href={ystUrl} target="_blank">
                             <MovieButton>
@@ -178,14 +180,11 @@ function Movie() {
 
                         <a href={movieWebUrl} target="_blank">
                             <MovieButton>
-                                Watch{" "}
                                 <FontAwesomeIcon icon={faPlayCircle}/>
                             </MovieButton>
                         </a>
                     </>
-                    <Link to={showType ==="movie" ? `/` : `/tv`}>
-                        <MovieButton>Back</MovieButton>
-                    </Link>
+
                 </div>
                 <div style={{textAlign: "center",userSelect: 'none'}}>
                     <h3 onClick={enablePause}>{title}</h3>

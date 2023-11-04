@@ -6,7 +6,7 @@ import YouTube from "react-youtube";
 import {Link} from "react-router-dom";
 import './style.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faExpand, faVolumeHigh, faVolumeXmark,faForwardStep,faBackwardStep} from '@fortawesome/free-solid-svg-icons'
+import {faExpand, faVolumeHigh, faVolumeXmark,faForwardStep,faBackwardStep,faArrowCircleLeft} from '@fortawesome/free-solid-svg-icons'
 import {Fade, Modal} from "react-bootstrap";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -524,7 +524,7 @@ class Banner extends Component {
                             <div style={{width: '70vh', height: '5vh'}}>
                                 {!showSimilar ?
                                     <Link to={`/`}>
-                                        <MovieButton>Back</MovieButton>
+                                        <MovieButton><FontAwesomeIcon icon={faArrowCircleLeft}/></MovieButton>
                                     </Link>:''}
                             </div>
                             :
