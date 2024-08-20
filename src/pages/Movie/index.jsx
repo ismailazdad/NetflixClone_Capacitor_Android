@@ -92,7 +92,7 @@ function Movie() {
             undefined
     const title = currentMovie?.title || currentMovie?.name;
     const image = urls.findImagesUrl +currentMovie?.poster_path;
-    const movieWebUrl = "https://movie-web.app/media/" + (showType === "movie" ? "tmdb-movie-":"tmdb-show-") + id
+    const movieWebUrl = "https://webtorrentplayer.github.io/" + (showType === "movie" ? "movies/":"series/") + imdbId
 
     App.addListener('appStateChange', (state) => {
         if (state.isActive) {
