@@ -1,4 +1,5 @@
 import React, {useContext, useRef, useState, useEffect} from "react";
+import { useLongPress } from 'use-long-press';
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
@@ -134,21 +135,15 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
     const [isLoading, setIsLoading] = useState(true)
     const { data, error } = useFetchList(url, useRank)
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
-    const [clickCount, setClickCount] = useState(0);
-    const [lastClickedMovieId, setLastClickedMovieId] = useState(null);
 
     const updateMoviesWithAlert = (movie, currentIndex) => {
-        if (clickCount === 1 && lastClickedMovieId === movie.id) {
-            setModalVisibility(true)
-            setClickCount(clickCount +1 )
-        } else {
-            setClickCount(1);
-            setLastClickedMovieId(movie.id);
-            setModalVisibility(false)
-        }
+        setModalVisibility(false)
         updateMovies(movie, currentIndex);
     };
 
+    const bind = useLongPress(() => {
+        setModalVisibility(true)
+    });
 
     useEffect(() => {
         setIsLoading(true)
@@ -270,7 +265,7 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
                                         alt={movie.name}
                                         isLargeRow={isLargeRow}
                                         isActive={currentIndex === movie}
-                                        onTouchEnd={(e) => {
+                                        onTouchStart={(e) => {
                                             updateMoviesWithAlert(movie, index)
                                             e.preventDefault();
                                         }}
@@ -279,6 +274,7 @@ function RowBanner({ title, url, isLargeRow, useRank, sort, myList, confirm }) {
                                         }}
                                         useRank={useRank}
                                         onError={(e) => e.target.parentNode.style.display = "none"}
+                                        {...bind()}
                                     />
                                 </div>
                             ) : (

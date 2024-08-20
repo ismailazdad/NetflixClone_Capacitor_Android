@@ -5,8 +5,8 @@ android {
     defaultConfig {
         applicationId "com.moviestrailer.app"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdk 33
-        versionCode 53
+        targetSdk 34
+        versionCode 54
         versionName '3.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

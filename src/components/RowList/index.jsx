@@ -1,4 +1,5 @@
 import React, {useContext, useRef, useState} from "react";
+import { useLongPress } from 'use-long-press';
 import {Loader} from "../../utils/style/Atoms";
 import ChevronLeft from "../../assets/chevronLeft.png"
 import ChevronRight from "../../assets/chevronRight.png"
@@ -132,22 +133,14 @@ function RowList({title, url, isLargeRow,useRank,sort,myList,confirm, onClick}) 
     const { moviesContext, saveMoviesContext, currentIndex, saveCurrentIndex, saveMovie, setModalVisibility } = useContext(MoviesContext)
     const movies = myList?.length > 0 ? myList.map((movie)=>{return { ...movie, id : movie.id}}): data.map((movie)=>{return { ...movie, id : movie.id}});
 
-
-    const [clickCount, setClickCount] = useState(0);
-    const [lastClickedMovieId, setLastClickedMovieId] = useState(null);
-
     const updateMoviesWithAlert = (movie, currentIndex) => {
-        if (clickCount === 1 && lastClickedMovieId === movie.id) {
-            setModalVisibility(true)
-            setClickCount(clickCount +1 )
-        } else {
-            setClickCount(1);
-            setLastClickedMovieId(movie.id);
-            setModalVisibility(false)
-        }
+        setModalVisibility(false)
         updateMovies(movie, currentIndex);
-        onClick && onClick();
     };
+
+    const bind = useLongPress(() => {
+        setModalVisibility(true)
+    });
 
     if(sort)
         movies.sort((a,b)=>b?.release_date?.split('-').join('')-a?.release_date?.split('-').join(''))
@@ -205,7 +198,7 @@ function RowList({title, url, isLargeRow,useRank,sort,myList,confirm, onClick}) 
                                                     alt={movie.name}
                                                     isLargeRow={isLargeRow}
                                                     isActive={currentIndex === movie}
-                                                    onTouchEnd={(e) => {
+                                                    onTouchStart={(e) => {
                                                         updateMoviesWithAlert(movie, index)
                                                         e.preventDefault();
                                                     }}
@@ -214,6 +207,7 @@ function RowList({title, url, isLargeRow,useRank,sort,myList,confirm, onClick}) 
                                                     }}
                                                     useRank={useRank}
                                                     onError={e => e.target.parentNode.style.display = 'none'}
+                                                    {...bind()}
                                                 />
                                             </div>
                                             :
