@@ -12,7 +12,7 @@
     "cordova-plugin-screen-orientation": "^3.0.3",
     "cordova-res": "^0.15.4",
     "es6-promise-plugin": "^4.2.2",
-    "movie-trailer": "^3.0.0",
+    "movie-trailer": "^3.2.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
