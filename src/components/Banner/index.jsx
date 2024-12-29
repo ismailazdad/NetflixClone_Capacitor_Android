@@ -31,7 +31,7 @@ import RenderIfVisible from "react-render-if-visible"
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import MovieReviewsStars from "../MovieReviewsStars";
 
-export const PlayModalMenuButton = styled.button`       
+export const PlayModalMenuButton = styled.button`
     cursor: pointer;
     color: #fff;
     outline: none;
@@ -370,72 +370,112 @@ class Banner extends Component {
 
 
     componentDidUpdate(prevProps, prevState) {
+        // Handle modal visibility changes
         if (this.context.showModal !== prevState.prevShowModal) {
             this.setState({ prevShowModal: this.context.showModal });
             this.setShowModal(this.context.showModal);
-            if (!this.context.showModal && this.state.playerObj) {
-                try {
-                    this.state.playerObj.pauseVideo();
-                } catch (err) {
-                    console.error("Error pausing video:", err);
-                }
-            }
         }
 
+        // Handle item changes
         if (prevProps.id !== this.props.id) {
+            this.cleanupVideoPlayer(); // Clean up previous video state
             this.handleClick(this.props.id);
+        }
+
+        // Handle title changes
+        if (prevProps.title !== this.props.title) {
+            playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
+            this.cleanupVideoPlayer(); // Clean up previous video state
+            this.handleClick(this.props.id);
+            this.setState({ key: 1 });
         }
     }
 
-    handleClick = (id) => {
+    cleanupVideoPlayer = () => {
+        if (this.state.playerObj && typeof this.state.playerObj.stopVideo === 'function') {
+            try {
+                this.state.playerObj.stopVideo();
+            } catch (err) {
+                console.error("Error stopping video:", err);
+            }
+        }
+        this.setTrailerURL("");
+        this.setCurrentTrailerURL("");
+        this.setIsVideoPlaying(false);
+        this.setPlayButton(false);
+        this.setIsVideoLoading(false);
+    }
+
+    componentWillUnmount() {
+        this.cleanupVideoPlayer();
+    }
+
+    handleClick = async (id) => {
         this.setVidError(false);
         this.setIsVideoLoading(true);
-        const playerPresent = this.state.playerObj && typeof this.state.playerObj.loadVideoById === "function";
-        if (playerPresent) {
-            movieTrailer(null, { tmdbId: id, language: this.props.language, videoType: this.props.showType })
-                .then((url) => {
-                    const urlParams = new URLSearchParams(new URL(url).search);
-                    const videoId = urlParams.get("v");
 
-                    if (videoId !== this.state.currentTrailerURL) {
-                        this.state.playerObj.loadVideoById(videoId);
-                        this.setCurrentTrailerURL(videoId); // Ensure state is updated
-                    }
+        try {
+            // Try with specified language first
+            let url = await movieTrailer(null, {
+                tmdbId: id,
+                language: this.props.language,
+                videoType: this.props.showType
+            });
 
-                    this.setIsVideoLoading(false);
-                })
-                .catch((e) => {
-                    this.setVidError(true);
-                    this.setIsVideoLoading(false);
+            if (!url) {
+                // Try without language specification
+                url = await movieTrailer(null, {
+                    tmdbId: id,
+                    videoType: this.props.showType
                 });
-        } else {
-            movieTrailer(null, { tmdbId: id, language: this.props.language, videoType: this.props.showType })
-                .then((url) => {
-                    const urlParams = new URLSearchParams(new URL(url).search);
-                    const videoId = urlParams.get("v");
+            }
 
-                    if (videoId !== this.state.currentTrailerURL) {
-                        this.setTrailerURL(videoId);
-                        this.setCurrentTrailerURL(videoId); // Update current video ID
-                    }
-                    this.setIsVideoLoading(false);
-                })
-                .catch((e) => {
-                    console.error("Error loading trailer:", e);
-                    this.setVidError(true);
-                    this.setIsVideoLoading(false);
-                });
+            if (!url) {
+                throw new Error('No trailer found');
+            }
+
+            const urlParams = new URLSearchParams(new URL(url).search);
+            const videoId = urlParams.get("v");
+
+            if (!videoId) {
+                throw new Error('Invalid video ID');
+            }
+
+            const playerPresent = this.state.playerObj &&
+                typeof this.state.playerObj.loadVideoById === "function";
+
+            if (playerPresent) {
+                this.state.playerObj.loadVideoById(videoId);
+            } else {
+                this.setTrailerURL(videoId);
+            }
+
+            this.setCurrentTrailerURL(videoId);
+            this.setVidError(false);
+
+        } catch (error) {
+            console.error("Error loading trailer:", error);
+            this.cleanupVideoPlayer();
+            this.setVidError(true);
+        } finally {
+            this.setIsVideoLoading(false);
         }
     };
 
-
-    updateTrailer = (key) =>{
-        if(key !== this.state.currentTrailerUrl){
+    updateTrailer = (key) => {
+        if (key !== this.state.currentTrailerUrl) {
+            this.cleanupVideoPlayer();
             playerOptions.playerVars.mute = !this.state.sound ? 1 : 0;
-            this.setVidError(false);
-            if(Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h){
-                this.state.playerObj.loadVideoById(key)
-                this.setCurrentTrailerURL(key);
+
+            if (this.state.playerObj?.loadVideoById) {
+                try {
+                    this.state.playerObj.loadVideoById(key);
+                    this.setCurrentTrailerURL(key);
+                    this.setVidError(false);
+                } catch (error) {
+                    console.error("Error updating trailer:", error);
+                    this.setVidError(true);
+                }
             }
         }
     }
@@ -478,7 +518,7 @@ class Banner extends Component {
     }
 
     handleSelect = (key) =>{
-           this.setState({key: key})
+        this.setState({key: key})
     }
 
     render(){
@@ -492,7 +532,7 @@ class Banner extends Component {
                         </div>
                         : ''
                     }
-                     {this.state.isVideoPlaying?
+                    {this.state.isVideoPlaying?
                         <div>
                             <SoundContainer onClick={this.enableSound}>
                                 {this.state.sound ?
@@ -533,52 +573,52 @@ class Banner extends Component {
                     </DescriptionContainer>
 
                 </MovieHeaderContent>
-                    <LoaderContainer >
-                        {this.state.vidError ? <span style={{color:'white'}}>no trailer...</span>:''}
-                        {(this.state.isVideoLoading && !this.state.vidError )?
-                            <LoaderWrapper data-testid='loader'>
-                                <Loader style={{marginTop:'0vh'}} id='myloader'/>
-                            </LoaderWrapper>
-                            :''}
-                        <VideoContainer isVideoLoading={this.state.isVideoLoading} isVideoPlaying={this.state.isVideoPlaying} isVideoError={this.state.vidError}>
-                            <YouTube key='testVideo' id='vidPlayer' className='video-background-banner'
-                                     onPlay={e => {
-                                         this.setIsVideoLoading(false);
-                                         this.setIsVideoPlaying(true);
-                                         this.setFirst(false);
-                                         this.setVidError(false);
-                                         App.addListener('appStateChange', (state) => {
-                                             if (state.isActive) {
-                                                 this.state.playerObj.playVideo();
-                                             } else {
-                                                 this.state.playerObj.pauseVideo();
-                                             }
-                                         });
-                                     }}
-                                     onError={e => {this.setVidError(true);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
-                                     onReady={e=>{
-                                         e.target.playVideo();
-                                         this.setPlayerObj(e.target);
-                                         this.setIsVideoPlaying(false);
-                                         this.setIsVideoLoading(true);
-                                         this.setVidError(false);
-                                     }}
-                                     onStateChange={e=> {
-                                            const t =  [-1,0,3,5]
-                                            if(!t.includes(e.target.getPlayerState())  && !this.state.isVideoLoading){
-                                                if(e.target.getPlayerState() ===2)this.setPlayButton(true)
-                                                if(e.target.getPlayerState() ===1)this.setPlayButton(false)
-                                            }else{
-                                                this.setPlayButton(false)
-                                            }
+                <LoaderContainer >
+                    {this.state.vidError ? <span style={{color:'white'}}>no trailer...</span>:''}
+                    {(this.state.isVideoLoading && !this.state.vidError )?
+                        <LoaderWrapper data-testid='loader'>
+                            <Loader style={{marginTop:'0vh'}} id='myloader'/>
+                        </LoaderWrapper>
+                        :''}
+                    <VideoContainer isVideoLoading={this.state.isVideoLoading} isVideoPlaying={this.state.isVideoPlaying} isVideoError={this.state.vidError}>
+                        <YouTube key='testVideo' id='vidPlayer' className='video-background-banner'
+                                 onPlay={e => {
+                                     this.setIsVideoLoading(false);
+                                     this.setIsVideoPlaying(true);
+                                     this.setFirst(false);
+                                     this.setVidError(false);
+                                     App.addListener('appStateChange', (state) => {
+                                         if (state.isActive) {
+                                             this.state.playerObj.playVideo();
+                                         } else {
+                                             this.state.playerObj.pauseVideo();
+                                         }
+                                     });
+                                 }}
+                                 onError={e => {this.setVidError(true);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
+                                 onReady={e=>{
+                                     e.target.playVideo();
+                                     this.setPlayerObj(e.target);
+                                     this.setIsVideoPlaying(false);
+                                     this.setIsVideoLoading(true);
+                                     this.setVidError(false);
+                                 }}
+                                 onStateChange={e=> {
+                                     const t =  [-1,0,3,5]
+                                     if(!t.includes(e.target.getPlayerState())  && !this.state.isVideoLoading){
+                                         if(e.target.getPlayerState() ===2)this.setPlayButton(true)
+                                         if(e.target.getPlayerState() ===1)this.setPlayButton(false)
+                                     }else{
+                                         this.setPlayButton(false)
                                      }
-                                     }
-                                     onEnd={ e=> {this.setVidError(false);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
-                                     videoId={this.state.trailerURL}
-                                     opts={playerOptions}
-                            />
-                        </VideoContainer>
-                    </LoaderContainer>
+                                 }
+                                 }
+                                 onEnd={ e=> {this.setVidError(false);this.setIsVideoPlaying(false);this.setIsVideoLoading(false);}}
+                                 videoId={this.state.trailerURL}
+                                 opts={playerOptions}
+                        />
+                    </VideoContainer>
+                </LoaderContainer>
                 <MovieFadeBottom />
                 <Modal id="mymodal" key={`--CardModal'`} show={this.state.showModal} className={`my-modal ${this.state.showModal ? 'bounce-in' : ''}`} style={{top:'30vh', WebkitUserSelect: 'none',backgroundColor:'#594757'}} >
                     <Modal.Dialog style={{backgroundPosition:'top', backgroundSize: 'cover',backgroundImage: `url(${imageUrlPoster})`}}>
@@ -604,39 +644,39 @@ class Banner extends Component {
                                     </OverlayTrigger>
                             }
                             <RenderIfVisible>
-                            <Tabs
-                                className="mb-3"
-                                transition={Fade}
-                                activeKey={this.state.key }
-                                onSelect={this.handleSelect}
-                                // fill  justify
-                            >
-                                <Tab eventKey={1} title="Movie" >
-                                    {character ? character : ''}
+                                <Tabs
+                                    className="mb-3"
+                                    transition={Fade}
+                                    activeKey={this.state.key }
+                                    onSelect={this.handleSelect}
+                                    // fill  justify
+                                >
+                                    <Tab eventKey={1} title="Movie" >
+                                        {character ? character : ''}
                                         <MovieReviewsStars title={title} imdbId={this.state.imdbId} />
                                         <MovieDetails showType={showType} id={id} language={language} updateImdbId={this.updateImdbId}/>
                                         <VideoList showType={showType} id={id} language={language} setTrailerURL={this.updateTrailer} isVideoPlaying={this.state.isVideoPlaying} trailerURL={this.state.currentTrailerUrl} updateMenuStatue={this.updateMenuStatue} />
                                         <Credits showType={showType} id={id} language={language}/>
                                         <MovieProvider showType={showType}  id={id} language={language.length > 2 ? language?.split("-")[1] : language.toUpperCase()}/>
                                         <MovieReviews showType={showType} title={title} language={language} id={id} />
-                                </Tab>
-                                {this.props.showSimilar ?
-                                    <Tab eventKey={4} title="Similar">
-                                        <RowList sort={true} confirm={true} style={{position: 'relative'}}
-                                                   title={showType && showType === "tv" ?'Similar Tv show':'Similar movie'}
-                                                   url={showType && showType === "tv" ?
-                                                       tvUrls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language :
-                                                       urls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language}
-                                                   isLargeRow={true}/>
-                                        <RowList sort={true}  confirm={true}  style={{position: 'relative'}}
-                                                   title={showType && showType === "tv" ?'Recommended Tv show':'Recommended Movie'}
-                                                   url={showType && showType === "tv" ?
-                                                       tvUrls.findSimilarById.replace("{id}", id).replace('original','w185') + language:
-                                                       urls.findSimilarById.replace("{id}", id).replace('original','w185') + language}
-                                                   isLargeRow={true}/>
-                                    </Tab> : ''}
+                                    </Tab>
+                                    {this.props.showSimilar ?
+                                        <Tab eventKey={4} title="Similar">
+                                            <RowList sort={true} confirm={true} style={{position: 'relative'}}
+                                                     title={showType && showType === "tv" ?'Similar Tv show':'Similar movie'}
+                                                     url={showType && showType === "tv" ?
+                                                         tvUrls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language :
+                                                         urls.findRecommendedById.replace("{id}", id).replace('original', 'w185') + language}
+                                                     isLargeRow={true}/>
+                                            <RowList sort={true}  confirm={true}  style={{position: 'relative'}}
+                                                     title={showType && showType === "tv" ?'Recommended Tv show':'Recommended Movie'}
+                                                     url={showType && showType === "tv" ?
+                                                         tvUrls.findSimilarById.replace("{id}", id).replace('original','w185') + language:
+                                                         urls.findSimilarById.replace("{id}", id).replace('original','w185') + language}
+                                                     isLargeRow={true}/>
+                                        </Tab> : ''}
 
-                            </Tabs>
+                                </Tabs>
                             </RenderIfVisible>
                         </Modal.Body>
                         <Modal.Footer style={{border: 'transparent',display: 'initial'}}>
@@ -657,12 +697,12 @@ class Banner extends Component {
                                                          icon={faBackwardStep}/>
                                     </div>
                                 }
-                                    <div>
-                                        <Link
-                                            to={`/movieDetails/${this.state.currentTrailerUrl !== "" ? this.state.currentTrailerUrl : undefined}/${this.state.sound}/${this.state.imdbId}/${language}/${showType}`}>
-                                            <PlayModalMenuButton><img alt='' src={PlayButton}/></PlayModalMenuButton>
-                                        </Link>
-                                    </div>
+                                <div>
+                                    <Link
+                                        to={`/movieDetails/${this.state.currentTrailerUrl !== "" ? this.state.currentTrailerUrl : undefined}/${this.state.sound}/${this.state.imdbId}/${language}/${showType}`}>
+                                        <PlayModalMenuButton><img alt='' src={PlayButton}/></PlayModalMenuButton>
+                                    </Link>
+                                </div>
 
                                 {this.context.moviesContext[this.context.currentIndex + 1] ?
                                     <div onClick={() => {
