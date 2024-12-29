@@ -368,71 +368,66 @@ class Banner extends Component {
         this.setPlayButton(false);
     }
 
-    componentDidUpdate(prevProps, prevState, prevContext) {
-        if (this.context.showModal !== this.state.prevShowModal) {
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.context.showModal !== prevState.prevShowModal) {
             this.setState({ prevShowModal: this.context.showModal });
             this.setShowModal(this.context.showModal);
+            if (!this.context.showModal && this.state.playerObj) {
+                try {
+                    this.state.playerObj.pauseVideo();
+                } catch (err) {
+                    console.error("Error pausing video:", err);
+                }
+            }
+        }
+
+        if (prevProps.id !== this.props.id) {
+            this.handleClick(this.props.id);
         }
     }
-
 
     handleClick = (id) => {
         this.setVidError(false);
         this.setIsVideoLoading(true);
-        const playerPresent = Object.keys(this.state.playerObj).length >0 && this.state.playerObj?.h;
-        if(playerPresent){
-            this.state.playerObj?.pauseVideo();
-        }
-        //test movietrailer with specified language
-        movieTrailer(null, {tmdbId: id, language: this.props.language, videoType:this.props.showType})
-            .then((url) => {
-                console.log("result url:",url)
-                const urlParams = new URLSearchParams(new URL(url).search);
-                if(playerPresent){
-                    this.state.playerObj.loadVideoById(urlParams.get("v"));
-                    this.setCurrentTrailerURL(urlParams.get("v"));
-                }else{
-                    this.setTrailerURL(urlParams.get("v"));
-                    this.setCurrentTrailerURL(urlParams.get("v"));
-                }
-                this.setVidError(false);
-            })
-            .catch((e) => {
-                movieTrailer(null, {tmdbId: id, videoType:this.props.showType})
-                    .then((url) => {
-                        console.log("result url:",url)
-                        const urlParams = new URLSearchParams(new URL(url).search);
-                        if(playerPresent){
-                            this.state.playerObj.loadVideoById(urlParams.get("v"));
-                            this.setCurrentTrailerURL(urlParams.get("v"));
-                        }else{
-                            this.setTrailerURL(urlParams.get("v"));
-                            this.setCurrentTrailerURL(urlParams.get("v"));
-                        }
-                        this.setVidError(false);
-                    })
+        const playerPresent = this.state.playerObj && typeof this.state.playerObj.loadVideoById === "function";
+        if (playerPresent) {
+            movieTrailer(null, { tmdbId: id, language: this.props.language, videoType: this.props.showType })
+                .then((url) => {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    const videoId = urlParams.get("v");
 
-                    .catch((e) => {
-                        //if no trailer in specified language, call movietrailer withtout specified language
-                        movieTrailer(null, {tmdbId: id})
-                            .then((url) => {
-                                const urlParams = new URLSearchParams(new URL(url).search);
-                                if(playerPresent){
-                                    this.state.playerObj.loadVideoById(urlParams.get("v"));
-                                    this.setCurrentTrailerURL(urlParams.get("v"));
-                                }else{
-                                    this.setTrailerURL(urlParams.get("v"));
-                                    this.setCurrentTrailerURL(urlParams.get("v"));
-                                }
-                                this.setVidError(false);
-                            })
-                            .catch((e) => {
-                        console.log("passage error",e)
-                        this.setVidError(true);
-                            })
-                    })
-            })
+                    if (videoId !== this.state.currentTrailerURL) {
+                        this.state.playerObj.loadVideoById(videoId);
+                        this.setCurrentTrailerURL(videoId); // Ensure state is updated
+                    }
+
+                    this.setIsVideoLoading(false);
+                })
+                .catch((e) => {
+                    this.setVidError(true);
+                    this.setIsVideoLoading(false);
+                });
+        } else {
+            movieTrailer(null, { tmdbId: id, language: this.props.language, videoType: this.props.showType })
+                .then((url) => {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    const videoId = urlParams.get("v");
+
+                    if (videoId !== this.state.currentTrailerURL) {
+                        this.setTrailerURL(videoId);
+                        this.setCurrentTrailerURL(videoId); // Update current video ID
+                    }
+                    this.setIsVideoLoading(false);
+                })
+                .catch((e) => {
+                    console.error("Error loading trailer:", e);
+                    this.setVidError(true);
+                    this.setIsVideoLoading(false);
+                });
+        }
     };
+
 
     updateTrailer = (key) =>{
         if(key !== this.state.currentTrailerUrl){
