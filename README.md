@@ -138,6 +138,8 @@ Make your own movie favorite list quickly
 • Get a list of top rated movies.
 
 • Search any movie with its information: title, rating, release date, language, genres, synopsis, production...
+
+• Link to download movie with torrent
  
 ### Preview
 
